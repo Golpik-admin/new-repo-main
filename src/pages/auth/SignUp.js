@@ -25,7 +25,12 @@ const Wrapper = styled(Paper)`
 function SignUp() {
   return (
     <React.Fragment>
-      <Brand />
+      {/* <Brand /> */}
+      <Typography component="h1" variant="h1" align="center" gutterBottom>
+        <em>
+          <strong>Consilience</strong> Trading
+        </em>
+      </Typography>
       <Wrapper>
         <Helmet title="Sign Up" />
 

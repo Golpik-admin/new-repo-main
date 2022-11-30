@@ -114,14 +114,24 @@ const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
 const routes = [
   {
     path: "/",
-    element: <PresentationLayout />,
+    element: <AuthLayout />,
     children: [
       {
         path: "",
-        element: <Landing />,
+        element: <SignIn />,
       },
     ],
   },
+  // {
+  //   path: "/",
+  //   element: <PresentationLayout />,
+  //   children: [
+  //     {
+  //       path: "",
+  //       element: <Landing />,
+  //     },
+  //   ],
+  // },
   {
     path: "dashboard",
     element: <DashboardLayout />,
