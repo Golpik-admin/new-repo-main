@@ -34,12 +34,12 @@ function SignUp() {
       <Wrapper>
         <Helmet title="Sign Up" />
 
-        <Typography component="h1" variant="h4" align="center" gutterBottom>
+        {/* <Typography component="h1" variant="h4" align="center" gutterBottom>
           Get started
         </Typography>
         <Typography component="h2" variant="body1" align="center">
           Start creating the best possible user experience for you customers
-        </Typography>
+        </Typography> */}
 
         <SignUpComponent />
       </Wrapper>

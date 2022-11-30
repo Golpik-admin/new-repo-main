@@ -25,7 +25,11 @@ const Wrapper = styled(Paper)`
 function ResetPassword() {
   return (
     <React.Fragment>
-      <Brand />
+      <Typography component="h1" variant="h1" align="center" gutterBottom>
+        <em>
+          <strong>Consilience</strong> Trading
+        </em>
+      </Typography>
       <Wrapper>
         <Helmet title="Reset Password" />
 
