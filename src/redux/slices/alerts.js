@@ -24,7 +24,7 @@ export const fetchAlerts = createAsyncThunk("alerts/fetchAlerts", async () => {
     .catch(function (error) {
       return error;
     });
-  console.log(response,'response');
+  console.log(response, "response");
 });
 
 export const alertSlice = createSlice({
