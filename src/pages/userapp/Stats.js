@@ -117,7 +117,7 @@ const Stats = ({
         >
           <span>{percentagetext}</span> Since last month
         </Percentage>
-        {!illustration && <Chip label={chip} />}
+        {/* {!illustration && <Chip label={chip} />} */}
       </CardContent>
 
       {!!illustration && (
