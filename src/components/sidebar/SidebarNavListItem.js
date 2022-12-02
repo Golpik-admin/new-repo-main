@@ -13,29 +13,34 @@ const CustomRouterLink = forwardRef((props, ref) => (
 ));
 
 const Item = styled(ListItemButton)`
+  z-index: 2;
+  position; relative;
   padding-top: ${(props) =>
     props.theme.spacing(props.depth && props.depth > 0 ? 2 : 3)};
   padding-bottom: ${(props) =>
     props.theme.spacing(props.depth && props.depth > 0 ? 2 : 3)};
   padding-left: ${(props) =>
-    props.theme.spacing(props.depth && props.depth > 0 ? 14 : 8)};
+    props.theme.spacing(props.depth && props.depth > 0 ? 0 : 0)};
   padding-right: ${(props) =>
-    props.theme.spacing(props.depth && props.depth > 0 ? 4 : 7)};
+    props.theme.spacing(props.depth && props.depth > 0 ? 0 : 0)};
   font-weight: ${(props) => props.theme.typography.fontWeightRegular};
   svg {
     color: ${(props) => props.theme.sidebar.color};
     font-size: 20px;
-    width: 20px;
+    width: 100%;
     height: 20px;
-    opacity: 0.5;
+    padding: 0 ${(props) => props.theme.spacing(4)};
   }
   &:hover {
-    background: rgba(0, 0, 0, 0.08);
     color: ${(props) => props.theme.sidebar.color};
+    .side-title {
+      left: 58px;
+      opacity: 1;
+      background-color: ${(props) => props.theme.sidebar.background};
+    }
   }
   &.${(props) => props.activeclassname} {
-    background-color: ${(props) =>
-      darken(0.03, props.theme.sidebar.background)};
+    background-color: ${(props) => props.theme.sidebar.background};
     span {
       color: ${(props) => props.theme.sidebar.color};
     }
@@ -43,7 +48,15 @@ const Item = styled(ListItemButton)`
 `;
 
 const Title = styled(ListItemText)`
+  padding: ${(props) =>
+    props.theme.spacing(props.depth && props.depth > 0 ? 2 : 3)};
+  border-radius: 0 50px 50px 0;
   margin: 0;
+  position: fixed;
+  left: -50px;
+  z-index: 1;
+  opacity: 0;
+  transition: all ease-in-out 0.3s;
   span {
     color: ${(props) =>
       rgba(
@@ -51,7 +64,7 @@ const Title = styled(ListItemText)`
         props.depth && props.depth > 0 ? 0.7 : 1
       )};
     font-size: ${(props) => props.theme.typography.body1.fontSize}px;
-    padding: 0 ${(props) => props.theme.spacing(4)};
+    padding: 0;
   }
 `;
 
@@ -123,7 +136,7 @@ const SidebarNavListItem = (props) => {
         activeclassname="active"
       >
         {Icon && <Icon />}
-        <Title depth={depth}>
+        <Title className="side-title" depth={depth}>
           {title}
           {badge && <Badge label={badge} />}
         </Title>

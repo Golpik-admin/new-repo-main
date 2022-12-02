@@ -7,7 +7,8 @@ import async from "./components/Async";
 
 // Layouts
 import AuthLayout from "./layouts/Auth";
-import DashboardLayout from "./layouts/Dashboard";
+import DashboardLayout from "./layouts/AdminAppLayout";
+import FrontEndDashboardLayout from "./layouts/UserAppLayout";
 import DocLayout from "./layouts/Doc";
 import PresentationLayout from "./layouts/Presentation";
 
@@ -78,6 +79,10 @@ import ESLintAndPrettier from "./pages/docs/ESLintAndPrettier";
 import Support from "./pages/docs/Support";
 import Changelog from "./pages/docs/Changelog";
 
+// users routes
+import UsersAlerts from "./pages/userapp/alerts";
+import UserPositions from "./pages/userapp/positions";
+
 // Landing
 import Landing from "./pages/presentation/Landing";
 
@@ -124,6 +129,17 @@ const routes = [
   },
   // {
   //   path: "/",
+  //   element: <FrontEndDashboardLayout />,
+  //   children: [
+  //     {
+  //       path: "",
+  //       element: <Default />,
+  //     },
+  //   ],
+  // },
+
+  // {
+  //   path: "/",
   //   element: <PresentationLayout />,
   //   children: [
   //     {
@@ -134,19 +150,31 @@ const routes = [
   // },
   {
     path: "dashboard",
-    element: <DashboardLayout />,
+    element: <FrontEndDashboardLayout />,
     children: [
       {
-        path: "default",
+        path: "",
         element: <Default />,
       },
+    ],
+  },
+  {
+    path: "alerts",
+    element: <FrontEndDashboardLayout />,
+    children: [
       {
-        path: "analytics",
-        element: <Analytics />,
+        path: "",
+        element: <UsersAlerts />,
       },
+    ],
+  },
+  {
+    path: "positions",
+    element: <FrontEndDashboardLayout />,
+    children: [
       {
-        path: "saas",
-        element: <SaaS />,
+        path: "",
+        element: <UserPositions />,
       },
     ],
   },
