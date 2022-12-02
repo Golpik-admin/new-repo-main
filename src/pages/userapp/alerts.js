@@ -348,14 +348,22 @@ function EnhancedTable() {
                         <TableCell align="left">{row.status}</TableCell>
                         <TableCell align="right">{row.alert_Comment}</TableCell>
                         <TableCell align="right">
-                          <Moment format="YYYY-MM-DD hh:mm:ss">
-                            {row.time_Received}
-                          </Moment>
+                          {row.time_Received !== null ? (
+                            <Moment format="YYYY-MM-DD hh:mm:ss">
+                              {row.time_Received}
+                            </Moment>
+                          ) : (
+                            ""
+                          )}
                         </TableCell>
                         <TableCell align="right">
-                          <Moment format="YYYY-MM-DD hh:mm:ss">
-                            {row.time_Executed}
-                          </Moment>
+                          {row.time_Executed !== null ? (
+                            <Moment format="YYYY-MM-DD hh:mm:ss">
+                              {row.time_Executed}
+                            </Moment>
+                          ) : (
+                            ""
+                          )}
                         </TableCell>
                         {/* <TableCell>
                           {row.status === 0 && (
