@@ -470,8 +470,39 @@ function OrderList() {
   }, []);
   const alertList = useSelector((state) => state.alertsList);
   const processed = alertList.alerts.filter(
-    (record) => record.status == "Processed"
+    (record) => record.status === "Processed"
   );
+  const unprocessed = alertList.alerts.filter(
+    (record) => record.status === "Unprocessed"
+  );
+  const expired = alertList.alerts.filter(
+    (record) => record.status === "Expired"
+  );
+  const processedRecord = processed.length;
+  const unProcessedRecord = unprocessed.length;
+  const exiredRecord = expired.length;
+
+  const currentYear = new Date().getFullYear(); // 2020
+  const previousYear = currentYear - 1;
+
+  const prYearProcessed = alertList.alerts.filter(
+    (record) =>
+      record.status === "Processed" &&
+      new Date(record.time_Executed).getFullYear() === previousYear
+  );
+  const crYearProcessed = alertList.alerts.filter(
+    (record) =>
+      record.status === "Processed" &&
+      new Date(record.time_Executed).getFullYear() === currentYear
+  );
+  console.log(prYearProcessed, crYearProcessed);
+  const processDif =
+    100 *
+    Math.abs(
+      (prYearProcessed - crYearProcessed) /
+        ((prYearProcessed + crYearProcessed) / 2)
+    );
+
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -505,7 +536,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Total Alerts Processed"
-            amount="2.532"
+            amount={processedRecord}
             // chip="Today"
             percentagetext="+26%"
             percentagecolor={green[500]}
@@ -514,7 +545,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Total Alerts Unprocessed"
-            amount="170.212"
+            amount={unProcessedRecord}
             // chip="Annual"
             percentagetext="-14%"
             percentagecolor={red[500]}
@@ -523,7 +554,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Total Alerts Expired"
-            amount="$ 24.300"
+            amount={exiredRecord}
             // chip="Monthly"
             percentagetext="+18%"
             percentagecolor={green[500]}
