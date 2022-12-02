@@ -5,7 +5,7 @@ import alertApiReducer from "../redux/slices/alerts";
 export const store = configureStore(
   {
     reducer: {
-      alertApi: alertApiReducer,
+      alertsList: alertApiReducer,
     },
   },
   composeWithDevTools()
