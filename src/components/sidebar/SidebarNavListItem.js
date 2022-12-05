@@ -13,8 +13,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
 ));
 
 const Item = styled(ListItemButton)`
-  z-index: 2;
-  position; relative;
+  z-index: 9;
   padding-top: ${(props) =>
     props.theme.spacing(props.depth && props.depth > 0 ? 2 : 3)};
   padding-bottom: ${(props) =>
@@ -31,6 +30,11 @@ const Item = styled(ListItemButton)`
     height: 20px;
     padding: 0 ${(props) => props.theme.spacing(4)};
   }
+  ${(props) => props.theme.breakpoints.down("md")} {
+    svg {
+      width: auto;
+    }
+  }
   &:hover {
     color: ${(props) => props.theme.sidebar.color};
     .side-title {
@@ -38,9 +42,17 @@ const Item = styled(ListItemButton)`
       opacity: 1;
       background-color: ${(props) => props.theme.sidebar.background};
     }
+    ${(props) => props.theme.breakpoints.down("md")} {
+      .side-title {
+        left: auto;
+        background-color: ${(props) =>
+          darken(0.03, props.theme.sidebar.background)};
+      }
+    }
   }
   &.${(props) => props.activeclassname} {
-    background-color: ${(props) => props.theme.sidebar.background};
+    background-color: ${(props) =>
+      darken(0.03, props.theme.sidebar.background)};
     span {
       color: ${(props) => props.theme.sidebar.color};
     }
@@ -53,11 +65,17 @@ const Title = styled(ListItemText)`
   border-radius: 0 50px 50px 0;
   margin: 0;
   position: fixed;
-  left: -50px;
-  z-index: 1;
+  left: -58px;
+  z-index: -1;
   opacity: 0;
   transition: all ease-in-out 0.3s;
+  ${(props) => props.theme.breakpoints.down("md")} {
+    position: relative;
+    left: auto;
+    opacity: 1;
+  }
   span {
+    z-index: -1;
     color: ${(props) =>
       rgba(
         props.theme.sidebar.color,

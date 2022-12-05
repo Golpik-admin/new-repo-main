@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 
 import { green } from "@mui/material/colors";
-
 import { Box, Chip, Drawer as MuiDrawer, ListItemButton } from "@mui/material";
 
 import { ReactComponent as Logo } from "../../vendor/logo.svg";
@@ -68,13 +67,15 @@ const Sidebar = ({ items, showFooter = true, ...rest }) => {
   return (
     <Drawer variant="permanent" {...rest}>
       <Brand component={NavLink} to="/">
-        <BrandIcon />{" "}
+        {/* <BrandIcon />{" "} */}
         <Box ml={1}>
+          {/* 
           Mira <BrandChip label="PRO" />
+           */}
         </Box>
       </Brand>
       <SidebarNav items={items} />
-      {!!showFooter && <Footer />}
+      {/* {!!showFooter && <Footer />} */}
     </Drawer>
   );
 };
