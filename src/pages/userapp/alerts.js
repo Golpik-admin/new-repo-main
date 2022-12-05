@@ -26,6 +26,9 @@ import {
   Tooltip,
   Typography,
   LinearProgress as MuiLinearProgress,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
 import {
@@ -138,7 +141,7 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: "id", alignment: "right", label: "ID" },
+  // { id: "id", alignment: "right", label: "ID" },
   { id: "ticker", alignment: "left", label: "TICKER" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
   { id: "order_action", alignment: "right", label: "ORDER ACTION" },
@@ -170,14 +173,6 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all" }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -224,11 +219,48 @@ const EnhancedTableToolbar = (props) => {
             </IconButton>
           </Tooltip>
         ) : (
+          // <RadioGroup aria-label="Filters" name="alertFilters">
+          //   <FormControlLabel value="all" control={<Radio />} label="All" />
+          //   <FormControlLabel value="all" control={<Radio />} label="All" />
+          //   <FormControlLabel
+          //     value="processed"
+          //     control={<Radio />}
+          //     label="Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="unprocessed"
+          //     control={<Radio />}
+          //     label="Un Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="expired"
+          //     control={<Radio />}
+          //     label="Expired"
+          //   />
+          // </RadioGroup>
           <Tooltip title="Filter list">
             <IconButton aria-label="Filter list" size="large">
               <FilterListIcon />
             </IconButton>
           </Tooltip>
+          // <RadioGroup aria-label="Filters" name="alertFilters">
+          //   <FormControlLabel value="all" control={<Radio />} label="All" />
+          //   <FormControlLabel
+          //     value="processed"
+          //     control={<Radio />}
+          //     label="Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="unprocessed"
+          //     control={<Radio />}
+          //     label="Un Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="expired"
+          //     control={<Radio />}
+          //     label="Expired"
+          //   />
+          // </RadioGroup>
         )}
       </div>
     </Toolbar>
@@ -329,15 +361,6 @@ function EnhancedTable() {
                         key={`${row.id}`}
                         selected={isItemSelected}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isItemSelected}
-                            inputProps={{ "aria-labelledby": labelId }}
-                            onClick={(event) => handleClick(event, row.id)}
-                          />
-                        </TableCell>
-
-                        <TableCell align="right">#{row.id}</TableCell>
                         <TableCell align="left">{row.ticker}</TableCell>
                         <TableCell align="left">{row.option_Type}</TableCell>
                         <TableCell align="left">

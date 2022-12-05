@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Breadcrumbs as MuiBreadcrumbs,
@@ -25,6 +25,10 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  LinearProgress as MuiLinearProgress,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
 import {
@@ -35,6 +39,9 @@ import {
 } from "@mui/icons-material";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
+import { useEffect } from "react";
+import { fetchPositions } from "../../redux/slices/possitions";
+import Moment from "react-moment";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -134,13 +141,23 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: "id", alignment: "right", label: "Order ID" },
-  { id: "product", alignment: "left", label: "Product" },
-  { id: "date", alignment: "left", label: "Date" },
-  { id: "total", alignment: "right", label: "Total" },
-  { id: "status", alignment: "left", label: "Status" },
-  { id: "method", alignment: "left", label: "Payment Method" },
-  { id: "actions", alignment: "right", label: "Actions" },
+  // { id: "id", alignment: "right", label: "ID" },
+  { id: "ticker", alignment: "left", label: "TICKER" },
+  { id: "option_type", alignment: "left", label: "OPTION TYPE" },
+  { id: "price_excuted", alignment: "right", label: "PRICE EXECUTED" },
+  {
+    id: "qty",
+    alignment: "left",
+    label: "QTY",
+  },
+  { id: "alert_description", alignment: "left", label: "ALERT DESCRIPTION" },
+  { id: "capital_commited", alignment: "right", label: "CAPITAL COMMITED" },
+  { id: "status", alignment: "right", label: "STATUS" },
+  { id: "time_bought", alignment: "right", label: "TIME BOUGHT" },
+  { id: "time_sold", alignment: "right", label: "TIME SOLD" },
+  { id: "price_now", alignment: "right", label: "PRICE NOW" },
+  { id: "p_l", alignment: "right", label: "P & L" },
+  { id: "description", alignment: "right", label: "Description" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -159,14 +176,6 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all" }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -191,7 +200,6 @@ const EnhancedTableHead = (props) => {
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const { numSelected } = props;
-
   return (
     <Toolbar>
       <ToolbarTitle>
@@ -214,11 +222,48 @@ const EnhancedTableToolbar = (props) => {
             </IconButton>
           </Tooltip>
         ) : (
+          // <RadioGroup aria-label="Filters" name="alertFilters">
+          //   <FormControlLabel value="all" control={<Radio />} label="All" />
+          //   <FormControlLabel value="all" control={<Radio />} label="All" />
+          //   <FormControlLabel
+          //     value="processed"
+          //     control={<Radio />}
+          //     label="Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="unprocessed"
+          //     control={<Radio />}
+          //     label="Un Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="expired"
+          //     control={<Radio />}
+          //     label="Expired"
+          //   />
+          // </RadioGroup>
           <Tooltip title="Filter list">
             <IconButton aria-label="Filter list" size="large">
               <FilterListIcon />
             </IconButton>
           </Tooltip>
+          // <RadioGroup aria-label="Filters" name="alertFilters">
+          //   <FormControlLabel value="all" control={<Radio />} label="All" />
+          //   <FormControlLabel
+          //     value="processed"
+          //     control={<Radio />}
+          //     label="Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="unprocessed"
+          //     control={<Radio />}
+          //     label="Un Processed"
+          //   />
+          //   <FormControlLabel
+          //     value="expired"
+          //     control={<Radio />}
+          //     label="Expired"
+          //   />
+          // </RadioGroup>
         )}
       </div>
     </Toolbar>
@@ -240,7 +285,7 @@ function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = positionsList.positions.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -278,121 +323,186 @@ function EnhancedTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
+  const positionsList = useSelector((state) => state.positionsList);
+  const LinearProgress = styled(MuiLinearProgress)(spacing);
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
+    rowsPerPage -
+    Math.min(rowsPerPage, positionsList.positions.length - page * rowsPerPage);
   return (
     <div>
-      <Paper>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            aria-labelledby="tableTitle"
-            size={"medium"}
-            aria-label="enhanced table"
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={`${row.id}-${index}`}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          onClick={(event) => handleClick(event, row.id)}
-                        />
-                      </TableCell>
-
-                      <TableCell align="right">#{row.id}</TableCell>
-                      <TableCell align="left">{row.product}</TableCell>
-                      <TableCell align="left">{row.date}</TableCell>
-                      <TableCell align="right">{row.total}</TableCell>
-                      <TableCell>
-                        {row.status === 0 && (
-                          <Chip
-                            size="small"
-                            mr={1}
-                            mb={1}
-                            label="Shipped"
-                            shipped={+true}
-                          />
-                        )}
-                        {row.status === 1 && (
-                          <Chip
-                            size="small"
-                            mr={1}
-                            mb={1}
-                            label="Processing"
-                            processing={+true}
-                          />
-                        )}
-                        {row.status === 2 && (
-                          <Chip
-                            size="small"
-                            mr={1}
-                            mb={1}
-                            label="Cancelled"
-                            cancelled={+true}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell align="left">{row.method}</TableCell>
-                      <TableCell padding="none" align="right">
-                        <Box mr={2}>
-                          <IconButton aria-label="delete" size="large">
-                            <ArchiveIcon />
-                          </IconButton>
-                          <IconButton aria-label="details" size="large">
-                            <RemoveRedEyeIcon />
-                          </IconButton>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={8} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+      {positionsList.loading && <LinearProgress />}
+      {!positionsList.loading && positionsList.positions.length ? (
+        <Paper>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table
+              aria-labelledby="tableTitle"
+              size={"medium"}
+              aria-label="enhanced table"
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={positionsList.positions.length}
+              />
+              <TableBody>
+                {stableSort(
+                  positionsList.positions,
+                  getComparator(order, orderBy)
+                )
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    console.log(row);
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${row.id}`;
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={`${row.id}`}
+                        selected={isItemSelected}
+                      >
+                        <TableCell align="left">{row.ticker}</TableCell>
+                        <TableCell align="left">{row.option_Type}</TableCell>
+                        <TableCell align="left">
+                          processD
+                          {row.quantity}
+                        </TableCell>
+                        <TableCell align="left">
+                          {row.buy_Order_Reason}
+                        </TableCell>
+                        <TableCell align="left">
+                          {row.capital_Committed}
+                        </TableCell>
+                        <TableCell align="right">{row.status}</TableCell>
+                        <TableCell align="right">
+                          {row.buy_Time_Executed !== null ? (
+                            <Moment format="YYYY-MM-DD hh:mm:ss">
+                              {row.buy_Time_Executed}
+                            </Moment>
+                          ) : (
+                            ""
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.sell_Time_Executed !== null ? (
+                            <Moment format="YYYY-MM-DD hh:mm:ss">
+                              {row.sell_Time_Executed}
+                            </Moment>
+                          ) : (
+                            ""
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.sell_Price_Executed}
+                        </TableCell>
+                        <TableCell align="right">{row.pnL}</TableCell>
+                        <TableCell align="right">
+                          {row.sell_Order_Reason}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={8} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={positionsList.positions.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      ) : (
+        <Paper>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table
+              aria-labelledby="tableTitle"
+              size={"medium"}
+              aria-label="enhanced table"
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={positionsList.positions.length}
+              />
+              <TableBody>
+                <TableCell colSpan={12}>{"Record not found"}</TableCell>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={positionsList.positions.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      )}
     </div>
   );
 }
 
 function OrderList() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchPositions());
+  }, []);
+
+  const positionsList = useSelector((state) => state.positionsList);
+  const positionOpnd = positionsList.positions.filter(
+    (record) => record.status === "open"
+  );
+  // const unprocessed = positionsList.positions.filter(
+  //   (record) => record.status === "Unprocessed"
+  // );
+  // const expired = positionsList.positions.filter(
+  //   (record) => record.status === "Expired"
+  // );
+  const positionOpend = positionOpnd?.length;
+  // const unProcessedRecord = unprocessed.length;
+  // const exiredRecord = expired.length;
+
+  // const currentYear = new Date().getFullYear(); // 2020
+  // const previousYear = currentYear - 1;
+
+  // const prYearProcessed = positionsList.positions.filter(
+  //   (record) =>
+  //     record.status === "Processed" &&
+  //     new Date(record.time_Executed).getFullYear() === previousYear
+  // );
+  // const crYearProcessed = positionsList.positions.filter(
+  //   (record) =>
+  //     record.status === "Processed" &&
+  //     new Date(record.time_Executed).getFullYear() === currentYear
+  // );
+  // const processDif =
+  //   100 *
+  //   Math.abs(
+  //     (prYearProcessed - crYearProcessed) /
+  //       ((prYearProcessed + crYearProcessed) / 2)
+  //   );
+
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -402,62 +512,44 @@ function OrderList() {
           <Typography variant="h3" gutterBottom display="inline">
             Positions
           </Typography>
-
-          {/* <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-            <Link component={NavLink} to="/">
-              Dashboard
-            </Link>
-            <Link component={NavLink} to="/">
-              Pages
-            </Link>
-            <Typography>Positions</Typography>
-          </Breadcrumbs> */}
         </Grid>
-        {/* <Grid item>
-          <div>
-            <Button variant="contained" color="primary">
-              <AddIcon />
-              New Order
-            </Button>
-          </div>
-        </Grid> */}
       </Grid>
       <Grid container spacing={6}>
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
-            title="Sales Today"
-            amount="2.532"
-            chip="Today"
+            title="Total Positions Open"
+            amount={positionOpend}
+            // chip="Today"
             percentagetext="+26%"
             percentagecolor={green[500]}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
-            title="Visitors"
-            amount="170.212"
-            chip="Annual"
+            title="Today P & L"
+            amount=""
+            // chip="Annual"
             percentagetext="-14%"
             percentagecolor={red[500]}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
-            title="Total Earnings"
-            amount="$ 24.300"
-            chip="Monthly"
+            title="P & L"
+            amount=""
+            // chip="Monthly"
             percentagetext="+18%"
             percentagecolor={green[500]}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
-            title="Pending Orders"
+            title="Recent Positions"
             amount="45"
-            chip="Yearly"
+            // chip="Yearly"
             percentagetext="-9%"
             percentagecolor={red[500]}
-            illustration="/static/img/illustrations/waiting.png"
+            // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
       </Grid>
