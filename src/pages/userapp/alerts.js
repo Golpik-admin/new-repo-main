@@ -431,11 +431,11 @@ function EnhancedTable() {
                       </TableRow>
                     );
                   })}
-                {emptyRows > 0 && (
+                {/* {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
                     <TableCell colSpan={8} />
                   </TableRow>
-                )}
+                )} */}
               </TableBody>
             </Table>
           </TableContainer>

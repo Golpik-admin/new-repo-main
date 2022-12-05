@@ -355,7 +355,6 @@ function EnhancedTable() {
                 )
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    console.log(row);
                     const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${row.id}`;
                     return (
@@ -370,14 +369,16 @@ function EnhancedTable() {
                         <TableCell align="left">{row.ticker}</TableCell>
                         <TableCell align="left">{row.option_Type}</TableCell>
                         <TableCell align="left">
-                          processD
-                          {row.quantity}
+                          {row.buy_Price_Executed}
                         </TableCell>
+                        <TableCell align="left">{row.quantity}</TableCell>
                         <TableCell align="left">
                           {row.buy_Order_Reason}
                         </TableCell>
                         <TableCell align="left">
-                          {row.capital_Committed}
+                          {row.capital_Committed !== null
+                            ? parseFloat(row.capital_Committed).toFixed(2)
+                            : ""}
                         </TableCell>
                         <TableCell align="right">{row.status}</TableCell>
                         <TableCell align="right">
@@ -401,18 +402,23 @@ function EnhancedTable() {
                         <TableCell align="right">
                           {row.sell_Price_Executed}
                         </TableCell>
-                        <TableCell align="right">{row.pnL}</TableCell>
+                        <TableCell align="right">
+                          {row.pnL !== null
+                            ? parseFloat(row.pnL).toFixed(2)
+                            : ""}
+                        </TableCell>
                         <TableCell align="right">
                           {row.sell_Order_Reason}
                         </TableCell>
                       </TableRow>
                     );
                   })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={8} />
+                {/* {emptyRows > 0 && (
+                  //  style={{ height: 53 * emptyRows }}
+                  <TableRow>
+                    <TableCell colSpan={12} />
                   </TableRow>
-                )}
+                )} */}
               </TableBody>
             </Table>
           </TableContainer>
