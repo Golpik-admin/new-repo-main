@@ -43,7 +43,7 @@ const AppBarComponent = () => (
             <Grid item>
               <Brand>
                 <BrandIcon />
-                Mira
+                {/* Mira */}
               </Brand>
             </Grid>
             <Grid item xs />

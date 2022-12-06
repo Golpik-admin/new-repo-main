@@ -47,10 +47,10 @@ const defaultVariant = {
     background: "#FFF",
   },
   sidebar: {
-    color: grey[200],
+    color: "#fff",
     background: "#233044",
     header: {
-      color: grey[200],
+      color: "#fff",
       background: "#233044",
       brand: {
         color: customBlue[500],
@@ -116,8 +116,8 @@ const lightVariant = merge(defaultVariant, {
     },
   },
   sidebar: {
-    color: grey[900],
-    background: "#FFF",
+    color: "#fff",
+    background: "#2f65cb",
     header: {
       color: "#FFF",
       background: customBlue[800],
