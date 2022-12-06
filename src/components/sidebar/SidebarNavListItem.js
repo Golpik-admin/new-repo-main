@@ -13,6 +13,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
 ));
 
 const Item = styled(ListItemButton)`
+  justify-content: center;
   z-index: 9;
   padding-top: ${(props) =>
     props.theme.spacing(props.depth && props.depth > 0 ? 2 : 3)};
@@ -23,20 +24,30 @@ const Item = styled(ListItemButton)`
   padding-right: ${(props) =>
     props.theme.spacing(props.depth && props.depth > 0 ? 0 : 0)};
   font-weight: ${(props) => props.theme.typography.fontWeightRegular};
-  svg {
-    color: ${(props) => props.theme.sidebar.color};
-    font-size: 20px;
-    width: 100%;
-    height: 20px;
-    padding: 0 ${(props) => props.theme.spacing(4)};
+  ${(props) => props.theme.breakpoints.up("md")} {
+    svg {
+      color: ${(props) => props.theme.sidebar.color};
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      padding: 0 ${(props) => props.theme.spacing(2)};
+      border-radius: 25px;
+    }
   }
   ${(props) => props.theme.breakpoints.down("md")} {
     svg {
       width: auto;
+      color: ${(props) => props.theme.sidebar.color};
+      padding: 0 ${(props) => props.theme.spacing(4)};
     }
   }
   &:hover {
     color: ${(props) => props.theme.sidebar.color};
+    background-color: transparent;
+    svg {
+      background-color: ${(props) =>
+        darken(0.3, props.theme.sidebar.background)};
+    }
     .side-title {
       left: 58px;
       opacity: 1;
@@ -45,14 +56,12 @@ const Item = styled(ListItemButton)`
     ${(props) => props.theme.breakpoints.down("md")} {
       .side-title {
         left: auto;
-        background-color: ${(props) =>
-          darken(0.03, props.theme.sidebar.background)};
+        background-color: transparent;
       }
     }
   }
   &.${(props) => props.activeclassname} {
-    background-color: ${(props) =>
-      darken(0.03, props.theme.sidebar.background)};
+    background-color: transparent;
     span {
       color: ${(props) => props.theme.sidebar.color};
     }
