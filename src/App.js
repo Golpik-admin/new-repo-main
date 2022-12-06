@@ -32,8 +32,8 @@ function App({ emotionCache = clientSideEmotionCache }) {
     <CacheProvider value={emotionCache}>
       <HelmetProvider>
         <Helmet
-          titleTemplate="%s | Mira"
-          defaultTitle="Mira - React Material Admin Dashboard"
+          titleTemplate="Consilience Trading"
+          defaultTitle="Consilience Trading Dashboard"
         />
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>

@@ -42,7 +42,7 @@ function SignIn() {
         try {
           await signIn(values.email, values.password);
 
-          navigate("/private");
+          navigate("/dashboard");
         } catch (error) {
           const message = error.message || "Something went wrong";
 
@@ -62,10 +62,10 @@ function SignIn() {
         values,
       }) => (
         <form noValidate onSubmit={handleSubmit}>
-          <Alert mt={3} mb={3} severity="info">
-            Use <strong>demo@bootlab.io</strong> and{" "}
-            <strong>unsafepassword</strong> to sign in
-          </Alert>
+          {/* <Alert mt={3} mb={3} severity="info">
+            Use <strong>demo@golpik.com</strong> and{" "}
+            <strong>safepassword</strong> to sign in
+          </Alert> */}
           {errors.submit && (
             <Alert mt={2} mb={3} severity="warning">
               {errors.submit}

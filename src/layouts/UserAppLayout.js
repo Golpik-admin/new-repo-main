@@ -15,7 +15,8 @@ import Footer from "../components/Footer";
 import Settings from "../components/Settings";
 import UserDashboard from "../pages/dashboards/Default/index";
 
-const drawerWidth = 258;
+const drawerWidth = 58;
+const drawerWidthXs = 258;
 
 const Root = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ const Dashboard = ({ children }) => {
       <Drawer>
         <Box sx={{ display: { xs: "block", lg: "none" } }}>
           <Sidebar
-            PaperProps={{ style: { width: drawerWidth } }}
+            PaperProps={{ style: { width: drawerWidthXs } }}
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}

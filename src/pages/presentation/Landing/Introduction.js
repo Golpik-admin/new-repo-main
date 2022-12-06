@@ -121,7 +121,7 @@ function Introduction() {
         <Grid container alignItems="center" justifyContent="center" spacing={4}>
           <Grid item xs={12} sm={9} md={8} lg={8}>
             <Content>
-              <Version variant="body2">v4.2.0</Version>
+              <Version variant="body2">v4.2.0 afafa</Version>
               <Title variant="h1" gutterBottom>
                 The simplest and fastest way to build your next{" "}
                 <span>Material UI</span> dashboard or app.
