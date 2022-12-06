@@ -1,17 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { apiEndpoint } from "../../config";
 
 const initialState = {
   positions: [],
   loading: true,
   errors: null,
 };
-export const url = process.env.REACT_APP_POSSITIONS_API;
+const userId = "6372c6c0a8b2c2ec60b2da52";
+const startDate = null;
+const endDate = null;
 export const fetchPositions = createAsyncThunk(
   "positions/fetchPositions",
-  async () => {
+  async (args = null) => {
     const response = await axios
-      .get(`${url}`)
+      .get(
+        `${apiEndpoint}/ActiveTrades/${userId}/${startDate}/${endDate}/TextForAccessToken`,
+        {
+          params: {
+            status: args !== null ? args.status : null,
+            count: args !== null ? args.count : null,
+          },
+        }
+      )
       .then((response) => {
         return response.data;
       })

@@ -200,6 +200,14 @@ const EnhancedTableHead = (props) => {
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const { numSelected } = props;
+  const dispatch = useDispatch();
+  const handleChange = (event) => {
+    if (event.target.value === "all") {
+      dispatch(fetchPositions({ status: null, count: null }));
+    } else {
+      dispatch(fetchPositions({ status: event.target.value, count: null }));
+    }
+  };
   return (
     <Toolbar>
       <ToolbarTitle>
@@ -216,54 +224,64 @@ const EnhancedTableToolbar = (props) => {
       <Spacer />
       <div>
         {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete" size="large">
-              <ArchiveIcon />
-            </IconButton>
-          </Tooltip>
+          // <Tooltip title="Delete">
+          //   <IconButton aria-label="Delete" size="large">
+          //     <ArchiveIcon />
+          //   </IconButton>
+          // </Tooltip>
+          <RadioGroup
+            aria-label="Filters"
+            name="positionsFilters"
+            onChange={handleChange}
+          >
+            <FormControlLabel value="all" control={<Radio />} label="All" />
+            <FormControlLabel value="open" control={<Radio />} label="Open" />
+            <FormControlLabel
+              value="closed"
+              control={<Radio />}
+              label="Closed"
+            />
+            <FormControlLabel
+              value="failed"
+              control={<Radio />}
+              label="Failed"
+            />
+            <FormControlLabel
+              value="riskmanaged"
+              control={<Radio />}
+              label="Risk Managed"
+            />
+          </RadioGroup>
         ) : (
-          // <RadioGroup aria-label="Filters" name="alertFilters">
-          //   <FormControlLabel value="all" control={<Radio />} label="All" />
-          //   <FormControlLabel value="all" control={<Radio />} label="All" />
-          //   <FormControlLabel
-          //     value="processed"
-          //     control={<Radio />}
-          //     label="Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="unprocessed"
-          //     control={<Radio />}
-          //     label="Un Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="expired"
-          //     control={<Radio />}
-          //     label="Expired"
-          //   />
-          // </RadioGroup>
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list" size="large">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-          // <RadioGroup aria-label="Filters" name="alertFilters">
-          //   <FormControlLabel value="all" control={<Radio />} label="All" />
-          //   <FormControlLabel
-          //     value="processed"
-          //     control={<Radio />}
-          //     label="Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="unprocessed"
-          //     control={<Radio />}
-          //     label="Un Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="expired"
-          //     control={<Radio />}
-          //     label="Expired"
-          //   />
-          // </RadioGroup>
+          // <Tooltip title="Filter list">
+          //   <IconButton aria-label="Filter list" size="large">
+          //     <FilterListIcon />
+          //   </IconButton>
+          // </Tooltip>
+
+          <RadioGroup
+            aria-label="Filters"
+            name="positionsFilters"
+            onChange={handleChange}
+          >
+            <FormControlLabel value="all" control={<Radio />} label="All" />
+            <FormControlLabel value="open" control={<Radio />} label="Open" />
+            <FormControlLabel
+              value="closed"
+              control={<Radio />}
+              label="Closed"
+            />
+            <FormControlLabel
+              value="failed"
+              control={<Radio />}
+              label="Failed"
+            />
+            <FormControlLabel
+              value="riskmanaged"
+              control={<Radio />}
+              label="Risk Managed"
+            />
+          </RadioGroup>
         )}
       </div>
     </Toolbar>
@@ -473,41 +491,12 @@ function OrderList() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchPositions());
+    dispatch(fetchPositions({ status: "open", count: null }));
+    dispatch(fetchPositions({ status: "closed", count: null }));
+    dispatch(fetchPositions({ status: "failed", count: null }));
   }, []);
 
   const positionsList = useSelector((state) => state.positionsList);
-  const positionOpnd = positionsList.positions.filter(
-    (record) => record.status === "open"
-  );
-  // const unprocessed = positionsList.positions.filter(
-  //   (record) => record.status === "Unprocessed"
-  // );
-  // const expired = positionsList.positions.filter(
-  //   (record) => record.status === "Expired"
-  // );
-  const positionOpend = positionOpnd?.length;
-  // const unProcessedRecord = unprocessed.length;
-  // const exiredRecord = expired.length;
-
-  // const currentYear = new Date().getFullYear(); // 2020
-  // const previousYear = currentYear - 1;
-
-  // const prYearProcessed = positionsList.positions.filter(
-  //   (record) =>
-  //     record.status === "Processed" &&
-  //     new Date(record.time_Executed).getFullYear() === previousYear
-  // );
-  // const crYearProcessed = positionsList.positions.filter(
-  //   (record) =>
-  //     record.status === "Processed" &&
-  //     new Date(record.time_Executed).getFullYear() === currentYear
-  // );
-  // const processDif =
-  //   100 *
-  //   Math.abs(
-  //     (prYearProcessed - crYearProcessed) /
-  //       ((prYearProcessed + crYearProcessed) / 2)
-  //   );
 
   return (
     <React.Fragment>
@@ -524,7 +513,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Total Positions Open"
-            amount={positionOpend}
+            amount=""
             // chip="Today"
             percentagetext="+26%"
             percentagecolor={green[500]}
