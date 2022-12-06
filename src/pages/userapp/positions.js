@@ -492,8 +492,6 @@ function OrderList() {
   useEffect(() => {
     dispatch(fetchPositions());
     dispatch(fetchPositions({ status: "open", count: null }));
-    dispatch(fetchPositions({ status: "closed", count: null }));
-    dispatch(fetchPositions({ status: "failed", count: null }));
   }, []);
 
   const positionsList = useSelector((state) => state.positionsList);
@@ -513,7 +511,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Total Positions Open"
-            amount=""
+            amount={positionsList.positionsOpen}
             // chip="Today"
             percentagetext="+26%"
             percentagecolor={green[500]}

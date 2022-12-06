@@ -6,6 +6,7 @@ const initialState = {
   positions: [],
   loading: true,
   errors: null,
+  positionsOpen: 0,
 };
 const userId = "6372c6c0a8b2c2ec60b2da52";
 const startDate = null;
@@ -42,9 +43,18 @@ export const positionsSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchPositions.fulfilled, (state, action) => {
-        state.loading = false;
-        state.positions = [];
-        state.positions = action.payload;
+        console.log(action);
+        if (
+          action.payload.Status !== undefined &&
+          action.payload.Status === "open"
+        ) {
+          state.positionsOpen = action.payload.Count;
+        }
+        if (action.payload.Status === undefined) {
+          state.loading = false;
+          state.positions = [];
+          state.positions = action.payload;
+        }
       })
       .addCase(fetchPositions.rejected, (state, action) => {
         state.loading = false;

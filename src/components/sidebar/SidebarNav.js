@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import ReactPerfectScrollbar from "react-perfect-scrollbar";
-import { List, Typography, Button } from "@mui/material";
+import { List, Typography, Button, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -32,22 +32,22 @@ const Items = styled.div`
   padding-bottom: ${(props) => props.theme.spacing(2.5)};
 `;
 
-const Box = styled.div`
-  transform: rotate(-90deg);
-  background-color: ${(props) => props.theme.sidebar.background};
-  //position: absolute;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
-  .vert-logo {
-    // position: absolute;
-    display: inline-flex;
-    // bottom: -8px;
-    // left: -90px;
-    color: #fff;
-    margin: 16px 0 0 8px;
-  }
-`;
+// const Box = styled.div`
+//   transform: rotate(-90deg);
+//   background-color: ${(props) => props.theme.sidebar.background};
+//   //position: absolute;
+//   // bottom: 0;
+//   // left: 0;
+//   // right: 0;
+//   .vert-logo {
+//     // position: absolute;
+//     display: inline-flex;
+//     // bottom: -8px;
+//     // left: -90px;
+//     color: #fff;
+//     margin: 16px 0 0 8px;
+//   }
+// `;
 
 const SidebarNav = ({ items }) => {
   const theme = useTheme();

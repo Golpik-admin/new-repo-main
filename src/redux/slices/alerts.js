@@ -21,7 +21,7 @@ export const fetchAlerts = createAsyncThunk(
         `${apiEndpoint}/Alerts/${userId}/${startDate}/${endDate}/TextForAccessToken`,
         {
           params: {
-            status: args !== null && args !== "all" ? args.status : null,
+            status: args !== null && args.status !== "all" ? args.status : null,
             count: args !== null ? args.count : null,
           },
         }
