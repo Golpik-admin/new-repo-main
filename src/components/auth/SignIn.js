@@ -42,7 +42,7 @@ function SignIn() {
         try {
           await signIn(values.email, values.password);
 
-          navigate("/private");
+          navigate("/dashboard");
         } catch (error) {
           const message = error.message || "Something went wrong";
 
