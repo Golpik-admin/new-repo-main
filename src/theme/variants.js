@@ -34,7 +34,7 @@ const defaultVariant = {
   },
   header: {
     color: grey[500],
-    background: "transparent",
+    background: "#F7F9FC",
     search: {
       color: grey[800],
     },
@@ -107,7 +107,7 @@ const lightVariant = merge(defaultVariant, {
   },
   header: {
     color: grey[800],
-    background: "transparent",
+    background: "#F7F9FC",
     search: {
       color: grey[100],
     },

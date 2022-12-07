@@ -233,7 +233,7 @@ const EnhancedTableToolbar = (props) => {
       <Box className="radio-parent">
         {numSelected > 0 ? (
           <RadioGroup
-            className="radio-cus"
+            class="murtaza"
             aria-label="Filters"
             name="alertFilters"
             onChange={handleChange}
