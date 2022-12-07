@@ -28,6 +28,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  TextField,
   CircularProgress as MuiCircularProgress,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
@@ -42,6 +43,12 @@ import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts, filters } from "../../redux/slices/alerts";
 import Moment from "react-moment";
+
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
+import "./cus-style.css";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -170,6 +177,7 @@ const EnhancedTableHead = (props) => {
     onRequestSort(event, property);
   };
 
+  const [value, setValue] = React.useState([null, null]);
   return (
     <TableHead>
       <TableRow>
@@ -211,7 +219,7 @@ const Box = styled.div`
         border-radius: 4px;
         left: 0;
         right: 0;
-        padding: 15px 22px;
+        padding: 18px 22px;
         &.Mui-checked {
           background: #2f65cbd1;
         }
@@ -222,8 +230,9 @@ const Box = styled.div`
       .MuiFormControlLabel-label {
         position: relative;
         z-index: 9;
-        padding: 15px 22px;
+        padding: 8px 22px;
         font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
       }
     }
   }
@@ -236,6 +245,7 @@ const EnhancedTableToolbar = (props) => {
   const handleChange = (event) => {
     dispatch(fetchAlerts({ status: event.target.value, count: null }));
   };
+  const [value, setValue] = React.useState([null, null]);
 
   return (
     <Toolbar>
@@ -252,55 +262,50 @@ const EnhancedTableToolbar = (props) => {
       </ToolbarTitle>
       <Spacer />
       <Box className="radio-parent">
-        {numSelected > 0 ? (
-          <RadioGroup
-            className="radio-cus"
-            aria-label="Filters"
-            name="alertFilters"
-            onChange={handleChange}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel
-              value="Processed"
-              control={<Radio />}
-              label="Processed"
-            />
-            <FormControlLabel
-              value="Unprocessed"
-              control={<Radio />}
-              label="Un Processed"
-            />
-            <FormControlLabel
-              value="Expired"
-              control={<Radio />}
-              label="Expired"
-            />
-          </RadioGroup>
-        ) : (
-          <RadioGroup
-            aria-label="Filters"
-            name="alertFilters"
-            onChange={handleChange}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel
-              value="Processed"
-              control={<Radio />}
-              label="Processed"
-            />
-            <FormControlLabel
-              value="Unprocessed"
-              control={<Radio />}
-              label="Un Processed"
-            />
-            <FormControlLabel
-              value="Expired"
-              control={<Radio />}
-              label="Expired"
-            />
-          </RadioGroup>
-        )}
+        <RadioGroup
+          aria-label="Filters"
+          name="alertFilters"
+          onChange={handleChange}
+        >
+          <FormControlLabel value="all" control={<Radio />} label="All" />
+          <FormControlLabel
+            value="Processed"
+            control={<Radio />}
+            label="Processed"
+          />
+          <FormControlLabel
+            value="Unprocessed"
+            control={<Radio />}
+            label="Un Processed"
+          />
+          <FormControlLabel
+            value="Expired"
+            control={<Radio />}
+            label="Expired"
+          />
+        </RadioGroup>
       </Box>
+      <StyledEngineProvider injectFirst>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={{ start: "Jan, 2019", end: "Dec, 2019" }}
+        >
+          <DateRangePicker
+            className="picker-range"
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            renderInput={(startProps, endProps) => (
+              <React.Fragment>
+                <TextField {...startProps} />
+                {/* <Box sx={{ mx: 2 }}> to </Box> */}
+                <TextField {...endProps} />
+              </React.Fragment>
+            )}
+          />
+        </LocalizationProvider>
+      </StyledEngineProvider>
     </Toolbar>
   );
 };
