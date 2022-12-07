@@ -28,7 +28,7 @@ const defaultVariant = {
       contrastText: "#FFF",
     },
     background: {
-      default: "#F7F9FC",
+      default: "#F5F6FA",
       paper: "#FFF",
     },
   },

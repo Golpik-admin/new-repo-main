@@ -28,6 +28,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  TextField,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
 import {
@@ -42,6 +43,11 @@ import { useEffect } from "react";
 import { fetchPositions, fetchPNL } from "../../redux/slices/possitions";
 import Moment from "react-moment";
 import moment from "moment-timezone";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
+import "./cus-style.css";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -244,6 +250,7 @@ const EnhancedTableToolbar = (props) => {
       dispatch(fetchPositions({ status: event.target.value, count: null }));
     }
   };
+  const [value, setValue] = React.useState([null, null]);
   return (
     <Toolbar>
       <ToolbarTitle>
@@ -275,6 +282,27 @@ const EnhancedTableToolbar = (props) => {
           />
         </RadioGroup>
       </Box>
+      <StyledEngineProvider injectFirst>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={{ start: "Jan, 2019", end: "Dec, 2019" }}
+        >
+          <DateRangePicker
+            className="picker-range"
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            renderInput={(startProps, endProps) => (
+              <React.Fragment>
+                <TextField {...startProps} />
+                {/* <Box sx={{ mx: 2 }}> to </Box> */}
+                <TextField {...endProps} />
+              </React.Fragment>
+            )}
+          />
+        </LocalizationProvider>
+      </StyledEngineProvider>
     </Toolbar>
   );
 };
@@ -507,14 +535,6 @@ function OrderList() {
   return (
     <React.Fragment>
       <Helmet title="Orders" />
-
-      <Grid justifyContent="space-between" container spacing={10}>
-        <Grid item>
-          <Typography variant="h3" gutterBottom display="inline">
-            Positions
-          </Typography>
-        </Grid>
-      </Grid>
       <Grid container spacing={6}>
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
