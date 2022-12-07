@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Box,
   Breadcrumbs as MuiBreadcrumbs,
   Button,
   Checkbox,
@@ -198,6 +197,42 @@ const EnhancedTableHead = (props) => {
   );
 };
 
+const Box = styled.div`
+  &.radio-parent {
+    flex: 1 1 100%;
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+      label {
+        position: relative;
+      }
+      .MuiRadio-root {
+        position: absolute;
+        z-index: 1;
+        background: #eee;
+        border-radius: 4px;
+        left: 0;
+        right: 0;
+        padding: 18px 22px;
+        &.Mui-checked {
+          background: #2f65cbd1;
+        }
+        svg {
+          display: none;
+        }
+      }
+      .MuiFormControlLabel-label {
+        position: relative;
+        z-index: 9;
+        padding: 8px 22px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+      }
+    }
+  }
+`;
+
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const { numSelected } = props;
@@ -223,7 +258,7 @@ const EnhancedTableToolbar = (props) => {
         )}
       </ToolbarTitle>
       <Spacer />
-      <div>
+      <Box className="radio-parent">
         <RadioGroup
           aria-label="Filters"
           name="positionsFilters"
@@ -239,7 +274,7 @@ const EnhancedTableToolbar = (props) => {
             label="Risk Managed"
           />
         </RadioGroup>
-      </div>
+      </Box>
     </Toolbar>
   );
 };

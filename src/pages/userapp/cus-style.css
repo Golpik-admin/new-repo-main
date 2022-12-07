@@ -1,0 +1,6 @@
+.MuiDateRangePickerInput-root.picker-range {
+  width: 100%;
+}
+.MuiPickersPopper-paper .picker-range > div:first-child {
+  display: none;
+}
