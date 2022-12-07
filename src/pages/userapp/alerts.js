@@ -250,7 +250,7 @@ const EnhancedTableToolbar = (props) => {
   return (
     <Toolbar>
       <ToolbarTitle>
-        {numSelected > 0 ? (
+        {/* {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
             {numSelected} selected
           </Typography>
@@ -258,7 +258,7 @@ const EnhancedTableToolbar = (props) => {
           <Typography variant="h6" id="tableTitle">
             Alerts
           </Typography>
-        )}
+        )} */}
       </ToolbarTitle>
       <Spacer />
       <Box className="radio-parent">
@@ -491,20 +491,20 @@ function OrderList() {
     <React.Fragment>
       <Helmet title="Orders" />
 
-      <Grid justifyContent="space-between" container spacing={10}>
+      {/* <Grid justifyContent="space-between" container spacing={10}>
         <Grid item>
           <Typography variant="h3" gutterBottom display="inline">
             Alerts
           </Typography>
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid container spacing={6}>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Processed"
             amount={alertList.processedAlertsCount}
             // chip="Today"
-            percentagetext="+26%"
+            percentagetext="26% &#8593;"
             percentagecolor={green[500]}
           />
         </Grid>
@@ -536,7 +536,7 @@ function OrderList() {
             // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
           <Stats
             title="Pro +"
             amount="Subscription"

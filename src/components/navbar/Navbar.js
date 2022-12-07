@@ -11,6 +11,7 @@ import {
   AppBar as MuiAppBar,
   IconButton as MuiIconButton,
   Toolbar,
+  Typography,
 } from "@mui/material";
 
 import { Menu as MenuIcon } from "@mui/icons-material";
@@ -63,6 +64,11 @@ const SearchIconWrapper = styled.div`
   }
 `;
 
+const ToolbarTitle = styled.div`
+  min-width: 150px;
+  margin-left: 15px;
+`;
+
 const Input = styled(InputBase)`
   color: inherit;
   width: 100%;
@@ -101,12 +107,17 @@ const Navbar = ({ onDrawerToggle }) => {
                 </SearchIconWrapper>
                 <Input placeholder={t("Search")} />
               </Search> */}
+              <ToolbarTitle>
+                <Typography variant="h2" id="tableTitle">
+                  Alerts
+                </Typography>
+              </ToolbarTitle>
             </Grid>
             <Grid item xs />
             <Grid item>
-              {/* <NavbarMessagesDropdown />
+              {/* <NavbarMessagesDropdown />*/}
               <NavbarNotificationsDropdown />
-              <NavbarLanguagesDropdown /> */}
+              {/*<NavbarLanguagesDropdown /> */}
               <NavbarUserDropdown />
             </Grid>
           </Grid>
