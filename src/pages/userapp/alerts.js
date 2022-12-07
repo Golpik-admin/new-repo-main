@@ -200,8 +200,29 @@ const Box = styled.div`
       display: flex;
       flex-direction: row;
       justify-content: end;
-      &.cus-radio {
-        opacity: 0;
+      label {
+        position: relative;
+      }
+      .MuiRadio-root {
+        position: absolute;
+        z-index: 1;
+        background: #eee;
+        border-radius: 4px;
+        left: 0;
+        right: 0;
+        padding: 15px 22px;
+        &.Mui-checked {
+          background: #2f65cbd1;
+        }
+        svg {
+          display: none;
+        }
+      }
+      .MuiFormControlLabel-label {
+        position: relative;
+        z-index: 9;
+        padding: 15px 22px;
+        font-weight: 500;
       }
     }
   }
@@ -447,7 +468,7 @@ function OrderList() {
         </Grid>
       </Grid>
       <Grid container spacing={6}>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Processed"
             amount={alertList.processedAlertsCount}
@@ -456,7 +477,7 @@ function OrderList() {
             percentagecolor={green[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Unprocessed"
             amount={alertList.unprocessedAlertsCount}
@@ -465,7 +486,7 @@ function OrderList() {
             percentagecolor={red[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Expired"
             amount={alertList.expiredAlertsCount}
@@ -474,7 +495,7 @@ function OrderList() {
             percentagecolor={green[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Alerts Per Hour"
             amount="45"
@@ -483,6 +504,17 @@ function OrderList() {
             percentagecolor={red[500]}
             // illustration="/static/img/illustrations/waiting.png"
           />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
+          <Stats
+            title="Pro +"
+            amount="Subscription"
+            chip=""
+            percentagetext="Details"
+            percentagecolor={red[500]}
+            // illustration="/static/img/illustrations/waiting.png"
+          />
+          {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>
       </Grid>
       <Divider my={6} />

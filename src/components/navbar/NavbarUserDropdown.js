@@ -17,6 +17,9 @@ import {
 import useAuth from "../../hooks/useAuth";
 
 const IconButton = styled(MuiIconButton)`
+  &:hover {
+    background-color: transparent;
+  }
   svg {
     width: 22px;
     height: 22px;
