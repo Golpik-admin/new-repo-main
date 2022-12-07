@@ -40,7 +40,7 @@ import {
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
-import { fetchPositions } from "../../redux/slices/possitions";
+import { fetchPositions, fetchPNL } from "../../redux/slices/possitions";
 import Moment from "react-moment";
 
 const Divider = styled(MuiDivider)(spacing);
@@ -489,9 +489,21 @@ function EnhancedTable() {
 
 function OrderList() {
   const dispatch = useDispatch();
+  let date = new Date();
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
+    .toISOString()
+    .split("T")[0];
+  const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+    .toISOString()
+    .split("T")[0];
+  const today = new Date().toISOString().split("T")[0];
   useEffect(() => {
     dispatch(fetchPositions());
-    dispatch(fetchPositions({ status: "open", count: null }));
+    dispatch(fetchPositions({ status: "open", count: true }));
+    dispatch(
+      fetchPNL({ startDate: firstDay, endDate: lastDay, apiCall: "totalPnl" })
+    );
+    dispatch(fetchPNL({ startDate: today, endDate: today, apiCall: "today" }));
   }, []);
 
   const positionsList = useSelector((state) => state.positionsList);
@@ -520,7 +532,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Today P & L"
-            amount=""
+            amount={positionsList.todayPnl}
             // chip="Annual"
             percentagetext="-14%"
             percentagecolor={red[500]}
@@ -529,7 +541,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="P & L"
-            amount=""
+            amount={positionsList.pnl}
             // chip="Monthly"
             percentagetext="+18%"
             percentagecolor={green[500]}
