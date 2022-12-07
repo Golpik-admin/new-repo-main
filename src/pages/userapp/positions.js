@@ -42,6 +42,7 @@ import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchPositions, fetchPNL } from "../../redux/slices/possitions";
 import Moment from "react-moment";
+import moment from "moment-timezone";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -223,66 +224,21 @@ const EnhancedTableToolbar = (props) => {
       </ToolbarTitle>
       <Spacer />
       <div>
-        {numSelected > 0 ? (
-          // <Tooltip title="Delete">
-          //   <IconButton aria-label="Delete" size="large">
-          //     <ArchiveIcon />
-          //   </IconButton>
-          // </Tooltip>
-          <RadioGroup
-            aria-label="Filters"
-            name="positionsFilters"
-            onChange={handleChange}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel value="open" control={<Radio />} label="Open" />
-            <FormControlLabel
-              value="closed"
-              control={<Radio />}
-              label="Closed"
-            />
-            <FormControlLabel
-              value="failed"
-              control={<Radio />}
-              label="Failed"
-            />
-            <FormControlLabel
-              value="riskmanaged"
-              control={<Radio />}
-              label="Risk Managed"
-            />
-          </RadioGroup>
-        ) : (
-          // <Tooltip title="Filter list">
-          //   <IconButton aria-label="Filter list" size="large">
-          //     <FilterListIcon />
-          //   </IconButton>
-          // </Tooltip>
-
-          <RadioGroup
-            aria-label="Filters"
-            name="positionsFilters"
-            onChange={handleChange}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel value="open" control={<Radio />} label="Open" />
-            <FormControlLabel
-              value="closed"
-              control={<Radio />}
-              label="Closed"
-            />
-            <FormControlLabel
-              value="failed"
-              control={<Radio />}
-              label="Failed"
-            />
-            <FormControlLabel
-              value="riskmanaged"
-              control={<Radio />}
-              label="Risk Managed"
-            />
-          </RadioGroup>
-        )}
+        <RadioGroup
+          aria-label="Filters"
+          name="positionsFilters"
+          onChange={handleChange}
+        >
+          <FormControlLabel value="all" control={<Radio />} label="All" />
+          <FormControlLabel value="open" control={<Radio />} label="Open" />
+          <FormControlLabel value="closed" control={<Radio />} label="Closed" />
+          <FormControlLabel value="failed" control={<Radio />} label="Failed" />
+          <FormControlLabel
+            value="riskmanaged"
+            control={<Radio />}
+            label="Risk Managed"
+          />
+        </RadioGroup>
       </div>
     </Toolbar>
   );
@@ -489,14 +445,19 @@ function EnhancedTable() {
 
 function OrderList() {
   const dispatch = useDispatch();
+
   let date = new Date();
-  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
-    .toISOString()
-    .split("T")[0];
-  const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-    .toISOString()
-    .split("T")[0];
-  const today = new Date().toISOString().split("T")[0];
+  const firstDay = moment(date)
+    .subtract(1, "months")
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const lastDay = moment(date)
+    .subtract(1, "months")
+    .endOf("month")
+    .format("YYYY-MM-DD");
+
+  console.log(firstDay, lastDay);
+  const today = moment().format("YYYY-MM-DD");
   useEffect(() => {
     dispatch(fetchPositions());
     dispatch(fetchPositions({ status: "open", count: true }));
@@ -532,7 +493,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="Today P & L"
-            amount={positionsList.todayPnl}
+            amount={parseFloat(positionsList.todayPnl).toFixed(2)}
             // chip="Annual"
             percentagetext="-14%"
             percentagecolor={red[500]}
@@ -541,7 +502,7 @@ function OrderList() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats
             title="P & L"
-            amount={positionsList.pnl}
+            amount={parseFloat(positionsList.pnl).toFixed(2)}
             // chip="Monthly"
             percentagetext="+18%"
             percentagecolor={green[500]}

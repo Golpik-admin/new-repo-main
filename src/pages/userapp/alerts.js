@@ -42,7 +42,6 @@ import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts, filters } from "../../redux/slices/alerts";
 import Moment from "react-moment";
-
 const Divider = styled(MuiDivider)(spacing);
 
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
@@ -231,54 +230,29 @@ const EnhancedTableToolbar = (props) => {
       </ToolbarTitle>
       <Spacer />
       <Box className="radio-parent">
-        {numSelected > 0 ? (
-          <RadioGroup
-            class="murtaza"
-            aria-label="Filters"
-            name="alertFilters"
-            onChange={handleChange}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel
-              value="Processed"
-              control={<Radio />}
-              label="Processed"
-            />
-            <FormControlLabel
-              value="Unprocessed"
-              control={<Radio />}
-              label="Un Processed"
-            />
-            <FormControlLabel
-              value="Expired"
-              control={<Radio />}
-              label="Expired"
-            />
-          </RadioGroup>
-        ) : (
-          <RadioGroup
-            aria-label="Filters"
-            name="alertFilters"
-            onChange={handleChange}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel
-              value="Processed"
-              control={<Radio />}
-              label="Processed"
-            />
-            <FormControlLabel
-              value="Unprocessed"
-              control={<Radio />}
-              label="Un Processed"
-            />
-            <FormControlLabel
-              value="Expired"
-              control={<Radio />}
-              label="Expired"
-            />
-          </RadioGroup>
-        )}
+        <RadioGroup
+          class="murtaza"
+          aria-label="Filters"
+          name="alertFilters"
+          onChange={handleChange}
+        >
+          <FormControlLabel value="all" control={<Radio />} label="All" />
+          <FormControlLabel
+            value="Processed"
+            control={<Radio />}
+            label="Processed"
+          />
+          <FormControlLabel
+            value="Unprocessed"
+            control={<Radio />}
+            label="Un Processed"
+          />
+          <FormControlLabel
+            value="Expired"
+            control={<Radio />}
+            label="Expired"
+          />
+        </RadioGroup>
       </Box>
     </Toolbar>
   );
