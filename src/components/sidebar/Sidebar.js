@@ -66,14 +66,14 @@ const BrandChip = styled(Chip)`
 const Sidebar = ({ items, showFooter = true, ...rest }) => {
   return (
     <Drawer variant="permanent" {...rest}>
-      <Brand component={NavLink} to="/">
-        {/* <BrandIcon />{" "} */}
+      {/* <Brand component={NavLink} to="/">
+        {/* <BrandIcon />{" "}
         <Box ml={1}>
-          {/* 
+           
           Mira <BrandChip label="PRO" />
-           */}
+           
         </Box>
-      </Brand>
+      </Brand> */}
       <SidebarNav items={items} />
       {/* {!!showFooter && <Footer />} */}
     </Drawer>
