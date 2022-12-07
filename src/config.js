@@ -18,3 +18,5 @@ export const cognitoConfig = {
   userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
   clientId: process.env.REACT_APP_COGNITO_CLIENT_ID,
 };
+
+export const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;

@@ -83,6 +83,10 @@ import Changelog from "./pages/docs/Changelog";
 import UsersAlerts from "./pages/userapp/alerts";
 import UserPositions from "./pages/userapp/positions";
 
+import UserSettings from "./pages/userapp/settings";
+import UserHelpCenter from "./pages/userapp/helpcenter";
+import UserIntegration from "./pages/userapp/integration";
+
 // Landing
 import Landing from "./pages/presentation/Landing";
 
@@ -175,6 +179,36 @@ const routes = [
       {
         path: "",
         element: <UserPositions />,
+      },
+    ],
+  },
+  {
+    path: "settings",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UserSettings />,
+      },
+    ],
+  },
+  {
+    path: "integration",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UserIntegration />,
+      },
+    ],
+  },
+  {
+    path: "help-center",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UserHelpCenter />,
       },
     ],
   },

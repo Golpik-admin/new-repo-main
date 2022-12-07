@@ -95,18 +95,18 @@ const Navbar = ({ onDrawerToggle }) => {
               </IconButton>
             </Grid>
             <Grid item>
-              <Search>
+              {/* <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
                 <Input placeholder={t("Search")} />
-              </Search>
+              </Search> */}
             </Grid>
             <Grid item xs />
             <Grid item>
-              <NavbarMessagesDropdown />
+              {/* <NavbarMessagesDropdown />
               <NavbarNotificationsDropdown />
-              <NavbarLanguagesDropdown />
+              <NavbarLanguagesDropdown /> */}
               <NavbarUserDropdown />
             </Grid>
           </Grid>

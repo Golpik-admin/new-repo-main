@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Box,
   Breadcrumbs as MuiBreadcrumbs,
   Button,
   Checkbox,
@@ -29,6 +28,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  CircularProgress as MuiCircularProgress,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
 import {
@@ -40,9 +40,8 @@ import {
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
-import { fetchAlerts } from "../../redux/slices/alerts";
+import { fetchAlerts, filters } from "../../redux/slices/alerts";
 import Moment from "react-moment";
-
 const Divider = styled(MuiDivider)(spacing);
 
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
@@ -194,9 +193,49 @@ const EnhancedTableHead = (props) => {
   );
 };
 
+const Box = styled.div`
+  &.radio-parent {
+    flex: 1 1 100%;
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+      label {
+        position: relative;
+      }
+      .MuiRadio-root {
+        position: absolute;
+        z-index: 1;
+        background: #eee;
+        border-radius: 4px;
+        left: 0;
+        right: 0;
+        padding: 15px 22px;
+        &.Mui-checked {
+          background: #2f65cbd1;
+        }
+        svg {
+          display: none;
+        }
+      }
+      .MuiFormControlLabel-label {
+        position: relative;
+        z-index: 9;
+        padding: 15px 22px;
+        font-weight: 500;
+      }
+    }
+  }
+`;
+
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const { numSelected } = props;
+  const dispatch = useDispatch();
+  const handleChange = (event) => {
+    dispatch(fetchAlerts({ status: event.target.value, count: null }));
+  };
+
   return (
     <Toolbar>
       <ToolbarTitle>
@@ -211,58 +250,31 @@ const EnhancedTableToolbar = (props) => {
         )}
       </ToolbarTitle>
       <Spacer />
-      <div>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete" size="large">
-              <ArchiveIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          // <RadioGroup aria-label="Filters" name="alertFilters">
-          //   <FormControlLabel value="all" control={<Radio />} label="All" />
-          //   <FormControlLabel value="all" control={<Radio />} label="All" />
-          //   <FormControlLabel
-          //     value="processed"
-          //     control={<Radio />}
-          //     label="Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="unprocessed"
-          //     control={<Radio />}
-          //     label="Un Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="expired"
-          //     control={<Radio />}
-          //     label="Expired"
-          //   />
-          // </RadioGroup>
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list" size="large">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-          // <RadioGroup aria-label="Filters" name="alertFilters">
-          //   <FormControlLabel value="all" control={<Radio />} label="All" />
-          //   <FormControlLabel
-          //     value="processed"
-          //     control={<Radio />}
-          //     label="Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="unprocessed"
-          //     control={<Radio />}
-          //     label="Un Processed"
-          //   />
-          //   <FormControlLabel
-          //     value="expired"
-          //     control={<Radio />}
-          //     label="Expired"
-          //   />
-          // </RadioGroup>
-        )}
-      </div>
+      <Box className="radio-parent">
+        <RadioGroup
+          class="murtaza"
+          aria-label="Filters"
+          name="alertFilters"
+          onChange={handleChange}
+        >
+          <FormControlLabel value="all" control={<Radio />} label="All" />
+          <FormControlLabel
+            value="Processed"
+            control={<Radio />}
+            label="Processed"
+          />
+          <FormControlLabel
+            value="Unprocessed"
+            control={<Radio />}
+            label="Un Processed"
+          />
+          <FormControlLabel
+            value="Expired"
+            control={<Radio />}
+            label="Expired"
+          />
+        </RadioGroup>
+      </Box>
     </Toolbar>
   );
 };
@@ -327,10 +339,10 @@ function EnhancedTable() {
     Math.min(rowsPerPage, alertList.alerts.length - page * rowsPerPage);
   return (
     <div>
-      {alertList.loading && <LinearProgress />}
-      {!alertList.loading && alertList.alerts.length ? (
-        <Paper>
-          <EnhancedTableToolbar numSelected={selected.length} />
+      <Paper>
+        <EnhancedTableToolbar numSelected={selected.length} />
+        {alertList.loading && <LinearProgress />}
+        {!alertList.loading && alertList.alerts.length ? (
           <TableContainer>
             <Table
               aria-labelledby="tableTitle"
@@ -388,46 +400,6 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        {/* <TableCell>
-                          {row.status === 0 && (
-                            <Chip
-                              size="small"
-                              mr={1}
-                              mb={1}
-                              label="Shipped"
-                              shipped={+true}
-                            />
-                          )}
-                          {row.status === 1 && (
-                            <Chip
-                              size="small"
-                              mr={1}
-                              mb={1}
-                              label="Processing"
-                              processing={+true}
-                            />
-                          )}
-                          {row.status === 2 && (
-                            <Chip
-                              size="small"
-                              mr={1}
-                              mb={1}
-                              label="Cancelled"
-                              cancelled={+true}
-                            />
-                          )}
-                        </TableCell> */}
-                        {/* <TableCell align="left">{row.method}</TableCell>
-                        <TableCell padding="none" align="right">
-                          <Box mr={2}>
-                            <IconButton aria-label="delete" size="large">
-                              <ArchiveIcon />
-                            </IconButton>
-                            <IconButton aria-label="details" size="large">
-                              <RemoveRedEyeIcon />
-                            </IconButton>
-                          </Box>
-                        </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -439,19 +411,7 @@ function EnhancedTable() {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={alertList.alerts.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      ) : (
-        <Paper>
-          <EnhancedTableToolbar numSelected={selected.length} />
+        ) : (
           <TableContainer>
             <Table
               aria-labelledby="tableTitle"
@@ -471,17 +431,17 @@ function EnhancedTable() {
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={alertList.alerts.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      )}
+        )}
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={alertList.alerts.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
     </div>
   );
 }
@@ -490,42 +450,12 @@ function OrderList() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAlerts());
+    dispatch(fetchAlerts({ status: "Processed", count: true }));
+    dispatch(fetchAlerts({ status: "Unprocessed", count: true }));
+    dispatch(fetchAlerts({ status: "Expired", count: true }));
   }, []);
   const alertList = useSelector((state) => state.alertsList);
-  const processed = alertList.alerts.filter(
-    (record) => record.status === "Processed"
-  );
-  const unprocessed = alertList.alerts.filter(
-    (record) => record.status === "Unprocessed"
-  );
-  const expired = alertList.alerts.filter(
-    (record) => record.status === "Expired"
-  );
-  const processedRecord = processed.length;
-  const unProcessedRecord = unprocessed.length;
-  const exiredRecord = expired.length;
-
-  const currentYear = new Date().getFullYear(); // 2020
-  const previousYear = currentYear - 1;
-
-  const prYearProcessed = alertList.alerts.filter(
-    (record) =>
-      record.status === "Processed" &&
-      new Date(record.time_Executed).getFullYear() === previousYear
-  );
-  const crYearProcessed = alertList.alerts.filter(
-    (record) =>
-      record.status === "Processed" &&
-      new Date(record.time_Executed).getFullYear() === currentYear
-  );
-  console.log(prYearProcessed, crYearProcessed);
-  const processDif =
-    100 *
-    Math.abs(
-      (prYearProcessed - crYearProcessed) /
-        ((prYearProcessed + crYearProcessed) / 2)
-    );
-
+  const CircularProgress = styled(MuiCircularProgress)(spacing);
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -535,55 +465,37 @@ function OrderList() {
           <Typography variant="h3" gutterBottom display="inline">
             Alerts
           </Typography>
-
-          {/* <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-            <Link component={NavLink} to="/">
-              Dashboard
-            </Link>
-            <Link component={NavLink} to="/">
-              Pages
-            </Link>
-            <Typography>Orders</Typography>
-          </Breadcrumbs> */}
         </Grid>
-        {/* <Grid item>
-          <div>
-            <Button variant="contained" color="primary">
-              <AddIcon />
-              New Order
-            </Button>
-          </div>
-        </Grid> */}
       </Grid>
       <Grid container spacing={6}>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Processed"
-            amount={processedRecord}
+            amount={alertList.processedAlertsCount}
             // chip="Today"
             percentagetext="+26%"
             percentagecolor={green[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Unprocessed"
-            amount={unProcessedRecord}
+            amount={alertList.unprocessedAlertsCount}
             // chip="Annual"
             percentagetext="-14%"
             percentagecolor={red[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Expired"
-            amount={exiredRecord}
+            amount={alertList.expiredAlertsCount}
             // chip="Monthly"
             percentagetext="+18%"
             percentagecolor={green[500]}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Alerts Per Hour"
             amount="45"
@@ -592,6 +504,17 @@ function OrderList() {
             percentagecolor={red[500]}
             // illustration="/static/img/illustrations/waiting.png"
           />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={2}>
+          <Stats
+            title="Pro +"
+            amount="Subscription"
+            chip=""
+            percentagetext="Details"
+            percentagecolor={red[500]}
+            // illustration="/static/img/illustrations/waiting.png"
+          />
+          {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>
       </Grid>
       <Divider my={6} />
