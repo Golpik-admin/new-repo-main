@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Box,
   Breadcrumbs as MuiBreadcrumbs,
   Button,
   Checkbox,
@@ -195,6 +194,20 @@ const EnhancedTableHead = (props) => {
   );
 };
 
+const Box = styled.div`
+  &.radio-parent {
+    flex: 1 1 100%;
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+      &.cus-radio {
+        opacity: 0;
+      }
+    }
+  }
+`;
+
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const { numSelected } = props;
@@ -217,9 +230,10 @@ const EnhancedTableToolbar = (props) => {
         )}
       </ToolbarTitle>
       <Spacer />
-      <div>
+      <Box className="radio-parent">
         {numSelected > 0 ? (
           <RadioGroup
+            class="murtaza"
             aria-label="Filters"
             name="alertFilters"
             onChange={handleChange}
@@ -265,7 +279,7 @@ const EnhancedTableToolbar = (props) => {
             />
           </RadioGroup>
         )}
-      </div>
+      </Box>
     </Toolbar>
   );
 };

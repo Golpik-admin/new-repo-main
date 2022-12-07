@@ -62,6 +62,10 @@ const Item = styled(ListItemButton)`
   }
   &.${(props) => props.activeclassname} {
     background-color: transparent;
+    svg {
+      background-color: ${(props) =>
+        darken(0.3, props.theme.sidebar.background)};
+    }
     span {
       color: ${(props) => props.theme.sidebar.color};
     }
