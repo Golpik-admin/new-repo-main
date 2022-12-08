@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable prettier/prettier */
+import * as React from "react";
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { darken } from "polished";
@@ -12,6 +13,7 @@ import {
   IconButton as MuiIconButton,
   Toolbar,
   Typography,
+  capitalize,
 } from "@mui/material";
 
 import { Menu as MenuIcon } from "@mui/icons-material";
@@ -85,6 +87,7 @@ const Input = styled(InputBase)`
 
 const Navbar = ({ onDrawerToggle }) => {
   const { t } = useTranslation();
+  const pathName = window.location.pathname.substr(1);
   return (
     <React.Fragment>
       <AppBar position="sticky" elevation={0}>
@@ -108,8 +111,13 @@ const Navbar = ({ onDrawerToggle }) => {
                 <Input placeholder={t("Search")} />
               </Search> */}
               <ToolbarTitle>
-                <Typography variant="h2" id="tableTitle">
-                  Alerts
+                <Typography
+                  variant="h2"
+                  sx={{
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {pathName}
                 </Typography>
               </ToolbarTitle>
             </Grid>
