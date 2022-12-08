@@ -221,7 +221,8 @@ const Box = styled.div`
         right: 0;
         padding: 18px 22px;
         &.Mui-checked {
-          background: #2f65cbd1;
+          background: ${(props) => props.theme.sidebar.background};
+          + .MuiTypography-root{color:#fff} 
         }
         svg {
           display: none;
