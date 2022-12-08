@@ -183,9 +183,9 @@ function Settings() {
 
   return (
     <React.Fragment>
-      <Fab color="primary" aria-label="Edit" onClick={toggleDrawer(true)}>
+      {/* <Fab color="primary" aria-label="Edit" onClick={toggleDrawer(true)}>
         <PaletteIcon />
-      </Fab>
+      </Fab> */}
       <Drawer anchor="right" open={state.isOpen} onClose={toggleDrawer(false)}>
         <Demos />
       </Drawer>
