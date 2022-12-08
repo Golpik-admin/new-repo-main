@@ -11,14 +11,16 @@ const initialState = {
   expiredAlertsCount: 0,
 };
 const userId = "6372c6c0a8b2c2ec60b2da52";
-const startDate = null;
-const endDate = null;
 export const fetchAlerts = createAsyncThunk(
   "alerts/fetchAlerts",
   async (args = null) => {
+    const startDate =
+      args !== null && args.startDate !== undefined ? args.startDate : null;
+    const endDate =
+      args !== null && args.endDate !== undefined ? args.endDate : null;
     const response = await axios
       .get(
-        `${apiEndpoint}/Alerts/${userId}/${startDate}/${endDate}/TextForAccessToken`,
+        `${apiEndpoint}Alerts/${userId}/${startDate}/${endDate}/TextForAccessToken`,
         {
           params: {
             status: args !== null && args.status !== "all" ? args.status : null,

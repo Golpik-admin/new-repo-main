@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Box,
   Breadcrumbs as MuiBreadcrumbs,
   Button,
   Checkbox,
@@ -29,6 +28,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  TextField,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
 import {
@@ -42,6 +42,11 @@ import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchPositions, fetchPNL } from "../../redux/slices/possitions";
 import Moment from "react-moment";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
+import "./cus-style.css";
 import moment from "moment-timezone";
 
 const Divider = styled(MuiDivider)(spacing);
@@ -198,6 +203,42 @@ const EnhancedTableHead = (props) => {
   );
 };
 
+const Box = styled.div`
+  &.radio-parent {
+    flex: 1 1 100%;
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: end;
+      label {
+        position: relative;
+      }
+      .MuiRadio-root {
+        position: absolute;
+        z-index: 1;
+        background: #eee;
+        border-radius: 4px;
+        left: 0;
+        right: 0;
+        padding: 18px 22px;
+        &.Mui-checked {
+          background: #2f65cbd1;
+        }
+        svg {
+          display: none;
+        }
+      }
+      .MuiFormControlLabel-label {
+        position: relative;
+        z-index: 9;
+        padding: 8px 22px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+      }
+    }
+  }
+`;
+
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const { numSelected } = props;
@@ -209,6 +250,8 @@ const EnhancedTableToolbar = (props) => {
       dispatch(fetchPositions({ status: event.target.value, count: null }));
     }
   };
+  const [value, setValue] = React.useState([null, null]);
+  const today = moment().format("YYYY-MM-DD");
   return (
     <Toolbar>
       <ToolbarTitle>
@@ -223,7 +266,7 @@ const EnhancedTableToolbar = (props) => {
         )}
       </ToolbarTitle>
       <Spacer />
-      <div>
+      <Box className="radio-parent">
         <RadioGroup
           aria-label="Filters"
           name="positionsFilters"
@@ -239,7 +282,41 @@ const EnhancedTableToolbar = (props) => {
             label="Risk Managed"
           />
         </RadioGroup>
-      </div>
+      </Box>
+      <StyledEngineProvider injectFirst>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={{ start: today, end: today }}
+        >
+          <DateRangePicker
+            className="picker-range"
+            value={value}
+            onChange={(newValue) => {
+              let startDate =
+                newValue[0] !== null
+                  ? moment(newValue[0].$d).format("YYYY-MM-DD")
+                  : null;
+              let endDate =
+                newValue[1] !== null
+                  ? moment(newValue[1].$d).format("YYYY-MM-DD")
+                  : null;
+              if (startDate !== null && endDate !== null) {
+                dispatch(
+                  fetchPositions({ startDate: startDate, endDate: endDate })
+                );
+              }
+              setValue(newValue);
+            }}
+            renderInput={(startProps, endProps) => (
+              <React.Fragment>
+                <TextField {...startProps} />
+                {/* <Box sx={{ mx: 2 }}> to </Box> */}
+                <TextField {...endProps} />
+              </React.Fragment>
+            )}
+          />
+        </LocalizationProvider>
+      </StyledEngineProvider>
     </Toolbar>
   );
 };
@@ -455,8 +532,6 @@ function OrderList() {
     .subtract(1, "months")
     .endOf("month")
     .format("YYYY-MM-DD");
-
-  console.log(firstDay, lastDay);
   const today = moment().format("YYYY-MM-DD");
   useEffect(() => {
     dispatch(fetchPositions());
@@ -472,14 +547,6 @@ function OrderList() {
   return (
     <React.Fragment>
       <Helmet title="Orders" />
-
-      <Grid justifyContent="space-between" container spacing={10}>
-        <Grid item>
-          <Typography variant="h3" gutterBottom display="inline">
-            Positions
-          </Typography>
-        </Grid>
-      </Grid>
       <Grid container spacing={6}>
         <Grid item xs={12} sm={12} md={6} lg={3} xl>
           <Stats

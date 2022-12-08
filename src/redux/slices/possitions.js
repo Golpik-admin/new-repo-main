@@ -11,13 +11,16 @@ const initialState = {
   pnl: 0,
 };
 const userId = "6372c6c0a8b2c2ec60b2da52";
-const startDate = null;
-const endDate = null;
 export const fetchPositions = createAsyncThunk(
   "positions/fetchPositions",
   async (args = null) => {
+    const startDate =
+      args !== null && args.startDate !== undefined ? args.startDate : null;
+    const endDate =
+      args !== null && args.endDate !== undefined ? args.endDate : null;
+
     const response = await axios
-      .get(`${apiEndpoint}/ActiveTrades/${userId}/${startDate}/${endDate}`, {
+      .get(`${apiEndpoint}ActiveTrades/${userId}/${startDate}/${endDate}`, {
         params: {
           status: args !== null && args.status !== "all" ? args.status : null,
           count: args !== null ? args.count : null,

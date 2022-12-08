@@ -28,6 +28,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  TextField,
   CircularProgress as MuiCircularProgress,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
@@ -42,6 +43,14 @@ import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts, filters } from "../../redux/slices/alerts";
 import Moment from "react-moment";
+
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
+import "./cus-style.css";
+import moment from "moment-timezone";
+
 const Divider = styled(MuiDivider)(spacing);
 
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
@@ -168,7 +177,6 @@ const EnhancedTableHead = (props) => {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
   return (
     <TableHead>
       <TableRow>
@@ -210,7 +218,7 @@ const Box = styled.div`
         border-radius: 4px;
         left: 0;
         right: 0;
-        padding: 15px 22px;
+        padding: 18px 22px;
         &.Mui-checked {
           background: #2f65cbd1;
         }
@@ -221,8 +229,9 @@ const Box = styled.div`
       .MuiFormControlLabel-label {
         position: relative;
         z-index: 9;
-        padding: 15px 22px;
+        padding: 8px 22px;
         font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
       }
     }
   }
@@ -232,14 +241,18 @@ const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const { numSelected } = props;
   const dispatch = useDispatch();
+  const [value, setValue] = React.useState([null, null]);
+
   const handleChange = (event) => {
     dispatch(fetchAlerts({ status: event.target.value, count: null }));
   };
 
+  const today = moment().format("YYYY-MM-DD");
+
   return (
     <Toolbar>
       <ToolbarTitle>
-        {numSelected > 0 ? (
+        {/* {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
             {numSelected} selected
           </Typography>
@@ -247,12 +260,11 @@ const EnhancedTableToolbar = (props) => {
           <Typography variant="h6" id="tableTitle">
             Alerts
           </Typography>
-        )}
+        )} */}
       </ToolbarTitle>
       <Spacer />
       <Box className="radio-parent">
         <RadioGroup
-          class="murtaza"
           aria-label="Filters"
           name="alertFilters"
           onChange={handleChange}
@@ -275,6 +287,40 @@ const EnhancedTableToolbar = (props) => {
           />
         </RadioGroup>
       </Box>
+      <StyledEngineProvider injectFirst>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={{ start: today, end: today }}
+        >
+          <DateRangePicker
+            className="picker-range"
+            value={value}
+            onChange={(newValue) => {
+              let startDate =
+                newValue[0] !== null
+                  ? moment(newValue[0].$d).format("YYYY-MM-DD")
+                  : null;
+              let endDate =
+                newValue[1] !== null
+                  ? moment(newValue[1].$d).format("YYYY-MM-DD")
+                  : null;
+              if (startDate !== null && endDate !== null) {
+                dispatch(
+                  fetchAlerts({ startDate: startDate, endDate: endDate })
+                );
+              }
+              setValue(newValue);
+            }}
+            renderInput={(startProps, endProps) => (
+              <React.Fragment>
+                <TextField {...startProps} />
+                {/* <Box sx={{ mx: 2 }}> to </Box> */}
+                <TextField {...endProps} />
+              </React.Fragment>
+            )}
+          />
+        </LocalizationProvider>
+      </StyledEngineProvider>
     </Toolbar>
   );
 };
@@ -460,20 +506,20 @@ function OrderList() {
     <React.Fragment>
       <Helmet title="Orders" />
 
-      <Grid justifyContent="space-between" container spacing={10}>
+      {/* <Grid justifyContent="space-between" container spacing={10}>
         <Grid item>
           <Typography variant="h3" gutterBottom display="inline">
             Alerts
           </Typography>
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid container spacing={6}>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Processed"
             amount={alertList.processedAlertsCount}
             // chip="Today"
-            percentagetext="+26%"
+            percentagetext="26% &#8593;"
             percentagecolor={green[500]}
           />
         </Grid>
@@ -505,7 +551,7 @@ function OrderList() {
             // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
           <Stats
             title="Pro +"
             amount="Subscription"

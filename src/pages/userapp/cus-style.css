@@ -1,0 +1,4 @@
+.MuiDateRangePickerInput-root.picker-range {width: 100%;}
+.MuiPickersPopper-paper .picker-range > div:first-child {display: none;}
+.pro-card .MuiCard-root:last-child{background: #000;color: #fff;}
+/* .pro-card .MuiCard-root:last-child{background: url('static/img/illustrations/pro-card.png');color: #fff;} */
