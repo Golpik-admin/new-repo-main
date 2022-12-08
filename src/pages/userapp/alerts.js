@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
@@ -288,7 +289,7 @@ const EnhancedTableToolbar = (props) => {
       <StyledEngineProvider injectFirst>
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
-          localeText={{ start: "Jan, 2019", end: "Dec, 2019" }}
+          localeText={{ start: "Jan, 2019 Dec, 2019" }}
         >
           <DateRangePicker
             className="picker-range"
@@ -298,9 +299,11 @@ const EnhancedTableToolbar = (props) => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField {...startProps} />
+                <TextField
+                 {...endProps} {...startProps} 
+                />
                 {/* <Box sx={{ mx: 2 }}> to </Box> */}
-                <TextField {...endProps} />
+                {/* <TextField {...endProps} /> */}
               </React.Fragment>
             )}
           />
