@@ -163,10 +163,14 @@ const SidebarFooter = ({ ...rest }) => {
             }}
           >
             <IconButton sx={{ mt:5, ml:3, }} onClick={colorMode.toggleColorMode} color="inherit">
-              {theme.palette === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              {theme.theme === 'DARK' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
-            <Demo title="Dark" themeVariant={THEMES.DARK}></Demo>
+          {theme.theme === 'DARK' &&
             <Demo title="Light" themeVariant={THEMES.LIGHT}></Demo>
+          }
+          {theme.theme === 'LIGHT' &&
+            <Demo title="Dark" themeVariant={THEMES.DARK}></Demo>
+          }
           </Box>
       <Grid container spacing={2}>
           {/* <FooterBadge
