@@ -261,7 +261,6 @@ const EnhancedTableToolbar = (props) => {
           </Typography>
         )} */}
       </ToolbarTitle>
-      <Spacer />
       <Box className="radio-parent">
         <RadioGroup
           aria-label="Filters"
@@ -373,7 +372,11 @@ function EnhancedTable() {
     Math.min(rowsPerPage, alertList.alerts.length - page * rowsPerPage);
   return (
     <div>
-      <Paper>
+      <Paper
+        sx={{
+          minHeight: 450,
+        }}
+      >
         <EnhancedTableToolbar numSelected={selected.length} />
         {alertList.loading && <LinearProgress />}
         {!alertList.loading && alertList.alerts.length ? (
