@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
@@ -313,9 +314,11 @@ const EnhancedTableToolbar = (props) => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField {...startProps} />
+                <TextField
+                 {...endProps} {...startProps} 
+                />
                 {/* <Box sx={{ mx: 2 }}> to </Box> */}
-                <TextField {...endProps} />
+                {/* <TextField {...endProps} /> */}
               </React.Fragment>
             )}
           />
