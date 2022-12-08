@@ -1,4 +1,4 @@
-.MuiDateRangePickerInput-root.picker-range {width: 100%;}
+.MuiDateRangePickerInput-root.picker-range {min-width: 205px;}
 .MuiDateRangePickerInput-root.picker-range .MuiFormLabel-root{padding-left: 25px;}
 
 .MuiPickersPopper-paper .picker-range > div:first-child {display: none;}

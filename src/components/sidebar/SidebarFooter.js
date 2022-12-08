@@ -13,7 +13,10 @@ const Footer = styled.div`
   padding: ${(props) => props.theme.spacing(0)}
     ${(props) => props.theme.spacing(0)};
   border-right: 1px solid rgba(0, 0, 0, 0.12);
-  min-height: 120px
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 `;
 
 const FooterText = styled(Typography)`
