@@ -103,24 +103,17 @@ const DemoButtonInner = styled.div`
     `}
 `;
 
-const DemoTitle = styled(Typography)`
-  text-align: center;
-`;
 
 function Demo({ title, themeVariant }) {
   const { theme, setTheme } = useTheme();
 
   return (
     <Grid item xs={6}>
-      <DemoButton
-        active={themeVariant === theme}
-        onClick={() => setTheme(themeVariant)}
-      >
-        <DemoButtonInner selectedTheme={themeVariant} />
-      </DemoButton>
-      <DemoTitle variant="subtitle2" gutterBottom>
-        {title}
-      </DemoTitle>
+      <IconButton sx={{ mt: 5, ml: 3, }}
+      onClick={() => setTheme(themeVariant)}
+        color="inherit">
+        {themeVariant === theme ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
     </Grid>
   );
 }
@@ -162,9 +155,6 @@ const SidebarFooter = ({ ...rest }) => {
               borderRadius: 1,
             }}
           >
-            <IconButton sx={{ mt:5, ml:3, }} onClick={colorMode.toggleColorMode} color="inherit">
-              {theme.theme === 'DARK' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
           {theme.theme === 'DARK' &&
             <Demo title="Light" themeVariant={THEMES.LIGHT}></Demo>
           }
