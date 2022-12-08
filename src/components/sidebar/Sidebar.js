@@ -75,7 +75,7 @@ const Sidebar = ({ items, showFooter = true, ...rest }) => {
         </Box>
       </Brand> */}
       <SidebarNav items={items} />
-      {/* {!!showFooter && <Footer />} */}
+      {!!showFooter && <Footer />}
     </Drawer>
   );
 };
