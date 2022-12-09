@@ -326,9 +326,9 @@ const EnhancedTableToolbar = (props) => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField {...startProps} />
+                <TextField className="date-1" {...startProps} />
                 <Box> - </Box>
-                <TextField {...endProps} />
+                <TextField className="date-2" {...endProps} />
               </React.Fragment>
             )}
           />
@@ -428,7 +428,50 @@ function EnhancedTable() {
                     const labelId = `enhanced-table-checkbox-${row.id}`;
                     // -${index}
                     return (
-                      <TableRow
+                      <>
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={`${row.id}`}
+                          selected={isItemSelected}
+                        >
+                          <TableCell align="left">
+                          <IconButton color="inherit" ref={ref} onClick={handleOpen} size="large">
+                            {/* <Bell /> */}
+                            filter
+                          </IconButton>
+                          </TableCell>
+                          <TableCell align="left">{row.option_Type}</TableCell>
+                          <TableCell align="left">
+                            {row.order_Action.replace(/_/g, " ")}
+                          </TableCell>
+                          <TableCell align="left">{"N/A"}</TableCell>
+                          <TableCell align="left">{row.price}</TableCell>
+                          <TableCell align="left">{row.status}</TableCell>
+                          <TableCell align="right">{row.alert_Comment}</TableCell>
+                          <TableCell align="right">
+                            {row.time_Received !== null ? (
+                              <Moment format="YYYY-MM-DD hh:mm:ss">
+                                {row.time_Received}
+                              </Moment>
+                            ) : (
+                              ""
+                            )}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.time_Executed !== null ? (
+                              <Moment format="YYYY-MM-DD hh:mm:ss">
+                                {row.time_Executed}
+                              </Moment>
+                            ) : (
+                              ""
+                            )}
+                          </TableCell>
+                          <TableCell align="right">{row.alert_Name}</TableCell>
+                        </TableRow>
+                        <TableRow
                         hover
                         role="checkbox"
                         aria-checked={isItemSelected}
@@ -436,35 +479,36 @@ function EnhancedTable() {
                         key={`${row.id}`}
                         selected={isItemSelected}
                       >
-                        <TableCell align="left">{row.ticker}</TableCell>
-                        <TableCell align="left">{row.option_Type}</TableCell>
-                        <TableCell align="left">
-                          {row.order_Action.replace(/_/g, " ")}
-                        </TableCell>
-                        <TableCell align="left">{"N/A"}</TableCell>
-                        <TableCell align="left">{row.price}</TableCell>
-                        <TableCell align="left">{row.status}</TableCell>
-                        <TableCell align="right">{row.alert_Comment}</TableCell>
-                        <TableCell align="right">
-                          {row.time_Received !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.time_Received}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="right">
-                          {row.time_Executed !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.time_Executed}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="right">{row.alert_Name}</TableCell>
-                      </TableRow>
+                          <TableCell align="left">{row.ticker}</TableCell>
+                          <TableCell align="left">{row.option_Type}</TableCell>
+                          <TableCell align="left">
+                            {row.order_Action.replace(/_/g, " ")}
+                          </TableCell>
+                          <TableCell align="left">{"N/A"}</TableCell>
+                          <TableCell align="left">{row.price}</TableCell>
+                          <TableCell align="left">{row.status}</TableCell>
+                          <TableCell align="right">{row.alert_Comment}</TableCell>
+                          <TableCell align="right">
+                            {row.time_Received !== null ? (
+                              <Moment format="YYYY-MM-DD hh:mm:ss">
+                                {row.time_Received}
+                              </Moment>
+                            ) : (
+                              ""
+                            )}
+                          </TableCell>
+                          <TableCell align="right">
+                            {row.time_Executed !== null ? (
+                              <Moment format="YYYY-MM-DD hh:mm:ss">
+                                {row.time_Executed}
+                              </Moment>
+                            ) : (
+                              ""
+                            )}
+                          </TableCell>
+                          <TableCell align="right">{row.alert_Name}</TableCell>
+                        </TableRow>
+                      </>
                     );
                   })}
                 {/* {emptyRows > 0 && (
