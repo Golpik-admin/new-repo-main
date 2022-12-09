@@ -149,6 +149,7 @@ function stableSort(array, comparator) {
 const headCells = [
   // { id: "id", alignment: "right", label: "ID" },
   { id: "ticker", alignment: "left", label: "TICKER" },
+  { id: "option_Symbol", alignment: "left", label: "OPTION SYMBOL" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
   { id: "price_excuted", alignment: "right", label: "PRICE EXECUTED" },
   {
@@ -244,11 +245,7 @@ const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
   const dispatch = useDispatch();
   const handleChange = (event) => {
-    if (event.target.value === "all") {
-      dispatch(fetchPositions({ status: null, count: null }));
-    } else {
-      dispatch(fetchPositions({ status: event.target.value, count: null }));
-    }
+    dispatch(fetchPositions({ status: event.target.value, count: null }));
   };
   const [value, setValue] = React.useState([null, null]);
   const today = moment().format("YYYY-MM-DD");
@@ -271,6 +268,7 @@ const EnhancedTableToolbar = (props) => {
           aria-label="Filters"
           name="positionsFilters"
           onChange={handleChange}
+          defaultValue="all"
         >
           <FormControlLabel value="all" control={<Radio />} label="All" />
           <FormControlLabel value="open" control={<Radio />} label="Open" />
@@ -418,6 +416,7 @@ function EnhancedTable() {
                         selected={isItemSelected}
                       >
                         <TableCell align="left">{row.ticker}</TableCell>
+                        <TableCell align="left">{row.option_Symbol}</TableCell>
                         <TableCell align="left">{row.option_Type}</TableCell>
                         <TableCell align="left">
                           {row.buy_Price_Executed}

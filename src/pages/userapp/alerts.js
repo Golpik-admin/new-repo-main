@@ -164,6 +164,7 @@ const headCells = [
   { id: "alert_comment", alignment: "right", label: "ALERT COMMENT" },
   { id: "time_received", alignment: "right", label: "TIME RECIEVED" },
   { id: "time_executed", alignment: "right", label: "TIME EXCUTED" },
+  { id: "alert_Name", alignment: "right", label: "ALERT NAME" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -269,6 +270,7 @@ const EnhancedTableToolbar = (props) => {
           aria-label="Filters"
           name="alertFilters"
           onChange={handleChange}
+          defaultValue="all"
         >
           <FormControlLabel value="all" control={<Radio />} label="All" />
           <FormControlLabel
@@ -324,11 +326,9 @@ const EnhancedTableToolbar = (props) => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField
-                 {...endProps} {...startProps} 
-                />
-                {/* <Box sx={{ mx: 2 }}> to </Box> */}
-                {/* <TextField {...endProps} /> */}
+                <TextField {...startProps} />
+                <Box> - </Box>
+                <TextField {...endProps} />
               </React.Fragment>
             )}
           />
@@ -463,6 +463,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
+                        <TableCell align="right">{row.alert_Name}</TableCell>
                       </TableRow>
                     );
                   })}
@@ -565,7 +566,7 @@ function OrderList() {
             // chip="Yearly"
             percentagetext="-9%"
             percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
+          // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
@@ -575,7 +576,7 @@ function OrderList() {
             chip=""
             percentagetext="Details"
             percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
+          // illustration="/static/img/illustrations/waiting.png"
           />
           {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>
