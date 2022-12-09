@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from "react";
+import React, {useRef, useState} from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -396,6 +396,18 @@ function EnhancedTable() {
   const emptyRows =
     rowsPerPage -
     Math.min(rowsPerPage, alertList.alerts.length - page * rowsPerPage);
+
+    const ref = useRef(null);
+    const [isOpen, setOpen] = useState(false);
+  
+    const handleOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+
   return (
     <div>
       <Paper
