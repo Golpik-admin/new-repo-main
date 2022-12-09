@@ -158,7 +158,7 @@ const SidebarFooter = ({ ...rest }) => {
           {theme.theme === 'DARK' &&
             <Demo title="Light" themeVariant={THEMES.LIGHT}></Demo>
           }
-          {theme.theme === 'LIGHT' &&
+          {theme.theme !== 'DARK' &&
             <Demo title="Dark" themeVariant={THEMES.DARK}></Demo>
           }
           </Box>

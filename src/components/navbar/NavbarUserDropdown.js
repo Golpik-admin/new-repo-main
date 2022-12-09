@@ -68,26 +68,16 @@ function NavbarUserDropdown() {
                 }}
                 variant="dot"
               >
-                {!!user && (
-                  <Avatar
-                    alt={user.displayName}
-                    src="/static/img/avatars/user.png"
-                  />
-                )}
+                {!!user && <Avatar alt={user.displayName} src={user.avatar} />}
                 {/* Demo data */}
-                {!user && (
-                  <Avatar
-                    alt="Lucy Lavender"
-                    src="/static/img/avatars/user.png"
-                  />
-                )}
+                {!user && <Avatar alt="Lucy Lavender" src={user.avatar} />}
               </FooterBadge>
             </Grid>
             <Grid item alignItems="center" display="flex">
               {!!user && (
                 <FooterText variant="body2">
-                  {/* {user.displayName} */}
-                  User Account
+                  {user.displayName}
+                  {/* User Account */}
                 </FooterText>
               )}
               {/* Demo data */}
