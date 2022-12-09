@@ -149,6 +149,7 @@ function stableSort(array, comparator) {
 const headCells = [
   // { id: "id", alignment: "right", label: "ID" },
   { id: "ticker", alignment: "left", label: "TICKER" },
+  { id: "option_Symbol", alignment: "left", label: "OPTION SYMBOL" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
   { id: "price_excuted", alignment: "right", label: "PRICE EXECUTED" },
   {
@@ -415,6 +416,7 @@ function EnhancedTable() {
                         selected={isItemSelected}
                       >
                         <TableCell align="left">{row.ticker}</TableCell>
+                        <TableCell align="left">{row.option_Symbol}</TableCell>
                         <TableCell align="left">{row.option_Type}</TableCell>
                         <TableCell align="left">
                           {row.buy_Price_Executed}

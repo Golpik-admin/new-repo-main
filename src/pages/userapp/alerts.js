@@ -164,6 +164,7 @@ const headCells = [
   { id: "alert_comment", alignment: "right", label: "ALERT COMMENT" },
   { id: "time_received", alignment: "right", label: "TIME RECIEVED" },
   { id: "time_executed", alignment: "right", label: "TIME EXCUTED" },
+  { id: "alert_Name", alignment: "right", label: "ALERT NAME" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -315,12 +316,9 @@ const EnhancedTableToolbar = (props) => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField
-                  value={{ ...endProps } + { ...startProps }}
-
-                />
-                {/* <Box sx={{ mx: 2 }}> to </Box> */}
-                {/* <TextField {...endProps} /> */}
+                <TextField {...startProps} />
+                <Box> - </Box>
+                <TextField {...endProps} />
               </React.Fragment>
             )}
           />
@@ -455,6 +453,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
+                        <TableCell align="right">{row.alert_Name}</TableCell>
                       </TableRow>
                     );
                   })}
