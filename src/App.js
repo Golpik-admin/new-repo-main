@@ -16,9 +16,9 @@ import useTheme from "./hooks/useTheme";
 import { store } from "./redux/store";
 import createEmotionCache from "./utils/createEmotionCache";
 
-import { AuthProvider } from "./contexts/JWTContext";
+// import { AuthProvider } from "./contexts/JWTContext";
 // import { AuthProvider } from "./contexts/FirebaseAuthContext";
-// import { AuthProvider } from "./contexts/Auth0Context";
+import { AuthProvider } from "./contexts/Auth0Context";
 // import { AuthProvider } from "./contexts/CognitoContext";
 
 const clientSideEmotionCache = createEmotionCache();
@@ -32,8 +32,8 @@ function App({ emotionCache = clientSideEmotionCache }) {
     <CacheProvider value={emotionCache}>
       <HelmetProvider>
         <Helmet
-          titleTemplate="%s | Mira"
-          defaultTitle="Mira - React Material Admin Dashboard"
+          titleTemplate="Consilience Trading"
+          defaultTitle="Consilience Trading Dashboard"
         />
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>

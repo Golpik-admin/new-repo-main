@@ -7,6 +7,7 @@ export const store = configureStore(
   {
     reducer: {
       alertsList: alertApiReducer,
+      processedAlertCount: alertApiReducer,
       positionsList: positionsApiReducer,
     },
   },

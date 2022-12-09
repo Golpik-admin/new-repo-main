@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable prettier/prettier */
+import * as React from "react";
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
 import { darken } from "polished";
@@ -11,6 +12,8 @@ import {
   AppBar as MuiAppBar,
   IconButton as MuiIconButton,
   Toolbar,
+  Typography,
+  capitalize,
 } from "@mui/material";
 
 import { Menu as MenuIcon } from "@mui/icons-material";
@@ -63,6 +66,11 @@ const SearchIconWrapper = styled.div`
   }
 `;
 
+const ToolbarTitle = styled.div`
+  min-width: 150px;
+  margin-left: 15px;
+`;
+
 const Input = styled(InputBase)`
   color: inherit;
   width: 100%;
@@ -79,6 +87,7 @@ const Input = styled(InputBase)`
 
 const Navbar = ({ onDrawerToggle }) => {
   const { t } = useTranslation();
+  const pathName = window.location.pathname.substr(1);
   return (
     <React.Fragment>
       <AppBar position="sticky" elevation={0}>
@@ -95,18 +104,28 @@ const Navbar = ({ onDrawerToggle }) => {
               </IconButton>
             </Grid>
             <Grid item>
-              <Search>
+              {/* <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
                 <Input placeholder={t("Search")} />
-              </Search>
+              </Search> */}
+              <ToolbarTitle>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {pathName}
+                </Typography>
+              </ToolbarTitle>
             </Grid>
             <Grid item xs />
             <Grid item>
-              <NavbarMessagesDropdown />
+              {/* <NavbarMessagesDropdown />*/}
               <NavbarNotificationsDropdown />
-              <NavbarLanguagesDropdown />
+              {/*<NavbarLanguagesDropdown /> */}
               <NavbarUserDropdown />
             </Grid>
           </Grid>

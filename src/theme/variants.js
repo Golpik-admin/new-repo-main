@@ -28,13 +28,13 @@ const defaultVariant = {
       contrastText: "#FFF",
     },
     background: {
-      default: "#F7F9FC",
+      default: "#F5F6FA",
       paper: "#FFF",
     },
   },
   header: {
     color: grey[500],
-    background: "#FFF",
+    background: "#F7F9FC",
     search: {
       color: grey[800],
     },
@@ -47,10 +47,10 @@ const defaultVariant = {
     background: "#FFF",
   },
   sidebar: {
-    color: grey[200],
+    color: "#fff",
     background: "#233044",
     header: {
-      color: grey[200],
+      color: "#fff",
       background: "#233044",
       brand: {
         color: customBlue[500],
@@ -106,8 +106,8 @@ const lightVariant = merge(defaultVariant, {
     mode: "light",
   },
   header: {
-    color: grey[200],
-    background: customBlue[800],
+    color: grey[800],
+    background: "#F7F9FC",
     search: {
       color: grey[100],
     },
@@ -116,8 +116,8 @@ const lightVariant = merge(defaultVariant, {
     },
   },
   sidebar: {
-    color: grey[900],
-    background: "#FFF",
+    color: "#fff",
+    background: "#2f65cb",
     header: {
       color: "#FFF",
       background: customBlue[800],
