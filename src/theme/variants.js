@@ -31,6 +31,9 @@ const defaultVariant = {
       default: "#F5F6FA",
       paper: "#FFF",
     },
+    toolbarbtn: {
+      background: "##D7DBEC",
+    },
   },
   header: {
     color: grey[500],
@@ -86,6 +89,9 @@ const darkVariant = merge(defaultVariant, {
       primary: "rgba(255, 255, 255, 0.95)",
       secondary: "rgba(255, 255, 255, 0.5)",
     },
+    toolbarbtn: {
+      background: "#252B3B",
+    },
   },
   header: {
     color: grey[300],
@@ -104,6 +110,9 @@ const lightVariant = merge(defaultVariant, {
   name: THEMES.LIGHT,
   palette: {
     mode: "light",
+    toolbarbtn: {
+      background: "#D7DBEC",
+    },
   },
   header: {
     color: grey[800],

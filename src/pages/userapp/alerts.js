@@ -199,6 +199,7 @@ const EnhancedTableHead = (props) => {
           </TableCell>
         ))}
       </TableRow>
+
     </TableHead>
   );
 };
@@ -206,27 +207,35 @@ const EnhancedTableHead = (props) => {
 const Box = styled.div`
   &.radio-parent {
     flex: 1 1 100%;
+    text-align: right;
     div {
-      display: flex;
+      display: inline-flex;
       flex-direction: row;
       justify-content: end;
+      display: inline-flex;
+      padding: 2px;
+      border-radius: 4px;
+      background: ${(props) => props.theme.palette.toolbarbtn.background};
       label {
         position: relative;
-      }
-      .MuiRadio-root {
-        position: absolute;
-        z-index: 1;
-        background: #eee;
-        border-radius: 4px;
-        left: 0;
-        right: 0;
-        padding: 18px 22px;
-        &.Mui-checked {
-          background: ${(props) => props.theme.sidebar.background};
-          + .MuiTypography-root{color:#fff} 
-        }
-        svg {
-          display: none;
+        margin: 0;
+        .MuiRadio-root {
+          position: absolute;
+          z-index: 1;
+          background: #eee;
+          border-radius: 4px;
+          left: 0;
+          right: 0;
+          padding: 18px 22px;
+          margin: 1px;
+          background: ${(props) => props.theme.sidebar.color};
+          &.Mui-checked {
+            background: ${(props) => props.theme.sidebar.background};
+            + .MuiTypography-root{color:#fff} 
+          }
+          svg {
+            display: none;
+          }
         }
       }
       .MuiFormControlLabel-label {
@@ -294,10 +303,10 @@ const EnhancedTableToolbar = (props) => {
         <Button 
           variant="contained"
           sx={{
-            mr: 4,
+            mx: 4,
           }}
         >
-          Test
+          0
         </Button> 
       </box>
       <StyledEngineProvider injectFirst>
@@ -450,10 +459,6 @@ function EnhancedTable() {
                           selected={isItemSelected}
                         >
                           <TableCell align="left">
-                          <IconButton color="inherit" ref={ref} onClick={handleOpen} size="large">
-                            {/* <Bell /> */}
-                            filter
-                          </IconButton>
                           </TableCell>
                           <TableCell align="left">{row.option_Type}</TableCell>
                           <TableCell align="left">
