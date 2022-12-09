@@ -269,6 +269,7 @@ const EnhancedTableToolbar = (props) => {
           aria-label="Filters"
           name="alertFilters"
           onChange={handleChange}
+          defaultValue="all"
         >
           <FormControlLabel value="all" control={<Radio />} label="All" />
           <FormControlLabel
@@ -315,7 +316,8 @@ const EnhancedTableToolbar = (props) => {
             renderInput={(startProps, endProps) => (
               <React.Fragment>
                 <TextField
-                 {...endProps} {...startProps} 
+                  value={{ ...endProps } + { ...startProps }}
+
                 />
                 {/* <Box sx={{ mx: 2 }}> to </Box> */}
                 {/* <TextField {...endProps} /> */}
@@ -555,7 +557,7 @@ function OrderList() {
             // chip="Yearly"
             percentagetext="-9%"
             percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
+          // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
@@ -565,7 +567,7 @@ function OrderList() {
             chip=""
             percentagetext="Details"
             percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
+          // illustration="/static/img/illustrations/waiting.png"
           />
           {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>

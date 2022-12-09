@@ -244,11 +244,7 @@ const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
   const dispatch = useDispatch();
   const handleChange = (event) => {
-    if (event.target.value === "all") {
-      dispatch(fetchPositions({ status: null, count: null }));
-    } else {
-      dispatch(fetchPositions({ status: event.target.value, count: null }));
-    }
+    dispatch(fetchPositions({ status: event.target.value, count: null }));
   };
   const [value, setValue] = React.useState([null, null]);
   const today = moment().format("YYYY-MM-DD");
@@ -271,6 +267,7 @@ const EnhancedTableToolbar = (props) => {
           aria-label="Filters"
           name="positionsFilters"
           onChange={handleChange}
+          defaultValue="all"
         >
           <FormControlLabel value="all" control={<Radio />} label="All" />
           <FormControlLabel value="open" control={<Radio />} label="Open" />
