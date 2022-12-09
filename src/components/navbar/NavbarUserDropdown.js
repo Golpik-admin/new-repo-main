@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Power } from "react-feather";
 import { useNavigate } from "react-router-dom";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
 import {
   Badge,
@@ -15,6 +16,7 @@ import {
 } from "@mui/material";
 
 import useAuth from "../../hooks/useAuth";
+import { CenterFocusStrong } from "@mui/icons-material";
 
 const IconButton = styled(MuiIconButton)`
   &:hover {
@@ -66,23 +68,31 @@ function NavbarUserDropdown() {
                 }}
                 variant="dot"
               >
-                {!!user && <Avatar alt={user.displayName} src={user.avatar} />}
+                {!!user && (
+                  <Avatar
+                    alt={user.displayName}
+                    src="/static/img/avatars/user.png"
+                  />
+                )}
                 {/* Demo data */}
                 {!user && (
                   <Avatar
                     alt="Lucy Lavender"
-                    src="/static/img/avatars/avatar-1.jpg"
+                    src="/static/img/avatars/user.png"
                   />
                 )}
               </FooterBadge>
             </Grid>
-            <Grid item>
+            <Grid item alignItems="center" display="flex">
               {!!user && (
-                <FooterText variant="body2">{user.displayName}</FooterText>
+                <FooterText variant="body2">
+                  {/* {user.displayName} */}
+                  User Account
+                </FooterText>
               )}
               {/* Demo data */}
               {!user && <FooterText variant="body2">Lucy Lavender</FooterText>}
-              <FooterSubText variant="caption">UX Designer</FooterSubText>
+              <ExpandMore />
             </Grid>
           </Grid>
         </IconButton>
@@ -93,8 +103,25 @@ function NavbarUserDropdown() {
         open={Boolean(anchorMenu)}
         onClose={closeMenu}
       >
-        <MenuItem onClick={closeMenu}>Profile</MenuItem>
-        <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+        <MenuItem
+          onClick={closeMenu}
+          sx={{
+            width: 170,
+            justifyContent: "center",
+          }}
+        >
+          Profile
+        </MenuItem>
+        <MenuItem
+          onClick={handleSignOut}
+          elevation={5}
+          sx={{
+            width: 170,
+            justifyContent: "center",
+          }}
+        >
+          Sign out
+        </MenuItem>
       </Menu>
     </React.Fragment>
   );
