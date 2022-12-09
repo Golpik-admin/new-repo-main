@@ -43,6 +43,7 @@ import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts, filters } from "../../redux/slices/alerts";
+import { previousFetchAlerts, previousFilters } from "../../redux/slices/alertsPreviousMonth";
 import Moment from "react-moment";
 
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
@@ -503,13 +504,73 @@ function EnhancedTable() {
 function OrderList() {
   const dispatch = useDispatch();
   useEffect(() => {
+  
+  let date = new Date();
+  const currentMonthFirstDay = moment(date)
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const currentMonthLastDay = moment(date)
+    .endOf("month")
+    .format("YYYY-MM-DD");
+
+  const previousMonthFirstDay = moment(date)
+    .subtract(1, "months")
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const previousMonthLastDay = moment(date)
+    .subtract(1, "months")
+    .endOf("month")
+    .format("YYYY-MM-DD");
+
     dispatch(fetchAlerts());
-    dispatch(fetchAlerts({ status: "Processed", count: true }));
-    dispatch(fetchAlerts({ status: "Unprocessed", count: true }));
-    dispatch(fetchAlerts({ status: "Expired", count: true }));
+    
+    dispatch(fetchAlerts({ startDate: currentMonthFirstDay, endDate: currentMonthLastDay, status: "Processed", count: true }));
+    dispatch(previousFetchAlerts({ startDate: previousMonthFirstDay, endDate: previousMonthLastDay, status: "Processed", count: true }));
+
+    dispatch(fetchAlerts({ startDate: currentMonthFirstDay, endDate: currentMonthLastDay, status: "Unprocessed", count: true }));
+    dispatch(previousFetchAlerts({ startDate: previousMonthFirstDay, endDate: previousMonthLastDay, status: "Unprocessed", count: true }));
+
+    dispatch(fetchAlerts({ startDate: currentMonthFirstDay, endDate: currentMonthLastDay, status: "Expired", count: true }));
+    dispatch(previousFetchAlerts({ startDate: previousMonthFirstDay, endDate: previousMonthLastDay, status: "Expired", count: true }));
   }, []);
   const alertList = useSelector((state) => state.alertsList);
+  const previousAlertList = useSelector((state) => state.previousAlertsList);
   const CircularProgress = styled(MuiCircularProgress)(spacing);
+
+  // "% &#8593;";
+
+  if(parseInt(previousAlertList.previousProcessedAlertsCount) > 0){
+    var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(previousAlertList.previousProcessedAlertsCount)) * 100).toFixed(2);
+  }else{
+    var prevCalProcessed = 0;
+  }
+  if(parseInt(alertList.processedAlertsCount) < parseInt(previousAlertList.previousProcessedAlertsCount)){
+    var percentageColorProcessed =  red[500];
+  }else{
+    var percentageColorProcessed =  green[500];
+  }
+
+  if(parseInt(previousAlertList.previousUnprocessedAlertsCount) > 0){
+    var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(previousAlertList.previousUnprocessedAlertsCount)) * 100).toFixed(2);
+  }else{
+    var prevCalUnprocessed = 0;
+  }
+  if(parseInt(alertList.unprocessedAlertsCount) < parseInt(previousAlertList.previousUnprocessedAlertsCount)){
+    var percentageColorUnprocessed =  red[500];
+  }else{
+    var percentageColorUnprocessed =  green[500];
+  }
+
+  if(parseInt(previousAlertList.previousExpiredAlertsCount) > 0){
+    var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(alertList.expiredAlertsCount)) * 100).toFixed(2);
+  }else{
+    var prevCalExpired = 0;
+  }
+  if(parseInt(alertList.expiredAlertsCount) < parseInt(previousAlertList.previousExpiredAlertsCount)){
+    var percentageColorExpired =  red[500];
+  }else{
+    var percentageColorExpired =  green[500];
+  }
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -527,8 +588,8 @@ function OrderList() {
             title="Total Alerts Processed"
             amount={alertList.processedAlertsCount}
             // chip="Today"
-            percentagetext="26% &#8593;"
-            percentagecolor={green[500]}
+            percentagetext={prevCalProcessed+"%"}
+            percentagecolor={percentageColorProcessed}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -536,8 +597,8 @@ function OrderList() {
             title="Total Alerts Unprocessed"
             amount={alertList.unprocessedAlertsCount}
             // chip="Annual"
-            percentagetext="-14%"
-            percentagecolor={red[500]}
+            percentagetext={prevCalUnprocessed+"%"}
+            percentagecolor={percentageColorUnprocessed}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -545,8 +606,8 @@ function OrderList() {
             title="Total Alerts Expired"
             amount={alertList.expiredAlertsCount}
             // chip="Monthly"
-            percentagetext="+18%"
-            percentagecolor={green[500]}
+            percentagetext={prevCalExpired+"%"}
+            percentagecolor={percentageColorExpired}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
