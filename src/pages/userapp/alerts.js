@@ -218,7 +218,6 @@ const EnhancedTableHead = (props) => {
           </TableCell>
         ))}
       </TableRow>
-
     </TableHead>
   );
 };
@@ -468,8 +467,6 @@ function EnhancedTable() {
                     const labelId = `enhanced-table-checkbox-${row.id}`;
                     // -${index}
                     return (
-                      <>
-                        
                         <TableRow
                         hover
                         role="checkbox"
@@ -507,7 +504,6 @@ function EnhancedTable() {
                           </TableCell>
                           <TableCell align="right">{row.alert_Name}</TableCell>
                         </TableRow>
-                      </>
                     );
                   })}
                 {/* {emptyRows > 0 && (
