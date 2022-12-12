@@ -33,6 +33,7 @@ import {
   CircularProgress as MuiCircularProgress,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
+import {makeStyles} from "@mui/styles";
 import {
   Add as AddIcon,
   Archive as ArchiveIcon,
@@ -52,6 +53,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
+import FilterPop from "./Filter";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -208,12 +210,13 @@ const EnhancedTableHead = (props) => {
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
+            <FilterPop />
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
+              
             </TableSortLabel>
           </TableCell>
         ))}
@@ -245,8 +248,8 @@ const Box = styled.div`
           right: 0;
           padding: 18px 22px;
           margin: 1px;
-          background: ${(props) => props.theme.sidebar.color};
-          border: 1px solid ${(props) => props.theme.palette.toolbarbtn.background};
+          background: ${(props) => props.theme.palette.toolbarbtn.background};
+          border:  ${(props) => props.theme.palette.toolbarbtn.border};
           &.Mui-checked {
             background: ${(props) => props.theme.sidebar.background};
             + .MuiTypography-root{color:#fff} 
@@ -262,10 +265,18 @@ const Box = styled.div`
         padding: 8px 22px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
+        color: ${(props) => props.theme.palette.toolbarbtn.color};
       }
     }
   }
 `;
+const useStyles = makeStyles({
+  button: {
+    "&:hover": {
+      backgroundColor: "#eee",
+      color: "#ddd",
+  },
+}})
 
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
@@ -278,6 +289,8 @@ const EnhancedTableToolbar = (props) => {
   };
 
   const today = moment().format("YYYY-MM-DD");
+
+  const classes = useStyles();
 
   return (
     <Toolbar>
@@ -319,6 +332,7 @@ const EnhancedTableToolbar = (props) => {
       </Box>
       <box>
         <Button 
+          className={classes.button}
           variant="contained"
           sx={{
             mx: 4,
