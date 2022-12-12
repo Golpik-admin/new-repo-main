@@ -200,6 +200,24 @@ const EnhancedTableHead = (props) => {
           </TableCell>
         ))}
       </TableRow>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.alignment}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : "asc"}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
 
     </TableHead>
   );
@@ -451,44 +469,7 @@ function EnhancedTable() {
                     // -${index}
                     return (
                       <>
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={`${row.id}`}
-                          selected={isItemSelected}
-                        >
-                          <TableCell align="left">
-                          </TableCell>
-                          <TableCell align="left">{row.option_Type}</TableCell>
-                          <TableCell align="left">
-                            {row.order_Action.replace(/_/g, " ")}
-                          </TableCell>
-                          <TableCell align="left">{"N/A"}</TableCell>
-                          <TableCell align="left">{row.price}</TableCell>
-                          <TableCell align="left">{row.status}</TableCell>
-                          <TableCell align="right">{row.alert_Comment}</TableCell>
-                          <TableCell align="right">
-                            {row.time_Received !== null ? (
-                              <Moment format="YYYY-MM-DD hh:mm:ss">
-                                {row.time_Received}
-                              </Moment>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.time_Executed !== null ? (
-                              <Moment format="YYYY-MM-DD hh:mm:ss">
-                                {row.time_Executed}
-                              </Moment>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
-                          <TableCell align="right">{row.alert_Name}</TableCell>
-                        </TableRow>
+                        
                         <TableRow
                         hover
                         role="checkbox"
