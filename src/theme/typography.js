@@ -49,6 +49,7 @@ const typography = {
   },
   body1: {
     fontSize: 13,
+    fontWeight: 500,
   },
   button: {
     textTransform: "none",

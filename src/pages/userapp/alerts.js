@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -33,6 +33,7 @@ import {
   CircularProgress as MuiCircularProgress,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
+import {makeStyles} from "@mui/styles";
 import {
   Add as AddIcon,
   Archive as ArchiveIcon,
@@ -43,6 +44,10 @@ import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts, filters } from "../../redux/slices/alerts";
+import {
+  previousFetchAlerts,
+  previousFilters,
+} from "../../redux/slices/alertsPreviousMonth";
 import Moment from "react-moment";
 
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
@@ -51,6 +56,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
+import FilterPop from "./Filter";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -199,6 +205,25 @@ const EnhancedTableHead = (props) => {
           </TableCell>
         ))}
       </TableRow>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.alignment}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <FilterPop />
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : "asc"}
+              onClick={createSortHandler(headCell.id)}
+            >
+              
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
     </TableHead>
   );
 };
@@ -206,27 +231,37 @@ const EnhancedTableHead = (props) => {
 const Box = styled.div`
   &.radio-parent {
     flex: 1 1 100%;
+    text-align: right;
     div {
-      display: flex;
+      display: inline-flex;
       flex-direction: row;
       justify-content: end;
+      display: inline-flex;
+      padding: 2px;
+      border-radius: 4px;
       label {
         position: relative;
-      }
-      .MuiRadio-root {
-        position: absolute;
-        z-index: 1;
-        background: #eee;
-        border-radius: 4px;
-        left: 0;
-        right: 0;
-        padding: 18px 22px;
-        &.Mui-checked {
-          background: ${(props) => props.theme.sidebar.background};
-          + .MuiTypography-root{color:#fff} 
-        }
-        svg {
-          display: none;
+        margin: 0;
+        .MuiRadio-root {
+          position: absolute;
+          z-index: 1;
+          background: #eee;
+          border-radius: 4px;
+          left: 0;
+          right: 0;
+          padding: 18px 22px;
+          margin: 1px;
+          background: ${(props) => props.theme.palette.toolbarbtn.background};
+          border:  ${(props) => props.theme.palette.toolbarbtn.border};
+          &.Mui-checked {
+            background: ${(props) => props.theme.sidebar.background};
+            + .MuiTypography-root {
+              color: #fff;
+            }
+          }
+          svg {
+            display: none;
+          }
         }
       }
       .MuiFormControlLabel-label {
@@ -235,10 +270,18 @@ const Box = styled.div`
         padding: 8px 22px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
+        color: ${(props) => props.theme.palette.toolbarbtn.color};
       }
     }
   }
 `;
+const useStyles = makeStyles({
+  button: {
+    "&:hover": {
+      backgroundColor: "#eee",
+      color: "#ddd",
+  },
+}})
 
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
@@ -251,6 +294,8 @@ const EnhancedTableToolbar = (props) => {
   };
 
   const today = moment().format("YYYY-MM-DD");
+
+  const classes = useStyles();
 
   return (
     <Toolbar>
@@ -292,13 +337,14 @@ const EnhancedTableToolbar = (props) => {
       </Box>
       <box>
         <Button 
+          className={classes.button}
           variant="contained"
           sx={{
-            mr: 4,
+            mx: 4,
           }}
         >
-          Test
-        </Button> 
+          0
+        </Button>
       </box>
       <StyledEngineProvider injectFirst>
         <LocalizationProvider
@@ -326,9 +372,9 @@ const EnhancedTableToolbar = (props) => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField {...startProps} />
+                <TextField className="date-1" {...startProps} />
                 <Box> - </Box>
-                <TextField {...endProps} />
+                <TextField className="date-2" {...endProps} />
               </React.Fragment>
             )}
           />
@@ -396,6 +442,18 @@ function EnhancedTable() {
   const emptyRows =
     rowsPerPage -
     Math.min(rowsPerPage, alertList.alerts.length - page * rowsPerPage);
+
+  const ref = useRef(null);
+  const [isOpen, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <Paper
@@ -511,15 +569,123 @@ function EnhancedTable() {
 }
 
 function OrderList() {
+  function calculatePercentage(previous, current) {
+    let prevCalProcessed = 0;
+
+    if (parseInt(current) < parseInt(previous) && parseInt(previous) > 0) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(previous)) *
+        100
+      ).toFixed(2);
+    } else if (
+      parseInt(current) > parseInt(previous) &&
+      parseInt(current) > 0
+    ) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(current)) *
+        100
+      ).toFixed(2);
+    }
+
+    return prevCalProcessed;
+  }
+
+  function percentageStatusDisplay(previous, current) {
+    var percentageColorProcessed;
+    if (parseInt(current) < parseInt(previous)) {
+      percentageColorProcessed = red[500];
+    } else {
+      percentageColorProcessed = green[500];
+    }
+
+    return percentageColorProcessed;
+  }
+
   const dispatch = useDispatch();
+
+  let date = new Date();
+  const currentMonthFirstDay = moment(date)
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const currentMonthLastDay = moment(date).endOf("month").format("YYYY-MM-DD");
+
+  const previousMonthFirstDay = moment(date)
+    .subtract(1, "months")
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const previousMonthLastDay = moment(date)
+    .subtract(1, "months")
+    .endOf("month")
+    .format("YYYY-MM-DD");
+
+  const totalCurrentHours = moment
+    .duration(
+      moment(currentMonthLastDay, "YYYY/MM/DD").diff(
+        moment(currentMonthFirstDay, "YYYY/MM/DD")
+      )
+    )
+    .asHours();
+
   useEffect(() => {
     dispatch(fetchAlerts());
-    dispatch(fetchAlerts({ status: "Processed", count: true }));
-    dispatch(fetchAlerts({ status: "Unprocessed", count: true }));
-    dispatch(fetchAlerts({ status: "Expired", count: true }));
+
+    dispatch(
+      fetchAlerts({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        status: "Processed",
+        count: true,
+      })
+    );
+    dispatch(
+      previousFetchAlerts({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        status: "Processed",
+        count: true,
+      })
+    );
+
+    dispatch(
+      fetchAlerts({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        status: "Unprocessed",
+        count: true,
+      })
+    );
+    dispatch(
+      previousFetchAlerts({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        status: "Unprocessed",
+        count: true,
+      })
+    );
+
+    dispatch(
+      fetchAlerts({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        status: "Expired",
+        count: true,
+      })
+    );
+    dispatch(
+      previousFetchAlerts({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        status: "Expired",
+        count: true,
+      })
+    );
   }, []);
   const alertList = useSelector((state) => state.alertsList);
+  const previousAlertList = useSelector((state) => state.previousAlertsList);
   const CircularProgress = styled(MuiCircularProgress)(spacing);
+
+  // "% &#8593;";
+
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -537,8 +703,16 @@ function OrderList() {
             title="Total Alerts Processed"
             amount={alertList.processedAlertsCount}
             // chip="Today"
-            percentagetext="26% &#8593;"
-            percentagecolor={green[500]}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousProcessedAlertsCount,
+                alertList.processedAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousProcessedAlertsCount,
+              alertList.processedAlertsCount
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -546,8 +720,16 @@ function OrderList() {
             title="Total Alerts Unprocessed"
             amount={alertList.unprocessedAlertsCount}
             // chip="Annual"
-            percentagetext="-14%"
-            percentagecolor={red[500]}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousUnprocessedAlertsCount,
+              alertList.unprocessedAlertsCount
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -555,18 +737,36 @@ function OrderList() {
             title="Total Alerts Expired"
             amount={alertList.expiredAlertsCount}
             // chip="Monthly"
-            percentagetext="+18%"
-            percentagecolor={green[500]}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousExpiredAlertsCount,
+              alertList.expiredAlertsCount
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Alerts Per Hour"
-            amount="45"
+            amount={(
+              alertList.totalAlertsCount / parseInt(totalCurrentHours)
+            ).toFixed(2)}
             // chip="Yearly"
-            percentagetext="-9%"
-            percentagecolor={red[500]}
-          // illustration="/static/img/illustrations/waiting.png"
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousTotalAlertsCount,
+                alertList.totalAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousTotalAlertsCount,
+              alertList.totalAlertsCount
+            )}
+            // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
@@ -576,7 +776,7 @@ function OrderList() {
             chip=""
             percentagetext="Details"
             percentagecolor={red[500]}
-          // illustration="/static/img/illustrations/waiting.png"
+            // illustration="/static/img/illustrations/waiting.png"
           />
           {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>

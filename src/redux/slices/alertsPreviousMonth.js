@@ -3,17 +3,17 @@ import axios from "axios";
 import { apiEndpoint } from "../../config";
 
 const initialState = {
-  alerts: [],
+  alertsPreviousMonth: [],
   loading: true,
   errors: null,
-  processedAlertsCount: 0,
-  unprocessedAlertsCount: 0,
-  expiredAlertsCount: 0,
-  totalAlertsCount: 0,
+  previousProcessedAlertsCount: 0,
+  previousUnprocessedAlertsCount: 0,
+  previousExpiredAlertsCount: 0,
+  previousTotalAlertsCount: 0,
 };
 const userId = "6372c6c0a8b2c2ec60b2da52";
-export const fetchAlerts = createAsyncThunk(
-  "alerts/fetchAlerts",
+export const previousFetchAlerts = createAsyncThunk(
+  "alertsPreviousMonth/previousFetchAlerts",
   async (args = null) => {
     const startDate =
       args !== null && args.startDate !== undefined ? args.startDate : null;
@@ -35,50 +35,51 @@ export const fetchAlerts = createAsyncThunk(
       .catch(function (error) {
         return error;
       });
+
     return response;
   }
 );
 
-export const alertSlice = createSlice({
-  name: "alertsList",
+export const previousAlertSlice = createSlice({
+  name: "previousAlertsList",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchAlerts.pending, (state) => {
+    builder.addCase(previousFetchAlerts.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchAlerts.fulfilled, (state, action) => {
+    builder.addCase(previousFetchAlerts.fulfilled, (state, action) => {
       if (
         action.payload.Status !== undefined &&
         action.payload.Status === "Expired"
       ) {
-        state.expiredAlertsCount = action.payload.Count;
-        state.totalAlertsCount += parseInt(action.payload.Count);
+        state.previousExpiredAlertsCount = action.payload.Count;
+        state.previousTotalAlertsCount += parseInt(action.payload.Count);
       }
       if (
         action.payload.Status !== undefined &&
         action.payload.Status === "Unprocessed"
       ) {
-        state.unprocessedAlertsCount = action.payload.Count;
-        state.totalAlertsCount += parseInt(action.payload.Count);
+        state.previousUnprocessedAlertsCount = action.payload.Count;
+        state.previousTotalAlertsCount += parseInt(action.payload.Count);
       }
       if (
         action.payload.Status !== undefined &&
         action.payload.Status === "Processed"
       ) {
-        state.processedAlertsCount = action.payload.Count;
-        state.totalAlertsCount += parseInt(action.payload.Count);
+        state.previousProcessedAlertsCount = action.payload.Count;
+        state.previousTotalAlertsCount += parseInt(action.payload.Count);
       }
       if (action.payload.Status === undefined) {
         state.loading = false;
-        state.alerts = [];
-        state.alerts = action.payload;
+        state.alertsPreviousMonth = [];
+        state.alertsPreviousMonth = action.payload;
       }
     });
-    builder.addCase(fetchAlerts.rejected, (state, action) => {
+    builder.addCase(previousFetchAlerts.rejected, (state, action) => {
       state.loading = false;
-      state.alerts = [];
+      state.alertsPreviousMonth = [];
       state.errors = action.error.message;
     });
   },
 });
-export default alertSlice.reducer;
+export default previousAlertSlice.reducer;

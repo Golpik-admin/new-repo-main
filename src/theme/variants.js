@@ -3,6 +3,10 @@ import { green, grey, indigo, red } from "@mui/material/colors";
 import { THEMES } from "../constants";
 
 const customBlue = {
+  1: "#0058FF",
+  2: "#2B75FD",
+  3: "#91B7FF",
+  4: "#E5EEFF",
   50: "#e9f0fb",
   100: "#c8daf4",
   200: "#a3c1ed",
@@ -20,16 +24,21 @@ const defaultVariant = {
   palette: {
     mode: "light",
     primary: {
-      main: customBlue[700],
+      main: customBlue[2],
       contrastText: "#FFF",
     },
     secondary: {
-      main: customBlue[500],
+      main: customBlue[3],
       contrastText: "#FFF",
     },
     background: {
       default: "#F5F6FA",
       paper: "#FFF",
+    },
+    toolbarbtn: {
+      color: "#131523",
+      background: "#fff",
+      border: "1px solid #D7DBEC",
     },
   },
   header: {
@@ -48,7 +57,10 @@ const defaultVariant = {
   },
   sidebar: {
     color: "#fff",
-    background: "#233044",
+    background: customBlue[2],
+    icon: {
+      background: "#051A43",
+    },
     header: {
       color: "#fff",
       background: "#233044",
@@ -86,6 +98,10 @@ const darkVariant = merge(defaultVariant, {
       primary: "rgba(255, 255, 255, 0.95)",
       secondary: "rgba(255, 255, 255, 0.5)",
     },
+    toolbarbtn: {
+      color: "#7E84A3",
+      background: "#252B3B",
+    },
   },
   header: {
     color: grey[300],
@@ -117,7 +133,7 @@ const lightVariant = merge(defaultVariant, {
   },
   sidebar: {
     color: "#fff",
-    background: "#2f65cb",
+    background: customBlue[2],
     header: {
       color: "#FFF",
       background: customBlue[800],
