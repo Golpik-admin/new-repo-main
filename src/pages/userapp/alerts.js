@@ -551,8 +551,7 @@ function EnhancedTable() {
 
 function OrderList() {
   const dispatch = useDispatch();
-  useEffect(() => {
-  
+
   let date = new Date();
   const currentMonthFirstDay = moment(date)
     .startOf("month")
@@ -570,6 +569,26 @@ function OrderList() {
     .endOf("month")
     .format("YYYY-MM-DD");
 
+  const totalCurrentHours = moment
+  .duration(moment(currentMonthLastDay, 'YYYY/MM/DD')
+  .diff(moment(currentMonthFirstDay, 'YYYY/MM/DD'))
+  ).asHours()
+
+  function calculatePercentage(previous,current){
+    let prevCalProcessed = 0;
+    
+    if(parseInt(current) < parseInt(previous) && parseInt(previous) > 0){
+      prevCalProcessed = (((parseInt(current) - parseInt(previous)) / parseInt(previous)) * 100).toFixed(2);
+    }else if(parseInt(current) > parseInt(previous) && parseInt(current) > 0){
+      prevCalProcessed = (((parseInt(current) - parseInt(previous)) / parseInt(current)) * 100).toFixed(2);
+    }
+
+    return prevCalProcessed;
+  }
+
+  useEffect(() => {
+  
+
     dispatch(fetchAlerts());
     
     dispatch(fetchAlerts({ startDate: currentMonthFirstDay, endDate: currentMonthLastDay, status: "Processed", count: true }));
@@ -586,45 +605,59 @@ function OrderList() {
   const CircularProgress = styled(MuiCircularProgress)(spacing);
 
   // "% &#8593;";
-
-  if(parseInt(alertList.processedAlertsCount) < parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(previousAlertList.previousProcessedAlertsCount) > 0){
-    var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(previousAlertList.previousProcessedAlertsCount)) * 100).toFixed(2);
-  }else if(parseInt(alertList.processedAlertsCount) > parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(alertList.processedAlertsCount) > 0){
-    var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(alertList.processedAlertsCount)) * 100).toFixed(2);
-  }else{
-    var prevCalProcessed = 0;
-  }
+  
+  // if(parseInt(alertList.processedAlertsCount) < parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(previousAlertList.previousProcessedAlertsCount) > 0){
+  //   var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(previousAlertList.previousProcessedAlertsCount)) * 100).toFixed(2);
+  // }else if(parseInt(alertList.processedAlertsCount) > parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(alertList.processedAlertsCount) > 0){
+  //   var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(alertList.processedAlertsCount)) * 100).toFixed(2);
+  // }else{
+  //   var prevCalProcessed = 0;
+  // }
   if(parseInt(alertList.processedAlertsCount) < parseInt(previousAlertList.previousProcessedAlertsCount)){
     var percentageColorProcessed =  red[500];
   }else{
     var percentageColorProcessed =  green[500];
   }
-
-  if(parseInt(alertList.unprocessedAlertsCount) < parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(previousAlertList.previousUnprocessedAlertsCount) > 0){
-    var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(previousAlertList.previousUnprocessedAlertsCount)) * 100).toFixed(2);
-  }else if(parseInt(alertList.unprocessedAlertsCount) > parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(alertList.unprocessedAlertsCount) > 0){
-    var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(alertList.unprocessedAlertsCount)) * 100).toFixed(2);
-  }else{
-    var prevCalUnprocessed = 0;
-  }
+  
+  // if(parseInt(alertList.unprocessedAlertsCount) < parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(previousAlertList.previousUnprocessedAlertsCount) > 0){
+  //   var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(previousAlertList.previousUnprocessedAlertsCount)) * 100).toFixed(2);
+  // }else if(parseInt(alertList.unprocessedAlertsCount) > parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(alertList.unprocessedAlertsCount) > 0){
+  //   var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(alertList.unprocessedAlertsCount)) * 100).toFixed(2);
+  // }else{
+  //   var prevCalUnprocessed = 0;
+  // }
   if(parseInt(alertList.unprocessedAlertsCount) < parseInt(previousAlertList.previousUnprocessedAlertsCount)){
     var percentageColorUnprocessed =  red[500];
   }else{
     var percentageColorUnprocessed =  green[500];
   }
-
-  if(parseInt(alertList.expiredAlertsCount) < parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(previousAlertList.previousExpiredAlertsCount) > 0){
-    var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(previousAlertList.previousExpiredAlertsCount)) * 100).toFixed(2);
-  }else if(parseInt(alertList.expiredAlertsCount) > parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(alertList.expiredAlertsCount) > 0){
-    var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(alertList.expiredAlertsCount)) * 100).toFixed(2);
-  }else{
-    var prevCalExpired = 0;
-  }
+  
+  // if(parseInt(alertList.expiredAlertsCount) < parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(previousAlertList.previousExpiredAlertsCount) > 0){
+  //   var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(previousAlertList.previousExpiredAlertsCount)) * 100).toFixed(2);
+  // }else if(parseInt(alertList.expiredAlertsCount) > parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(alertList.expiredAlertsCount) > 0){
+  //   var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(alertList.expiredAlertsCount)) * 100).toFixed(2);
+  // }else{
+  //   var prevCalExpired = 0;
+  // }
   if(parseInt(alertList.expiredAlertsCount) < parseInt(previousAlertList.previousExpiredAlertsCount)){
     var percentageColorExpired =  red[500];
   }else{
     var percentageColorExpired =  green[500];
   }
+
+  if(parseInt(alertList.totalAlertsCount) < parseInt(previousAlertList.previousTotalAlertsCount) && parseInt(previousAlertList.previousTotalAlertsCount) > 0){
+    var prevCalTotalAlerts = (((parseInt(alertList.totalAlertsCount) - parseInt(previousAlertList.previousTotalAlertsCount)) / parseInt(previousAlertList.previousTotalAlertsCount)) * 100).toFixed(2);
+  }else if(parseInt(alertList.totalAlertsCount) > parseInt(previousAlertList.previousTotalAlertsCount) && parseInt(alertList.totalAlertsCount) > 0){
+    var prevCalTotalAlerts = (((parseInt(alertList.totalAlertsCount) - parseInt(previousAlertList.previousTotalAlertsCount)) / parseInt(alertList.totalAlertsCount)) * 100).toFixed(2);
+  }else{
+    var prevCalTotalAlerts = 0;
+  }
+  if(parseInt(alertList.totalAlertsCount) < parseInt(previousAlertList.previousTotalAlertsCount)){
+    var percentageColorTotalAlerts =  red[500];
+  }else{
+    var percentageColorTotalAlerts =  green[500];
+  }
+
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -642,7 +675,7 @@ function OrderList() {
             title="Total Alerts Processed"
             amount={alertList.processedAlertsCount}
             // chip="Today"
-            percentagetext={prevCalProcessed+"%"}
+            percentagetext={calculatePercentage(previousAlertList.previousProcessedAlertsCount,alertList.processedAlertsCount)+"%"}
             percentagecolor={percentageColorProcessed}
           />
         </Grid>
@@ -651,7 +684,7 @@ function OrderList() {
             title="Total Alerts Unprocessed"
             amount={alertList.unprocessedAlertsCount}
             // chip="Annual"
-            percentagetext={prevCalUnprocessed+"%"}
+            percentagetext={calculatePercentage(previousAlertList.previousUnprocessedAlertsCount,alertList.unprocessedAlertsCount)+"%"}
             percentagecolor={percentageColorUnprocessed}
           />
         </Grid>
@@ -660,17 +693,17 @@ function OrderList() {
             title="Total Alerts Expired"
             amount={alertList.expiredAlertsCount}
             // chip="Monthly"
-            percentagetext={prevCalExpired+"%"}
+            percentagetext={calculatePercentage(previousAlertList.previousExpiredAlertsCount,alertList.expiredAlertsCount)+"%"}
             percentagecolor={percentageColorExpired}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Alerts Per Hour"
-            amount="45"
+            amount={(alertList.totalAlertsCount/parseInt(totalCurrentHours)).toFixed(2)}
             // chip="Yearly"
-            percentagetext="-9%"
-            percentagecolor={red[500]}
+            percentagetext={prevCalTotalAlerts+"%"}
+            percentagecolor={percentageColorTotalAlerts}
           // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>

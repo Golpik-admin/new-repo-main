@@ -9,6 +9,7 @@ const initialState = {
   previousProcessedAlertsCount: 0,
   previousUnprocessedAlertsCount: 0,
   previousExpiredAlertsCount: 0,
+  previousTotalAlertsCount: 0,
 };
 const userId = "6372c6c0a8b2c2ec60b2da52";
 export const previousFetchAlerts = createAsyncThunk(
@@ -52,18 +53,21 @@ export const previousAlertSlice = createSlice({
         action.payload.Status === "Expired"
       ) {
         state.previousExpiredAlertsCount = action.payload.Count;
+        state.previousTotalAlertsCount += parseInt(action.payload.Count);
       }
       if (
         action.payload.Status !== undefined &&
         action.payload.Status === "Unprocessed"
       ) {
         state.previousUnprocessedAlertsCount = action.payload.Count;
+        state.previousTotalAlertsCount += parseInt(action.payload.Count);
       }
       if (
         action.payload.Status !== undefined &&
         action.payload.Status === "Processed"
       ) {
         state.previousProcessedAlertsCount = action.payload.Count;
+        state.previousTotalAlertsCount += parseInt(action.payload.Count);
       }
       if (action.payload.Status === undefined) {
         state.loading = false;
