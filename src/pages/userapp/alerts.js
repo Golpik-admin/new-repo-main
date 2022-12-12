@@ -215,7 +215,6 @@ const Box = styled.div`
       display: inline-flex;
       padding: 2px;
       border-radius: 4px;
-      background: ${(props) => props.theme.palette.toolbarbtn.background};
       label {
         position: relative;
         margin: 0;
@@ -229,6 +228,7 @@ const Box = styled.div`
           padding: 18px 22px;
           margin: 1px;
           background: ${(props) => props.theme.sidebar.color};
+          border: 1px solid ${(props) => props.theme.palette.toolbarbtn.background};
           &.Mui-checked {
             background: ${(props) => props.theme.sidebar.background};
             + .MuiTypography-root{color:#fff} 
