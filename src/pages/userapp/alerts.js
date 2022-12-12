@@ -605,8 +605,10 @@ function OrderList() {
 
   // "% &#8593;";
 
-  if(parseInt(previousAlertList.previousProcessedAlertsCount) > 0){
+  if(parseInt(alertList.processedAlertsCount) < parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(previousAlertList.previousProcessedAlertsCount) > 0){
     var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(previousAlertList.previousProcessedAlertsCount)) * 100).toFixed(2);
+  }else if(parseInt(alertList.processedAlertsCount) > parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(alertList.processedAlertsCount) > 0){
+    var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(alertList.processedAlertsCount)) * 100).toFixed(2);
   }else{
     var prevCalProcessed = 0;
   }
@@ -616,8 +618,10 @@ function OrderList() {
     var percentageColorProcessed =  green[500];
   }
 
-  if(parseInt(previousAlertList.previousUnprocessedAlertsCount) > 0){
+  if(parseInt(alertList.unprocessedAlertsCount) < parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(previousAlertList.previousUnprocessedAlertsCount) > 0){
     var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(previousAlertList.previousUnprocessedAlertsCount)) * 100).toFixed(2);
+  }else if(parseInt(alertList.unprocessedAlertsCount) > parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(alertList.unprocessedAlertsCount) > 0){
+    var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(alertList.unprocessedAlertsCount)) * 100).toFixed(2);
   }else{
     var prevCalUnprocessed = 0;
   }
@@ -627,7 +631,9 @@ function OrderList() {
     var percentageColorUnprocessed =  green[500];
   }
 
-  if(parseInt(previousAlertList.previousExpiredAlertsCount) > 0){
+  if(parseInt(alertList.expiredAlertsCount) < parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(previousAlertList.previousExpiredAlertsCount) > 0){
+    var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(previousAlertList.previousExpiredAlertsCount)) * 100).toFixed(2);
+  }else if(parseInt(alertList.expiredAlertsCount) > parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(alertList.expiredAlertsCount) > 0){
     var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(alertList.expiredAlertsCount)) * 100).toFixed(2);
   }else{
     var prevCalExpired = 0;
