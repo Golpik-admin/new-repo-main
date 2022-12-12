@@ -45,8 +45,7 @@ const Item = styled(ListItemButton)`
     color: ${(props) => props.theme.sidebar.color};
     background-color: transparent;
     svg {
-      background-color: ${(props) =>
-        darken(0.3, props.theme.sidebar.background)};
+      background-color: ${(props) => props.theme.sidebar.icon.background};
     }
     .side-title {
       left: 58px;
@@ -63,8 +62,7 @@ const Item = styled(ListItemButton)`
   &.${(props) => props.activeclassname} {
     background-color: transparent;
     svg {
-      background-color: ${(props) =>
-        darken(0.3, props.theme.sidebar.background)};
+      background-color: ${(props) => props.theme.sidebar.icon.background};
     }
     span {
       color: ${(props) => props.theme.sidebar.color};
