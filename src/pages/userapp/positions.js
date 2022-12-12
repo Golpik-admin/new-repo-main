@@ -41,6 +41,10 @@ import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchPositions, fetchPNL } from "../../redux/slices/possitions";
+import {
+  fetchPositionsPrevious,
+  fetchPNLPrevious,
+} from "../../redux/slices/positionsPreviousMonth";
 import Moment from "react-moment";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
@@ -523,25 +527,66 @@ function OrderList() {
   const dispatch = useDispatch();
 
   let date = new Date();
-  const firstDay = moment(date)
+
+  const today = moment().format("YYYY-MM-DD");
+
+  const currentMonthFirstDay = moment(date)
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const currentMonthLastDay = moment(date).endOf("month").format("YYYY-MM-DD");
+
+  const previousMonthFirstDay = moment(date)
     .subtract(1, "months")
     .startOf("month")
     .format("YYYY-MM-DD");
-  const lastDay = moment(date)
+  const previousMonthLastDay = moment(date)
     .subtract(1, "months")
     .endOf("month")
     .format("YYYY-MM-DD");
-  const today = moment().format("YYYY-MM-DD");
+
+  const totalCurrentHours = moment
+    .duration(
+      moment(currentMonthLastDay, "YYYY/MM/DD").diff(
+        moment(currentMonthFirstDay, "YYYY/MM/DD")
+      )
+    )
+    .asHours();
+
   useEffect(() => {
     dispatch(fetchPositions());
     dispatch(fetchPositions({ status: "open", count: true }));
+
     dispatch(
-      fetchPNL({ startDate: firstDay, endDate: lastDay, apiCall: "totalPnl" })
+      fetchPNL({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        apiCall: "totalPnl",
+        count: true,
+      })
     );
-    dispatch(fetchPNL({ startDate: today, endDate: today, apiCall: "today" }));
+    dispatch(
+      fetchPNLPrevious({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        apiCall: "totalPnl",
+        count: true,
+      })
+    );
+
+    dispatch(
+      fetchPNL({
+        startDate: today,
+        endDate: today,
+        apiCall: "today",
+        count: true,
+      })
+    );
   }, []);
 
   const positionsList = useSelector((state) => state.positionsList);
+  const positionsListPrevious = useSelector(
+    (state) => state.positionsListPrevious
+  );
 
   return (
     <React.Fragment>
