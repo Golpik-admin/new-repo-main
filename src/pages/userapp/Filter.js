@@ -1,7 +1,8 @@
 import * as React from "react";
+import styled from "@emotion/styled";
 
 import {
-  Popover,
+  Popover as MuiPopover,
   Typography,
   Button,
   Checkbox,
@@ -9,8 +10,19 @@ import {
   Autocomplete,
 } from "@mui/material";
 
+import SortIcon from "@mui/icons-material/Sort";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+
+const Popover = styled(MuiPopover)`
+  .MuiPaper-root {
+    width: 300px;
+    bachground-color: ${(props) =>
+      props.theme.palette.tableTh.background} !important;
+    ${(props) => props.theme.shadows[1]};
+    border: 1px solid ${(props) => props.theme.palette.divider};
+  }
+`;
 
 export default function FilterPop() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -30,11 +42,16 @@ export default function FilterPop() {
 
   return (
     <div>
-      <Button aria-describedby={id} variant="dense" onClick={handleClick}>
-        Open Popover
+      <Button
+        aria-describedby={id}
+        variant="dense"
+        onClick={handleClick}
+        startIcon={<SortIcon />}
+      >
+        Filter
       </Button>
       <Popover
-        variant="contained"
+        variant="popover"
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -61,7 +78,7 @@ export default function FilterPop() {
               {option.title}
             </li>
           )}
-          style={{ width: 500 }}
+          sx={{ width: 300, padding: 3 }}
           renderInput={(params) => (
             <TextField {...params} label="Checkboxes" placeholder="Favorites" />
           )}
