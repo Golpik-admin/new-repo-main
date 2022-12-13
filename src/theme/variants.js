@@ -40,6 +40,18 @@ const defaultVariant = {
       background: "#fff",
       border: "1px solid #D7DBEC",
     },
+    tableTh: {
+      background: customBlue[4],
+    },
+    filterTh: {
+      color: "#91B7FF",
+      background: "#F2F7FF",
+    },
+    proCard: {
+      color: "#FFFFFF",
+      background: "#131523",
+      beforeColor: "rgba(255,255,255,0.08)",
+    },
   },
   header: {
     color: grey[500],
@@ -93,6 +105,8 @@ const darkVariant = merge(defaultVariant, {
     background: {
       default: "#1B2635",
       paper: "#233044",
+      // default: "#1B202A",
+      // paper: "#1B202A",
     },
     text: {
       primary: "rgba(255, 255, 255, 0.95)",
@@ -101,6 +115,18 @@ const darkVariant = merge(defaultVariant, {
     toolbarbtn: {
       color: "#7E84A3",
       background: "#252B3B",
+    },
+    tableTh: {
+      background: "#252B3B",
+    },
+    filterTh: {
+      color: "#5A607F",
+      background: "#1B202A",
+    },
+    proCard: {
+      color: "#FFFFFF",
+      background: "#2B75FD",
+      beforeColor: "rgba(255,255,255,0.08)",
     },
   },
   header: {

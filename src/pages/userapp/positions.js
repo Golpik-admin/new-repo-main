@@ -9,7 +9,7 @@ import {
   Checkbox,
   Chip as MuiChip,
   Divider as MuiDivider,
-  Grid,
+  Grid as MuiGrid,
   IconButton,
   Link,
   Paper as MuiPaper,
@@ -657,7 +657,7 @@ function OrderList() {
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={12} md={6} lg>
           <Stats
             title="Today P & L"
             amount={parseFloat(positionsList.todayPnl).toFixed(2)}
@@ -674,7 +674,7 @@ function OrderList() {
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={12} md={6} lg>
           <Stats
             title="P & L"
             amount={parseFloat(positionsList.pnl).toFixed(2)}
@@ -691,7 +691,7 @@ function OrderList() {
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={12} md={6} lg>
           <Stats
             title="Recent Positions"
             amount="45"
@@ -700,6 +700,17 @@ function OrderList() {
             percentagecolor={red[500]}
             // illustration="/static/img/illustrations/waiting.png"
           />
+        </Grid>
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
+          <Stats
+            title="Pro +"
+            amount="Subscription"
+            chip=""
+            percentagetext="Details"
+            percentagecolor={red[500]}
+            // illustration="/static/img/illustrations/waiting.png"
+          />
+          {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>
       </Grid>
       <Divider my={6} />
@@ -712,5 +723,22 @@ function OrderList() {
     </React.Fragment>
   );
 }
+
+const Grid = styled(MuiGrid)`
+  &.pro-card {
+    .MuiPaper-root {
+      color: ${(props) => props.theme.palette.proCard.color};
+      background-color: ${(props) => props.theme.palette.proCard.background};
+      &:before {
+        content: "PRO+";
+        font-size: 70px;
+        position: absolute;
+        padding: 0 0 0 12px;
+        font-weight: 700;
+        color: ${(props) => props.theme.palette.proCard.beforeColor};
+      }
+    }
+  }
+`;
 
 export default OrderList;
