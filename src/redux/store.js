@@ -16,7 +16,7 @@ export const store = configureStore(
       positionsList: positionsApiReducer,
       positionsListPrevious: positionsPreviousApiReducer,
       fetchSettingsList: getSettingsReducer,
-      updateSettingsList: updateSettingsReducer,
+      updateFetchedSettingsList: updateSettingsReducer,
     },
   },
   composeWithDevTools()

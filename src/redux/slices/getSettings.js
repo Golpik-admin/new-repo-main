@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiEndpoint } from "../../config";
+import useAuth from "../../hooks/useAuth";
 
 const initialState = {
   settings: [],
@@ -14,14 +15,16 @@ const initialState = {
   TestMode: null,
   Scope: null,
 };
-const userId = "6372c6c0a8b2c2ec60b2da52";
+// const userId = "6372c6c0a8b2c2ec60b2da52";
+
 export const fetchSettings = createAsyncThunk(
   "settings/fetchSettings",
   async (args = null) => {
+    console.log(args.User_Id);
     const response = await axios
       .get(`${apiEndpoint}GetUserSettingsByUserId`, {
         params: {
-          User_Id: userId,
+          User_Id: args !== null ? args.User_Id.split("|")[1] : null,
           // DefaultStrike: args !== null ? args.DefaultStrike : null,
           // StrikeCalculation: args !== null ? args.StrikeCalculation : null,
           // DefaultExpiry: args !== null ? args.DefaultExpiry : null,
@@ -33,7 +36,7 @@ export const fetchSettings = createAsyncThunk(
         },
       })
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         return response.data;
       })
       .catch(function (error) {

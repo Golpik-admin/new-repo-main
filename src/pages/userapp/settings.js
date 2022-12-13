@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { fetchSettings, filters } from "../../redux/slices/getSettings";
 import {
-  updateSettings,
+  updateFetchedSettings,
   updateFilters,
 } from "../../redux/slices/updateSettings";
 import * as Yup from "yup";
@@ -39,14 +39,17 @@ const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)(spacing);
 
 function Settings() {
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
+  // console.log(user.id);
+  var User_Id = user.id;
   useEffect(() => {
-    dispatch(fetchSettings());
+    dispatch(fetchSettings({ User_Id }));
   }, []);
 
-  const getSettings_va = useSelector((state) => state.fetchSettingsList);
-  // console.log(getSettings_va);
+  const getSettings_val = useSelector((state) => state.fetchSettingsList);
+  // console.log(getSettings_val);
   const navigate = useNavigate();
 
   return (
@@ -162,13 +165,13 @@ function Settings() {
         <Grid item xs={12} sm={6} md={8} lg={8}>
           <Formik
             initialValues={{
-              DefaultExpiry: getSettings_va.DefaultExpiry,
-              DefaultStrike: getSettings_va.DefaultStrike,
-              ExpiryCalculation: getSettings_va.ExpiryCalculation,
-              RiskManagementActive: getSettings_va.RiskManagementActive,
-              Scope: getSettings_va.Scope,
-              StrikeCalculation: getSettings_va.StrikeCalculation,
-              TestMode: getSettings_va.TestMode,
+              DefaultExpiry: getSettings_val.DefaultExpiry,
+              DefaultStrike: getSettings_val.DefaultStrike,
+              ExpiryCalculation: getSettings_val.ExpiryCalculation,
+              RiskManagementActive: getSettings_val.RiskManagementActive,
+              Scope: getSettings_val.Scope,
+              StrikeCalculation: getSettings_val.StrikeCalculation,
+              TestMode: getSettings_val.TestMode,
               submit: false,
             }}
             validationSchema={Yup.object().shape({
@@ -193,10 +196,8 @@ function Settings() {
               try {
                 // submit api key
                 // signUp(values.email, values.password, values.firstName);
-                // useEffect(() => {
-                dispatch(updateSettings(values));
-                // }, []);
-                navigate("settings");
+                dispatch(updateFetchedSettings({ User_Id, values }));
+                // navigate("settings");
               } catch (error) {
                 const message = error.message || "Something went wrong";
 
@@ -216,7 +217,7 @@ function Settings() {
               values,
             }) => (
               <form noValidate onSubmit={handleSubmit}>
-                {console.log(values)}
+                {/* {console.log(values)} */}
                 {errors.submit && (
                   <Alert mt={2} mb={1} severity="warning">
                     {errors.submit}
