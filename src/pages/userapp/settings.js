@@ -19,6 +19,11 @@ import {
   RadioGroup,
   FormControlLabel,
 } from "@mui/material";
+import { fetchSettings, filters } from "../../redux/slices/getSettings";
+import {
+  updateSettings,
+  updateFilters,
+} from "../../redux/slices/updateSettings";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { spacing } from "@mui/system";
@@ -26,12 +31,22 @@ import { spacing } from "@mui/system";
 import useAuth from "../../hooks/useAuth";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
 
 function Settings() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchSettings());
+  }, []);
+
+  const getSettings_va = useSelector((state) => state.fetchSettingsList);
+  // console.log(getSettings_va);
   const navigate = useNavigate();
 
   return (
@@ -147,24 +162,29 @@ function Settings() {
         <Grid item xs={12} sm={6} md={8} lg={8}>
           <Formik
             initialValues={{
-              firstName: "",
-              email: "",
-              password: "",
+              DefaultExpiry: getSettings_va.DefaultExpiry,
+              DefaultStrike: getSettings_va.DefaultStrike,
+              ExpiryCalculation: getSettings_va.ExpiryCalculation,
+              RiskManagementActive: getSettings_va.RiskManagementActive,
+              Scope: getSettings_va.Scope,
+              StrikeCalculation: getSettings_va.StrikeCalculation,
+              TestMode: getSettings_va.TestMode,
               submit: false,
             }}
             validationSchema={Yup.object().shape({
-              firstName: Yup.string()
-                .max(255)
-                .required("First name is required"),
-              lastName: Yup.string().max(255).required("Last name is required"),
-              email: Yup.string()
-                .email("Must be a valid email")
-                .max(255)
-                .required("Email is required"),
-              password: Yup.string()
-                .min(12, "Must be at least 12 characters")
-                .max(255)
-                .required("Required"),
+              DefaultExpiry: Yup.string().required("DefaultExpiry is required"),
+              DefaultStrike: Yup.string().required("DefaultStrike is required"),
+              ExpiryCalculation: Yup.string().required(
+                "ExpiryCalculation is required"
+              ),
+              RiskManagementActive: Yup.string().required(
+                "RiskManagementActive is required"
+              ),
+              Scope: Yup.string().required("Scope is required"),
+              StrikeCalculation: Yup.string().required(
+                "StrikeCalculation is required"
+              ),
+              TestMode: Yup.string().required("TestMode is required"),
             })}
             onSubmit={async (
               values,
@@ -173,7 +193,10 @@ function Settings() {
               try {
                 // submit api key
                 // signUp(values.email, values.password, values.firstName);
-                navigate("/auth/sign-in");
+                // useEffect(() => {
+                dispatch(updateSettings(values));
+                // }, []);
+                navigate("settings");
               } catch (error) {
                 const message = error.message || "Something went wrong";
 
@@ -193,6 +216,7 @@ function Settings() {
               values,
             }) => (
               <form noValidate onSubmit={handleSubmit}>
+                {console.log(values)}
                 {errors.submit && (
                   <Alert mt={2} mb={1} severity="warning">
                     {errors.submit}
@@ -203,7 +227,12 @@ function Settings() {
                     <Checkbox
                       name="DefaultExpiry"
                       label="DefaultExpiry"
-                      value={values.DefaultExpiry}
+                      checked={
+                        values.DefaultExpiry != "undefined" &&
+                        values.DefaultExpiry
+                          ? true
+                          : false
+                      }
                       error={Boolean(
                         touched.DefaultExpiry && errors.DefaultExpiry
                       )}
@@ -228,7 +257,7 @@ function Settings() {
                         <TextField
                           type="text"
                           name="ExpiryCalculation"
-                          label="Expiry Calculation"
+                          placeholder="Expiry Calculation"
                           value={values.ExpiryCalculation}
                           error={Boolean(
                             touched.ExpiryCalculation &&
@@ -249,7 +278,12 @@ function Settings() {
                     <Checkbox
                       name="DefaultStrike"
                       label="DefaultStrike"
-                      value={values.DefaultStrike}
+                      checked={
+                        values.DefaultStrike != "undefined" &&
+                        values.DefaultStrike
+                          ? true
+                          : false
+                      }
                       error={Boolean(
                         touched.DefaultStrike && errors.DefaultStrike
                       )}
@@ -274,8 +308,8 @@ function Settings() {
                       <Grid item xs={12} sm={6} md={4} lg={6}>
                         <TextField
                           type="text"
-                          name="strikeCalculation"
-                          label="Strike Calculation"
+                          name="StrikeCalculation"
+                          placeholder="Strike Calculation"
                           value={values.StrikeCalculation}
                           error={Boolean(
                             touched.StrikeCalculation &&
@@ -308,17 +342,28 @@ function Settings() {
                       <Grid item xs={12} sm={6} md={4} lg={6}>
                         <RadioGroup
                           aria-labelledby="demo-radio-buttons-group-label"
-                          defaultValue="female"
-                          name="radio-buttons-group"
+                          defaultValue="1"
+                          name="Scope"
+                          onChange={handleChange}
                         >
                           <FormControlLabel
-                            value="female"
+                            value="1"
                             control={<Radio />}
+                            checked={
+                              values.Scope != null && values.Scope == 1
+                                ? true
+                                : false
+                            }
                             label="All positions on my account"
                           />
                           <FormControlLabel
-                            value="male"
+                            value="0"
                             control={<Radio />}
+                            checked={
+                              values.Scope != null && values.Scope == 0
+                                ? true
+                                : false
+                            }
                             label="Only positions traded via optionize"
                           />
                         </RadioGroup>
@@ -326,14 +371,27 @@ function Settings() {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} sm={6} md={4} lg={6}>
-                    <Checkbox /> Enable Risk-Manager (require subscription)
+                    <Checkbox
+                      onChange={handleChange}
+                      name="RiskManagementActive"
+                      checked={values.RiskManagementActive ? true : false}
+                    />
+                    Enable Risk-Manager (require subscription)
                   </Grid>
                 </Grid>
 
                 <Grid>
                   <Grid>
                     Alerts test mode
-                    <Switch />
+                    <Switch
+                      onChange={handleChange}
+                      name="TestMode"
+                      checked={
+                        values.TestMode != "undefined" && values.TestMode
+                          ? true
+                          : false
+                      }
+                    />
                   </Grid>
                 </Grid>
 
