@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -43,7 +43,10 @@ import Stats from "./Stats";
 import { flexbox, spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts, filters } from "../../redux/slices/alerts";
-import { previousFetchAlerts, previousFilters } from "../../redux/slices/alertsPreviousMonth";
+import {
+  previousFetchAlerts,
+  previousFilters,
+} from "../../redux/slices/alertsPreviousMonth";
 import Moment from "react-moment";
 
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
@@ -272,7 +275,9 @@ const Box = styled.div`
           border:  ${(props) => props.theme.palette.toolbarbtn.border};
           &.Mui-checked {
             background: ${(props) => props.theme.sidebar.background};
-            + .MuiTypography-root{color:#fff} 
+            + .MuiTypography-root {
+              color: #fff;
+            }
           }
           svg {
             display: none;
@@ -454,16 +459,16 @@ function EnhancedTable() {
     rowsPerPage -
     Math.min(rowsPerPage, alertList.alerts.length - page * rowsPerPage);
 
-    const ref = useRef(null);
-    const [isOpen, setOpen] = useState(false);
-  
-    const handleOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
+  const ref = useRef(null);
+  const [isOpen, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div>
@@ -497,7 +502,7 @@ function EnhancedTable() {
                     const labelId = `enhanced-table-checkbox-${row.id}`;
                     // -${index}
                     return (
-                        <TableRow
+                      <TableRow
                         hover
                         role="checkbox"
                         aria-checked={isItemSelected}
@@ -505,35 +510,35 @@ function EnhancedTable() {
                         key={`${row.id}`}
                         selected={isItemSelected}
                       >
-                          <TableCell align="left">{row.ticker}</TableCell>
-                          <TableCell align="left">{row.option_Type}</TableCell>
-                          <TableCell align="left">
-                            {row.order_Action.replace(/_/g, " ")}
-                          </TableCell>
-                          <TableCell align="left">{"N/A"}</TableCell>
-                          <TableCell align="left">{row.price}</TableCell>
-                          <TableCell align="left">{row.status}</TableCell>
-                          <TableCell align="right">{row.alert_Comment}</TableCell>
-                          <TableCell align="right">
-                            {row.time_Received !== null ? (
-                              <Moment format="YYYY-MM-DD hh:mm:ss">
-                                {row.time_Received}
-                              </Moment>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.time_Executed !== null ? (
-                              <Moment format="YYYY-MM-DD hh:mm:ss">
-                                {row.time_Executed}
-                              </Moment>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
-                          <TableCell align="right">{row.alert_Name}</TableCell>
-                        </TableRow>
+                        <TableCell align="left">{row.ticker}</TableCell>
+                        <TableCell align="left">{row.option_Type}</TableCell>
+                        <TableCell align="left">
+                          {row.order_Action.replace(/_/g, " ")}
+                        </TableCell>
+                        <TableCell align="left">{"N/A"}</TableCell>
+                        <TableCell align="left">{row.price}</TableCell>
+                        <TableCell align="left">{row.status}</TableCell>
+                        <TableCell align="right">{row.alert_Comment}</TableCell>
+                        <TableCell align="right">
+                          {row.time_Received !== null ? (
+                            <Moment format="YYYY-MM-DD hh:mm:ss">
+                              {row.time_Received}
+                            </Moment>
+                          ) : (
+                            ""
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.time_Executed !== null ? (
+                            <Moment format="YYYY-MM-DD hh:mm:ss">
+                              {row.time_Executed}
+                            </Moment>
+                          ) : (
+                            ""
+                          )}
+                        </TableCell>
+                        <TableCell align="right">{row.alert_Name}</TableCell>
+                      </TableRow>
                     );
                   })}
                 {/* {emptyRows > 0 && (
@@ -580,16 +585,45 @@ function EnhancedTable() {
 }
 
 function OrderList() {
+  function calculatePercentage(previous, current) {
+    let prevCalProcessed = 0;
+
+    if (parseInt(current) < parseInt(previous) && parseInt(previous) > 0) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(previous)) *
+        100
+      ).toFixed(2);
+    } else if (
+      parseInt(current) > parseInt(previous) &&
+      parseInt(current) > 0
+    ) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(current)) *
+        100
+      ).toFixed(2);
+    }
+
+    return prevCalProcessed;
+  }
+
+  function percentageStatusDisplay(previous, current) {
+    var percentageColorProcessed;
+    if (parseInt(current) < parseInt(previous)) {
+      percentageColorProcessed = red[500];
+    } else {
+      percentageColorProcessed = green[500];
+    }
+
+    return percentageColorProcessed;
+  }
+
   const dispatch = useDispatch();
-  useEffect(() => {
-  
+
   let date = new Date();
   const currentMonthFirstDay = moment(date)
     .startOf("month")
     .format("YYYY-MM-DD");
-  const currentMonthLastDay = moment(date)
-    .endOf("month")
-    .format("YYYY-MM-DD");
+  const currentMonthLastDay = moment(date).endOf("month").format("YYYY-MM-DD");
 
   const previousMonthFirstDay = moment(date)
     .subtract(1, "months")
@@ -600,16 +634,67 @@ function OrderList() {
     .endOf("month")
     .format("YYYY-MM-DD");
 
+  const totalCurrentHours = moment
+    .duration(
+      moment(currentMonthLastDay, "YYYY/MM/DD").diff(
+        moment(currentMonthFirstDay, "YYYY/MM/DD")
+      )
+    )
+    .asHours();
+
+  useEffect(() => {
     dispatch(fetchAlerts());
-    
-    dispatch(fetchAlerts({ startDate: currentMonthFirstDay, endDate: currentMonthLastDay, status: "Processed", count: true }));
-    dispatch(previousFetchAlerts({ startDate: previousMonthFirstDay, endDate: previousMonthLastDay, status: "Processed", count: true }));
 
-    dispatch(fetchAlerts({ startDate: currentMonthFirstDay, endDate: currentMonthLastDay, status: "Unprocessed", count: true }));
-    dispatch(previousFetchAlerts({ startDate: previousMonthFirstDay, endDate: previousMonthLastDay, status: "Unprocessed", count: true }));
+    dispatch(
+      fetchAlerts({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        status: "Processed",
+        count: true,
+      })
+    );
+    dispatch(
+      previousFetchAlerts({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        status: "Processed",
+        count: true,
+      })
+    );
 
-    dispatch(fetchAlerts({ startDate: currentMonthFirstDay, endDate: currentMonthLastDay, status: "Expired", count: true }));
-    dispatch(previousFetchAlerts({ startDate: previousMonthFirstDay, endDate: previousMonthLastDay, status: "Expired", count: true }));
+    dispatch(
+      fetchAlerts({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        status: "Unprocessed",
+        count: true,
+      })
+    );
+    dispatch(
+      previousFetchAlerts({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        status: "Unprocessed",
+        count: true,
+      })
+    );
+
+    dispatch(
+      fetchAlerts({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        status: "Expired",
+        count: true,
+      })
+    );
+    dispatch(
+      previousFetchAlerts({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        status: "Expired",
+        count: true,
+      })
+    );
   }, []);
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
@@ -617,44 +702,6 @@ function OrderList() {
 
   // "% &#8593;";
 
-  if(parseInt(alertList.processedAlertsCount) < parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(previousAlertList.previousProcessedAlertsCount) > 0){
-    var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(previousAlertList.previousProcessedAlertsCount)) * 100).toFixed(2);
-  }else if(parseInt(alertList.processedAlertsCount) > parseInt(previousAlertList.previousProcessedAlertsCount) && parseInt(alertList.processedAlertsCount) > 0){
-    var prevCalProcessed = (((parseInt(alertList.processedAlertsCount) - parseInt(previousAlertList.previousProcessedAlertsCount)) / parseInt(alertList.processedAlertsCount)) * 100).toFixed(2);
-  }else{
-    var prevCalProcessed = 0;
-  }
-  if(parseInt(alertList.processedAlertsCount) < parseInt(previousAlertList.previousProcessedAlertsCount)){
-    var percentageColorProcessed =  red[500];
-  }else{
-    var percentageColorProcessed =  green[500];
-  }
-
-  if(parseInt(alertList.unprocessedAlertsCount) < parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(previousAlertList.previousUnprocessedAlertsCount) > 0){
-    var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(previousAlertList.previousUnprocessedAlertsCount)) * 100).toFixed(2);
-  }else if(parseInt(alertList.unprocessedAlertsCount) > parseInt(previousAlertList.previousUnprocessedAlertsCount) && parseInt(alertList.unprocessedAlertsCount) > 0){
-    var prevCalUnprocessed = (((parseInt(alertList.unprocessedAlertsCount) - parseInt(previousAlertList.previousUnprocessedAlertsCount)) / parseInt(alertList.unprocessedAlertsCount)) * 100).toFixed(2);
-  }else{
-    var prevCalUnprocessed = 0;
-  }
-  if(parseInt(alertList.unprocessedAlertsCount) < parseInt(previousAlertList.previousUnprocessedAlertsCount)){
-    var percentageColorUnprocessed =  red[500];
-  }else{
-    var percentageColorUnprocessed =  green[500];
-  }
-
-  if(parseInt(alertList.expiredAlertsCount) < parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(previousAlertList.previousExpiredAlertsCount) > 0){
-    var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(previousAlertList.previousExpiredAlertsCount)) * 100).toFixed(2);
-  }else if(parseInt(alertList.expiredAlertsCount) > parseInt(previousAlertList.previousExpiredAlertsCount) && parseInt(alertList.expiredAlertsCount) > 0){
-    var prevCalExpired = (((parseInt(alertList.expiredAlertsCount) - parseInt(previousAlertList.previousExpiredAlertsCount)) / parseInt(alertList.expiredAlertsCount)) * 100).toFixed(2);
-  }else{
-    var prevCalExpired = 0;
-  }
-  if(parseInt(alertList.expiredAlertsCount) < parseInt(previousAlertList.previousExpiredAlertsCount)){
-    var percentageColorExpired =  red[500];
-  }else{
-    var percentageColorExpired =  green[500];
-  }
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -672,8 +719,16 @@ function OrderList() {
             title="Total Alerts Processed"
             amount={alertList.processedAlertsCount}
             // chip="Today"
-            percentagetext={prevCalProcessed+"%"}
-            percentagecolor={percentageColorProcessed}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousProcessedAlertsCount,
+                alertList.processedAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousProcessedAlertsCount,
+              alertList.processedAlertsCount
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -681,8 +736,16 @@ function OrderList() {
             title="Total Alerts Unprocessed"
             amount={alertList.unprocessedAlertsCount}
             // chip="Annual"
-            percentagetext={prevCalUnprocessed+"%"}
-            percentagecolor={percentageColorUnprocessed}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousUnprocessedAlertsCount,
+              alertList.unprocessedAlertsCount
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -690,18 +753,36 @@ function OrderList() {
             title="Total Alerts Expired"
             amount={alertList.expiredAlertsCount}
             // chip="Monthly"
-            percentagetext={prevCalExpired+"%"}
-            percentagecolor={percentageColorExpired}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousExpiredAlertsCount,
+              alertList.expiredAlertsCount
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Alerts Per Hour"
-            amount="45"
+            amount={(
+              alertList.totalAlertsCount / parseInt(totalCurrentHours)
+            ).toFixed(2)}
             // chip="Yearly"
-            percentagetext="-9%"
-            percentagecolor={red[500]}
-          // illustration="/static/img/illustrations/waiting.png"
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousTotalAlertsCount,
+                alertList.totalAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousTotalAlertsCount,
+              alertList.totalAlertsCount
+            )}
+            // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
@@ -711,7 +792,7 @@ function OrderList() {
             chip=""
             percentagetext="Details"
             percentagecolor={red[500]}
-          // illustration="/static/img/illustrations/waiting.png"
+            // illustration="/static/img/illustrations/waiting.png"
           />
           {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>

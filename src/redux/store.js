@@ -3,6 +3,7 @@ import { composeWithDevTools } from "@redux-devtools/extension";
 import alertApiReducer from "../redux/slices/alerts";
 import alertPreviousApiReducer from "../redux/slices/alertsPreviousMonth";
 import positionsApiReducer from "../redux/slices/possitions";
+import positionsPreviousApiReducer from "../redux/slices/positionsPreviousMonth";
 
 export const store = configureStore(
   {
@@ -11,6 +12,7 @@ export const store = configureStore(
       previousAlertsList: alertPreviousApiReducer,
       processedAlertCount: alertApiReducer,
       positionsList: positionsApiReducer,
+      positionsListPrevious: positionsPreviousApiReducer,
     },
   },
   composeWithDevTools()

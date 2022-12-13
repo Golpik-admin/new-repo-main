@@ -41,6 +41,10 @@ import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchPositions, fetchPNL } from "../../redux/slices/possitions";
+import {
+  fetchPositionsPrevious,
+  fetchPNLPrevious,
+} from "../../redux/slices/positionsPreviousMonth";
 import Moment from "react-moment";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
@@ -520,28 +524,117 @@ function EnhancedTable() {
 }
 
 function OrderList() {
+  function calculatePercentage(previous, current) {
+    let prevCalProcessed = 0;
+
+    if (parseInt(current) < parseInt(previous) && parseInt(previous) > 0) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(previous)) *
+        100
+      ).toFixed(2);
+    } else if (
+      parseInt(current) > parseInt(previous) &&
+      parseInt(current) > 0
+    ) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(current)) *
+        100
+      ).toFixed(2);
+    }
+
+    return prevCalProcessed;
+  }
+
+  function percentageStatusDisplay(previous, current) {
+    var percentageColorProcessed;
+    if (parseInt(current) < parseInt(previous)) {
+      percentageColorProcessed = red[500];
+    } else {
+      percentageColorProcessed = green[500];
+    }
+
+    return percentageColorProcessed;
+  }
+
   const dispatch = useDispatch();
 
   let date = new Date();
-  const firstDay = moment(date)
+
+  const today = moment().format("YYYY-MM-DD");
+
+  const currentMonthFirstDay = moment(date)
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const currentMonthLastDay = moment(date).endOf("month").format("YYYY-MM-DD");
+
+  const previousMonthFirstDay = moment(date)
     .subtract(1, "months")
     .startOf("month")
     .format("YYYY-MM-DD");
-  const lastDay = moment(date)
+  const previousMonthLastDay = moment(date)
     .subtract(1, "months")
     .endOf("month")
     .format("YYYY-MM-DD");
-  const today = moment().format("YYYY-MM-DD");
+
+  const totalCurrentHours = moment
+    .duration(
+      moment(currentMonthLastDay, "YYYY/MM/DD").diff(
+        moment(currentMonthFirstDay, "YYYY/MM/DD")
+      )
+    )
+    .asHours();
+
   useEffect(() => {
     dispatch(fetchPositions());
-    dispatch(fetchPositions({ status: "open", count: true }));
     dispatch(
-      fetchPNL({ startDate: firstDay, endDate: lastDay, apiCall: "totalPnl" })
+      fetchPositions({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        status: "open",
+        count: true,
+      })
     );
-    dispatch(fetchPNL({ startDate: today, endDate: today, apiCall: "today" }));
+
+    dispatch(
+      fetchPositionsPrevious({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        status: "open",
+        count: true,
+      })
+    );
+
+    dispatch(
+      fetchPNL({
+        startDate: currentMonthFirstDay,
+        endDate: currentMonthLastDay,
+        apiCall: "totalPnl",
+        count: true,
+      })
+    );
+    dispatch(
+      fetchPNLPrevious({
+        startDate: previousMonthFirstDay,
+        endDate: previousMonthLastDay,
+        apiCall: "totalPnl",
+        count: true,
+      })
+    );
+
+    dispatch(
+      fetchPNL({
+        startDate: today,
+        endDate: today,
+        apiCall: "today",
+        count: true,
+      })
+    );
   }, []);
 
   const positionsList = useSelector((state) => state.positionsList);
+  const positionsListPrevious = useSelector(
+    (state) => state.positionsListPrevious
+  );
 
   return (
     <React.Fragment>
@@ -552,8 +645,16 @@ function OrderList() {
             title="Total Positions Open"
             amount={positionsList.positionsOpen}
             // chip="Today"
-            percentagetext="+26%"
-            percentagecolor={green[500]}
+            percentagetext={
+              calculatePercentage(
+                positionsListPrevious.positionsOpenPrevious,
+                positionsList.positionsOpen
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              positionsListPrevious.positionsOpenPrevious,
+              positionsList.positionsOpen
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -561,8 +662,16 @@ function OrderList() {
             title="Today P & L"
             amount={parseFloat(positionsList.todayPnl).toFixed(2)}
             // chip="Annual"
-            percentagetext="-14%"
-            percentagecolor={red[500]}
+            percentagetext={
+              calculatePercentage(
+                positionsListPrevious.todayPnlPrevious,
+                positionsList.todayPnl
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              positionsListPrevious.todayPnlPrevious,
+              positionsList.todayPnl
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -570,8 +679,16 @@ function OrderList() {
             title="P & L"
             amount={parseFloat(positionsList.pnl).toFixed(2)}
             // chip="Monthly"
-            percentagetext="+18%"
-            percentagecolor={green[500]}
+            percentagetext={
+              calculatePercentage(
+                positionsListPrevious.pnlPrevious,
+                positionsList.pnl
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              positionsListPrevious.pnlPrevious,
+              positionsList.pnl
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>

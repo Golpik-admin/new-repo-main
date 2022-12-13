@@ -9,6 +9,7 @@ const initialState = {
   processedAlertsCount: 0,
   unprocessedAlertsCount: 0,
   expiredAlertsCount: 0,
+  totalAlertsCount: 0,
 };
 const userId = "6372c6c0a8b2c2ec60b2da52";
 export const fetchAlerts = createAsyncThunk(
@@ -51,18 +52,21 @@ export const alertSlice = createSlice({
         action.payload.Status === "Expired"
       ) {
         state.expiredAlertsCount = action.payload.Count;
+        state.totalAlertsCount += parseInt(action.payload.Count);
       }
       if (
         action.payload.Status !== undefined &&
         action.payload.Status === "Unprocessed"
       ) {
         state.unprocessedAlertsCount = action.payload.Count;
+        state.totalAlertsCount += parseInt(action.payload.Count);
       }
       if (
         action.payload.Status !== undefined &&
         action.payload.Status === "Processed"
       ) {
         state.processedAlertsCount = action.payload.Count;
+        state.totalAlertsCount += parseInt(action.payload.Count);
       }
       if (action.payload.Status === undefined) {
         state.loading = false;
