@@ -6,15 +6,15 @@ import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumbs as MuiBreadcrumbs,
-  Button,
+  Button as MuiButton,
   Checkbox,
   Chip as MuiChip,
   Divider as MuiDivider,
-  Grid,
+  Grid as MuiGrid,
   IconButton,
   Link,
   Paper as MuiPaper,
-  Table,
+  Table as MuiTable,
   TableBody,
   TableCell,
   TableContainer,
@@ -33,7 +33,6 @@ import {
   CircularProgress as MuiCircularProgress,
 } from "@mui/material";
 import { green, orange, red } from "@mui/material/colors";
-import {makeStyles} from "@mui/styles";
 import {
   Add as AddIcon,
   Archive as ArchiveIcon,
@@ -41,7 +40,7 @@ import {
   RemoveRedEye as RemoveRedEyeIcon,
 } from "@mui/icons-material";
 import Stats from "./Stats";
-import { spacing } from "@mui/system";
+import { flexbox, spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts, filters } from "../../redux/slices/alerts";
 import {
@@ -194,14 +193,16 @@ const EnhancedTableHead = (props) => {
             align={headCell.alignment}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            className="table-th"
           >
-            <TableSortLabel
+            {headCell.label}
+            {/* <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
-            </TableSortLabel>
+              
+            </TableSortLabel> */}
           </TableCell>
         ))}
       </TableRow>
@@ -212,21 +213,40 @@ const EnhancedTableHead = (props) => {
             align={headCell.alignment}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            className="filter-th"
           >
-            <FilterPop />
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
+            <Box 
+            className="filter-box"
             >
-              
-            </TableSortLabel>
+              <FilterPop />
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+              </TableSortLabel>
+            </Box>
           </TableCell>
         ))}
       </TableRow>
     </TableHead>
   );
 };
+
+const Table = styled(MuiTable)`
+  th.table-th{
+    background: ${(props) => props.theme.palette.tableTh.background};
+    padding: 10px;
+  }
+  th.filter-th{
+    background: ${(props) => props.theme.palette.filterTh.background};
+    padding: 10px;
+    .filter-box{
+      display: flex;
+      color: ${(props) => props.theme.palette.filterTh.color}
+    }
+  }
+`;
 
 const Box = styled.div`
   &.radio-parent {
@@ -271,17 +291,22 @@ const Box = styled.div`
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
         color: ${(props) => props.theme.palette.toolbarbtn.color};
+        line-height: 1.7;
       }
     }
   }
 `;
-const useStyles = makeStyles({
-  button: {
-    "&:hover": {
-      backgroundColor: "#eee",
-      color: "#ddd",
-  },
-}})
+const Button = styled(MuiButton)`
+  color: ${(props) => props.theme.sidebar.color};
+  background: ${(props) => props.theme.sidebar.background};
+  padding: 8px 22px;
+  margin: 0 19px 0 17px;
+  ${(props) => props.theme.palette.toolbarbtn.border};
+  &:hover{
+    background: ${(props) => props.theme.sidebar.background};
+  }
+} 
+`;
 
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
@@ -294,9 +319,6 @@ const EnhancedTableToolbar = (props) => {
   };
 
   const today = moment().format("YYYY-MM-DD");
-
-  const classes = useStyles();
-
   return (
     <Toolbar>
       <ToolbarTitle>
@@ -335,17 +357,11 @@ const EnhancedTableToolbar = (props) => {
           />
         </RadioGroup>
       </Box>
-      <box>
-        <Button 
-          className={classes.button}
-          variant="contained"
-          sx={{
-            mx: 4,
-          }}
-        >
-          0
-        </Button>
-      </box>
+      <Box>
+        <Button variant="contained">
+          Test
+        </Button> 
+      </Box>
       <StyledEngineProvider injectFirst>
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
@@ -769,7 +785,7 @@ function OrderList() {
             // illustration="/static/img/illustrations/waiting.png"
           />
         </Grid>
-        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
           <Stats
             title="Pro +"
             amount="Subscription"
@@ -791,5 +807,22 @@ function OrderList() {
     </React.Fragment>
   );
 }
+
+const Grid = styled(MuiGrid)`
+  &.pro-card{
+    .MuiPaper-root{
+      color: ${(props) => props.theme.palette.proCard.color};
+      background-color: ${(props) => props.theme.palette.proCard.background};
+      &:before{
+        content: "PRO+";
+        font-size: 70px;
+        position: absolute;
+        padding: 0 0 0 12px;
+        font-weight: 700;
+        color:${(props) => props.theme.palette.proCard.beforeColor};
+      }
+    }
+  }
+`;
 
 export default OrderList;
