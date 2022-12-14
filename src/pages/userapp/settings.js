@@ -1,15 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import {
-  Box,
-  Breadcrumbs as MuiBreadcrumbs,
-  Chip as MuiChip,
-  Divider as MuiDivider,
   Grid,
-  Paper as MuiPaper,
-  Typography,
-  LinearProgress as MuiLinearProgress,
-  CircularProgress as MuiCircularProgress,
   Button,
   TextField as MuiTextField,
   Alert as MuiAlert,
@@ -20,11 +12,8 @@ import {
   FormControlLabel,
   Input,
 } from "@mui/material";
-import { fetchSettings, filters } from "../../redux/slices/getSettings";
-import {
-  updateFetchedSettings,
-  updateFilters,
-} from "../../redux/slices/updateSettings";
+import { fetchSettings } from "../../redux/slices/getSettings";
+// import { updateFetchedSettings } from "../../redux/slices/updateSettings";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { spacing } from "@mui/system";
@@ -40,8 +29,10 @@ const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)(spacing);
 
 function Settings() {
+  const getSettings_val = useSelector((state) => state.fetchSettingsList);
   const { user } = useAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   var User_Id = user.id;
   console.log(User_Id);

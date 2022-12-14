@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiEndpoint } from "../../config";
-import useAuth from "../../hooks/useAuth";
 
 const initialState = {
   settings: [],
@@ -46,6 +45,7 @@ export const fetchSettingslice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchSettings.fulfilled, (state, action) => {
+      console.log(state, action);
       // if (
       //   action.payload.Status !== undefined &&
       //   action.payload.Status === "Expired"
