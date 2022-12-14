@@ -1,26 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiEndpoint } from "../../config";
-import useAuth from "../../hooks/useAuth";
 
 const initialState = {
-  settings: [],
-  loading: true,
-  errors: null,
-  DefaultStrike: null,
-  StrikeCalculation: null,
-  DefaultExpiry: null,
-  ExpiryCalculation: null,
-  RiskManagementActive: null,
-  TestMode: null,
-  Scope: null,
+  setting: {
+    settings: [],
+    loading: true,
+    errors: null,
+    DefaultStrike: false,
+    StrikeCalculation: "",
+    DefaultExpiry: false,
+    ExpiryCalculation: "",
+    RiskManagementActive: false,
+    TestMode: false,
+    Scope: false,
+  },
 };
-// const userId = "6372c6c0a8b2c2ec60b2da52";
-
 export const fetchSettings = createAsyncThunk(
   "settings/fetchSettings",
   async (args = null) => {
-    console.log(args.User_Id);
     const response = await axios
       .get(`${apiEndpoint}GetUserSettingsByUserId`, {
         params: {
@@ -36,7 +34,7 @@ export const fetchSettings = createAsyncThunk(
         },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response.data);
         return response.data;
       })
       .catch(function (error) {
@@ -54,6 +52,7 @@ export const fetchSettingslice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchSettings.fulfilled, (state, action) => {
+      console.log(state, action);
       // if (
       //   action.payload.Status !== undefined &&
       //   action.payload.Status === "Expired"
@@ -62,25 +61,28 @@ export const fetchSettingslice = createSlice({
       //   state.totalAlertsCount += parseInt(action.payload.Count);
       // }
       console.log(action);
-      state.DefaultStrike = action.payload.DefaultStrike;
-      state.StrikeCalculation = action.payload.StrikeCalculation;
-      state.DefaultExpiry = action.payload.DefaultExpiry;
-      state.ExpiryCalculation = action.payload.ExpiryCalculation;
-      state.RiskManagementActive = action.payload.RiskManagementActive;
-      state.TestMode = action.payload.TestMode;
-      state.Scope = action.payload.Scope;
+      if (action.payload) {
+        state.setting.DefaultStrike = action.payload.DefaultStrike;
+        state.setting.StrikeCalculation = action.payload.StrikeCalculation;
+        state.setting.DefaultExpiry = action.payload.DefaultExpiry;
+        state.setting.ExpiryCalculation = action.payload.ExpiryCalculation;
+        state.setting.RiskManagementActive =
+          action.payload.RiskManagementActive;
+        state.setting.TestMode = action.payload.TestMode;
+        state.setting.Scope = action.payload.Scope;
 
-      if (action.payload.Status === undefined) {
-        state.loading = false;
-        state.settings = [];
-        state.settings = action.payload;
+        if (action.payload.Status === undefined) {
+          state.setting.loading = false;
+          state.setting.settings = [];
+          state.setting.settings = action.payload;
+        }
       }
     });
-    builder.addCase(fetchSettings.rejected, (state, action) => {
-      state.loading = false;
-      state.settings = [];
-      state.errors = action.error.message;
-    });
+    // builder.addCase(fetchSettings.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.settings = [];
+    //   state.errors = action.error.message;
+    // });
   },
 });
 export default fetchSettingslice.reducer;

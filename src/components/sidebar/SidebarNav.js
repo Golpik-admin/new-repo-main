@@ -62,7 +62,7 @@ const SidebarNav = ({ items }) => {
             items.map((item) => (
               <SidebarNavSection
                 component="div"
-                key={item.title}
+                key={item.toString()}
                 pages={item.pages}
                 title={item.title}
               />
