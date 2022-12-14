@@ -16,11 +16,19 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const Popover = styled(MuiPopover)`
   .MuiPaper-root {
-    width: 300px;
-    bachground-color: ${(props) =>
-      props.theme.palette.tableTh.background} !important;
+    width: 250px;
+    background-color: ${(props) => props.theme.palette.tableTh.background};
     ${(props) => props.theme.shadows[1]};
-    border: 1px solid ${(props) => props.theme.palette.divider};
+    //border: 1px solid ${(props) => props.theme.palette.divider};
+    .multi-select {
+      color: #1b202a;
+      margin: 10px;
+      position: relative;
+    }
+    .item {
+      display: none;
+      background-color: ${(props) => props.theme.palette.tableTh.background};
+    }
   }
 `;
 
@@ -44,12 +52,10 @@ export default function FilterPop() {
     <div>
       <Button
         aria-describedby={id}
-        variant="dense"
+        variant="text"
         onClick={handleClick}
         startIcon={<SortIcon />}
-      >
-        Filter
-      </Button>
+      ></Button>
       <Popover
         variant="popover"
         id={id}
@@ -63,12 +69,13 @@ export default function FilterPop() {
       >
         <Autocomplete
           multiple
+          freeSolo
           id="checkboxes-tags-demo"
           options={top100Films}
           disableCloseOnSelect
           getOptionLabel={(option) => option.title}
           renderOption={(props, option, { selected }) => (
-            <li {...props}>
+            <li className="item" {...props}>
               <Checkbox
                 icon={icon}
                 checkedIcon={checkedIcon}
@@ -78,9 +85,9 @@ export default function FilterPop() {
               {option.title}
             </li>
           )}
-          sx={{ width: 300, padding: 3 }}
+          className="multi-select"
           renderInput={(params) => (
-            <TextField {...params} label="Checkboxes" placeholder="Favorites" />
+            <TextField {...params} label="search" placeholder="Favorites" />
           )}
         />
       </Popover>
