@@ -52,11 +52,12 @@ function Settings() {
   const getSettings_val = useSelector((state) => state.fetchSettingsList);
 
   const navigate = useNavigate();
-  if (!getSettings_val.loading) {
-    return (
-      <React.Fragment>
-        <Helmet title="Settings" />
-
+  const LinearProgress = styled(MuiLinearProgress)(spacing);
+  return (
+    <React.Fragment>
+      <Helmet title="Settings" />
+      {getSettings_val.loading && <LinearProgress />}
+      {!getSettings_val.loading ? (
         <Grid justifyContent="space-between" container spacing={10}>
           <Grid item xs={12} sm={6} md={4} lg={4}>
             <Formik
@@ -433,9 +434,11 @@ function Settings() {
             </Formik>
           </Grid>
         </Grid>
-      </React.Fragment>
-    );
-  }
+      ) : (
+        ""
+      )}
+    </React.Fragment>
+  );
 }
 
 export default Settings;
