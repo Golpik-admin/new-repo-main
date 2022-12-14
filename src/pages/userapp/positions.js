@@ -367,16 +367,16 @@ const EnhancedTableToolbar = (props) => {
                   : null;
               if (startDate !== null && endDate !== null) {
                 dispatch(
-                  fetchPositions({ startDate: startDate, endDate: endDate })
+                  fetchAlerts({ startDate: startDate, endDate: endDate })
                 );
               }
               setValue(newValue);
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField {...startProps} />
-                {/* <Box sx={{ mx: 2 }}> to </Box> */}
-                <TextField {...endProps} />
+                <TextField className="date-1" {...startProps} />
+                <Box> - </Box>
+                <TextField className="date-2" {...endProps} />
               </React.Fragment>
             )}
           />
