@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumbs as MuiBreadcrumbs,
-  Button,
+  Button as MuiButton,
   Checkbox,
   Chip as MuiChip,
   Divider as MuiDivider,
@@ -13,7 +13,7 @@ import {
   IconButton,
   Link,
   Paper as MuiPaper,
-  Table,
+  Table as MuiTable,
   TableBody,
   TableCell,
   TableContainer,
@@ -52,6 +52,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
+import FilterPop from "./Filter";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -189,6 +190,7 @@ const EnhancedTableHead = (props) => {
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
+            className="table-th"
             key={headCell.id}
             align={headCell.alignment}
             padding={headCell.disablePadding ? "none" : "normal"}
@@ -204,33 +206,80 @@ const EnhancedTableHead = (props) => {
           </TableCell>
         ))}
       </TableRow>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.alignment}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+            className="filter-th"
+          >
+            <Box className="filter-box">
+              <FilterPop />
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              ></TableSortLabel>
+            </Box>
+          </TableCell>
+        ))}
+      </TableRow>
     </TableHead>
   );
 };
 
+const Table = styled(MuiTable)`
+  th.table-th {
+    background: ${(props) => props.theme.palette.tableTh.background};
+    padding: 10px;
+  }
+  th.filter-th {
+    background: ${(props) => props.theme.palette.filterTh.background};
+    padding: 10px;
+    .filter-box {
+      display: flex;
+      width: 50px;
+      color: ${(props) => props.theme.palette.filterTh.color};
+    }
+  }
+`;
+
 const Box = styled.div`
   &.radio-parent {
     flex: 1 1 100%;
+    text-align: right;
     div {
-      display: flex;
+      display: inline-flex;
       flex-direction: row;
       justify-content: end;
+      display: inline-flex;
+      padding: 2px;
+      border-radius: 4px;
       label {
         position: relative;
-      }
-      .MuiRadio-root {
-        position: absolute;
-        z-index: 1;
-        background: #eee;
-        border-radius: 4px;
-        left: 0;
-        right: 0;
-        padding: 18px 22px;
-        &.Mui-checked {
-          background: #2f65cbd1;
-        }
-        svg {
-          display: none;
+        margin: 0;
+        .MuiRadio-root {
+          position: absolute;
+          z-index: 1;
+          background: #eee;
+          border-radius: 4px;
+          left: 0;
+          right: 0;
+          padding: 18px 22px;
+          margin: 1px;
+          background: ${(props) => props.theme.palette.toolbarbtn.background};
+          border: ${(props) => props.theme.palette.toolbarbtn.border};
+          &.Mui-checked {
+            background: ${(props) => props.theme.sidebar.background};
+            + .MuiTypography-root {
+              color: #fff;
+            }
+          }
+          svg {
+            display: none;
+          }
         }
       }
       .MuiFormControlLabel-label {
@@ -239,9 +288,23 @@ const Box = styled.div`
         padding: 8px 22px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
+        color: ${(props) => props.theme.palette.toolbarbtn.color};
+        line-height: 1.7;
       }
     }
   }
+`;
+
+const Button = styled(MuiButton)`
+  color: ${(props) => props.theme.sidebar.color};
+  background: ${(props) => props.theme.sidebar.background};
+  padding: 8px 22px;
+  margin: 0 19px 0 17px;
+  ${(props) => props.theme.palette.toolbarbtn.border};
+  &:hover{
+    background: ${(props) => props.theme.sidebar.background};
+  }
+} 
 `;
 
 const EnhancedTableToolbar = (props) => {
