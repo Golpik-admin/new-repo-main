@@ -393,7 +393,7 @@ function Settings() {
                         onChange={handleChange}
                         name="TestMode"
                         checked={
-                          values.TestMode != "undefined" && values.TestMode
+                          values.TestMode !== "undefined" && values.TestMode
                             ? true
                             : false
                         }
