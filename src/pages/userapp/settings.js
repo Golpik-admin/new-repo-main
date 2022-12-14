@@ -13,7 +13,7 @@ import {
   Input,
 } from "@mui/material";
 import { fetchSettings } from "../../redux/slices/getSettings";
-// import { updateFetchedSettings } from "../../redux/slices/updateSettings";
+import { updateFetchedSettings } from "../../redux/slices/updateSettings";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { spacing } from "@mui/system";
@@ -29,16 +29,15 @@ const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)(spacing);
 
 function Settings() {
-  const getSettings_val = useSelector((state) => state.fetchSettingsList);
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   var User_Id = user.id;
-  console.log(User_Id);
   useEffect(() => {
-    dispatch(fetchSettings({ User_Id }));
-  }, []);
+    if (User_Id) {
+      dispatch(fetchSettings({ User_Id }));
+    }
+  }, [dispatch, User_Id]);
 
   const getSettings_val = useSelector((state) => state.fetchSettingsList);
 
@@ -52,8 +51,8 @@ function Settings() {
           <Grid item xs={12} sm={6} md={4} lg={4}>
             <Formik
               initialValues={{
-                firstName: "",
-                email: "",
+                firstName: user.displayName,
+                email: user.email,
                 password: "",
                 submit: false,
               }}
@@ -110,9 +109,8 @@ function Settings() {
                     name="firstName"
                     label="First name"
                     value={values.firstName}
-                    error={Boolean(touched.firstName && errors.firstName)}
-                    fullWidth
-                    helperText={touched.firstName && errors.firstName}
+                    error={touched.firstName && errors.firstName}
+                    helpertext={touched.firstName && errors.firstName}
                     onBlur={handleBlur}
                     onChange={handleChange}
                     my={3}
@@ -123,9 +121,8 @@ function Settings() {
                     name="email"
                     label="Email address"
                     value={values.email}
-                    error={Boolean(touched.email && errors.email)}
-                    fullWidth
-                    helperText={touched.email && errors.email}
+                    error={touched.email && errors.email}
+                    helpertext={touched.email && errors.email}
                     onBlur={handleBlur}
                     onChange={handleChange}
                     my={3}
@@ -135,9 +132,8 @@ function Settings() {
                     name="password"
                     label="Password"
                     value={values.password}
-                    error={Boolean(touched.password && errors.password)}
-                    fullWidth
-                    helperText={touched.password && errors.password}
+                    error={!!(touched.password && errors.password)}
+                    helpertext={touched.password && errors.password}
                     onBlur={handleBlur}
                     onChange={handleChange}
                     my={3}
@@ -228,10 +224,8 @@ function Settings() {
                         name="User_Meta_Id"
                         placeholder="HIDDEN VALUE"
                         value={values.User_Meta_Id}
-                        error={Boolean(
-                          touched.User_Meta_Id && errors.User_Meta_Id
-                        )}
-                        helperText={touched.User_Meta_Id && errors.User_Meta_Id}
+                        error={touched.User_Meta_Id && errors.User_Meta_Id}
+                        helpertext={touched.User_Meta_Id && errors.User_Meta_Id}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         my={3}
@@ -240,16 +234,13 @@ function Settings() {
                         name="DefaultExpiry"
                         label="DefaultExpiry"
                         checked={
-                          values.DefaultExpiry != "undefined" &&
+                          values.DefaultExpiry !== "undefined" &&
                           values.DefaultExpiry
                             ? true
                             : false
                         }
-                        error={Boolean(
-                          touched.DefaultExpiry && errors.DefaultExpiry
-                        )}
-                        fullWidth
-                        helperText={
+                        error={touched.DefaultExpiry && errors.DefaultExpiry}
+                        helpertext={
                           touched.DefaultExpiry && errors.DefaultExpiry
                         }
                         onBlur={handleBlur}
@@ -273,11 +264,11 @@ function Settings() {
                             name="ExpiryCalculation"
                             placeholder="Expiry Calculation"
                             value={values.ExpiryCalculation}
-                            error={Boolean(
+                            error={
                               touched.ExpiryCalculation &&
-                                errors.ExpiryCalculation
-                            )}
-                            helperText={
+                              errors.ExpiryCalculation
+                            }
+                            helpertext={
                               touched.ExpiryCalculation &&
                               errors.ExpiryCalculation
                             }
@@ -293,16 +284,13 @@ function Settings() {
                         name="DefaultStrike"
                         label="DefaultStrike"
                         checked={
-                          values.DefaultStrike != "undefined" &&
+                          values.DefaultStrike !== "undefined" &&
                           values.DefaultStrike
                             ? true
                             : false
                         }
-                        error={Boolean(
-                          touched.DefaultStrike && errors.DefaultStrike
-                        )}
-                        fullWidth
-                        helperText={
+                        error={touched.DefaultStrike && errors.DefaultStrike}
+                        helpertext={
                           touched.DefaultStrike && errors.DefaultStrike
                         }
                         onBlur={handleBlur}
@@ -327,11 +315,11 @@ function Settings() {
                             name="StrikeCalculation"
                             placeholder="Strike Calculation"
                             value={values.StrikeCalculation}
-                            error={Boolean(
+                            error={
                               touched.StrikeCalculation &&
-                                errors.StrikeCalculation
-                            )}
-                            helperText={
+                              errors.StrikeCalculation
+                            }
+                            helpertext={
                               touched.StrikeCalculation &&
                               errors.StrikeCalculation
                             }
@@ -366,7 +354,7 @@ function Settings() {
                               value="1"
                               control={<Radio />}
                               checked={
-                                values.Scope != null && values.Scope == 1
+                                values.Scope != null && values.Scope === 1
                                   ? true
                                   : false
                               }
@@ -376,7 +364,7 @@ function Settings() {
                               value="0"
                               control={<Radio />}
                               checked={
-                                values.Scope != null && values.Scope == 0
+                                values.Scope != null && values.Scope === 0
                                   ? true
                                   : false
                               }
