@@ -56,6 +56,9 @@ import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
 import FilterPop from "./Filter";
+import useAuth from "../../hooks/useAuth";
+import { User } from "react-feather";
+import getSettings, { fetchSettings } from "../../redux/slices/getSettings";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -174,11 +177,8 @@ const headCells = [
 
 const EnhancedTableHead = (props) => {
   const {
-    onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
     onRequestSort,
   } = props;
   const createSortHandler = (property) => (event) => {
@@ -196,13 +196,6 @@ const EnhancedTableHead = (props) => {
             className="table-th"
           >
             {headCell.label}
-            {/* <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              
-            </TableSortLabel> */}
           </TableCell>
         ))}
       </TableRow>
@@ -310,14 +303,15 @@ const Button = styled(MuiButton)`
 
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
-  const { numSelected } = props;
+  const getSettings = useSelector((state) => state.fetchSettingsList);
+
+  // const { numSelected } = props;
   const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
 
   const handleChange = (event) => {
     dispatch(fetchAlerts({ status: event.target.value, count: null }));
   };
-
   const today = moment().format("YYYY-MM-DD");
   return (
     <Toolbar>
@@ -355,12 +349,14 @@ const EnhancedTableToolbar = (props) => {
             control={<Radio />}
             label="Expired"
           />
+        {getSettings.TestMode &&           
+          <FormControlLabel
+            value="Test"
+            control={<Radio />}
+            label="Test"
+          />
+        }
         </RadioGroup>
-      </Box>
-      <Box>
-        <Button variant="contained">
-          Test
-        </Button> 
       </Box>
       <StyledEngineProvider injectFirst>
         <LocalizationProvider
@@ -642,9 +638,13 @@ function OrderList() {
     )
     .asHours();
 
-  useEffect(() => {
-    dispatch(fetchAlerts());
-
+    const { user } = useAuth();
+    const userId = user.id;  
+    useEffect(() => {
+      dispatch(fetchAlerts());
+      if (userId) { 
+        dispatch(fetchSettings({ User_Id: userId }));
+      }
     dispatch(
       fetchAlerts({
         startDate: currentMonthFirstDay,
@@ -695,7 +695,8 @@ function OrderList() {
         count: true,
       })
     );
-  }, []);
+    }, [userId]);
+
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
   const CircularProgress = styled(MuiCircularProgress)(spacing);
