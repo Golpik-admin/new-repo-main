@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiEndpoint } from "../../config";
-import useAuth from "../../hooks/useAuth";
 
 const initialState = {
   settings: [],
@@ -16,7 +15,6 @@ const initialState = {
   TestMode: null,
   Scope: null,
 };
-const userId = "6398936326682264cad3f30f";
 
 export const fetchSettings = createAsyncThunk(
   "settings/fetchSettings",
@@ -24,8 +22,7 @@ export const fetchSettings = createAsyncThunk(
     const response = await axios
       .get(`${apiEndpoint}GetUserSettingsByUserId`, {
         params: {
-          // User_Id: args !== null ? args.User_Id.split("|")[1] : null,
-          User_Id: userId,
+          User_Id: args !== null ? args.User_Id.split("|")[1] : null,
         },
       })
       .then((response) => {
@@ -46,13 +43,6 @@ export const fetchSettingslice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchSettings.fulfilled, (state, action) => {
-      // if (
-      //   action.payload.Status !== undefined &&
-      //   action.payload.Status === "Expired"
-      // ) {
-      //   state.expiredAlertsCount = action.payload.Count;
-      //   state.totalAlertsCount += parseInt(action.payload.Count);
-      // }
       if (action.payload !== undefined) {
         state.loading = false;
         state.User_Meta_Id = action.payload.id;
@@ -64,7 +54,6 @@ export const fetchSettingslice = createSlice({
         state.TestMode = action.payload.TestMode;
         state.Scope = action.payload.Scope;
       }
-
       if (action.payload === undefined) {
         state.loading = true;
         state.settings = [];

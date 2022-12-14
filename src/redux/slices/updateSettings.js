@@ -26,7 +26,7 @@ export const updateFetchedSettings = createAsyncThunk(
         }`,
         {
           // params: {
-          // User_Id: args !== null ? args.User_Id.split("|")[1] : null,
+          User_Id: args !== null ? args.User_Id.split("|")[1] : null,
           // status: args !== null && args.status !== "all" ? args.status : null,
           // count: args !== null ? args.count : null,
           DefaultStrike: args !== null ? args.values.DefaultStrike : null,
