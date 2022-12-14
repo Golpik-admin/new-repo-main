@@ -6,6 +6,7 @@ const initialState = {
   settings: [],
   loading: true,
   errors: null,
+  User_Meta_Id: null,
   DefaultStrike: null,
   StrikeCalculation: null,
   DefaultExpiry: null,
@@ -18,29 +19,28 @@ const initialState = {
 export const updateFetchedSettings = createAsyncThunk(
   "settings/updateFetchedSettings",
   async (args = null) => {
-    console.log(args);
     const response = await axios
       .post(
-        `${apiEndpoint}SetUserSettingsByUserId/?User_Id=${
+        `${apiEndpoint}SetUserSettingsByUserId?User_Id=${
           args !== null ? args.User_Id.split("|")[1] : null
         }`,
         {
-          params: {
-            // User_Id: args !== null ? args.User_Id.split("|")[1] : null,
-            // status: args !== null && args.status !== "all" ? args.status : null,
-            // count: args !== null ? args.count : null,
-            DefaultStrike: args !== null ? args.values.DefaultStrike : null,
-            StrikeCalculation:
-              args !== null ? parseInt(args.values.StrikeCalculation) : null,
-            DefaultExpiry: args !== null ? args.values.DefaultExpiry : null,
-            ExpiryCalculation:
-              args !== null ? parseInt(args.values.ExpiryCalculation) : 4,
-            RiskManagementActive:
-              args !== null ? args.values.RiskManagementActive : null,
-            TestMode: args !== null ? args.values.TestMode : null,
-            id: "6398936326682264cad3f30f-638065223886532157",
-            Scope: args !== null ? parseInt(args.values.Scope) : null,
-          },
+          // params: {
+          User_Id: args !== null ? args.User_Id.split("|")[1] : null,
+          // status: args !== null && args.status !== "all" ? args.status : null,
+          // count: args !== null ? args.count : null,
+          DefaultStrike: args !== null ? args.values.DefaultStrike : null,
+          StrikeCalculation:
+            args !== null ? parseInt(args.values.StrikeCalculation) : null,
+          DefaultExpiry: args !== null ? args.values.DefaultExpiry : null,
+          ExpiryCalculation:
+            args !== null ? parseInt(args.values.ExpiryCalculation) : null,
+          RiskManagementActive:
+            args !== null ? args.values.RiskManagementActive : null,
+          TestMode: args !== null ? args.values.TestMode : null,
+          id: args !== null ? args.values.User_Meta_Id : null,
+          Scope: args !== null ? parseInt(args.values.Scope) : null,
+          // },
         }
       )
       .then((response) => {
@@ -69,6 +69,8 @@ export const updateFetchedSettingSlice = createSlice({
       //     state.expiredAlertsCount = action.payload.Count;
       //     state.totalAlertsCount += parseInt(action.payload.Count);
       //   }
+      state.loading = false;
+      state.User_Meta_Id = action.payload.id;
       state.DefaultStrike = action.payload.DefaultStrike;
       state.StrikeCalculation = action.payload.StrikeCalculation;
       state.DefaultExpiry = action.payload.DefaultExpiry;
@@ -76,14 +78,14 @@ export const updateFetchedSettingSlice = createSlice({
       state.RiskManagementActive = action.payload.RiskManagementActive;
       state.TestMode = action.payload.TestMode;
       state.Scope = action.payload.Scope;
-      if (action.payload.Status === undefined) {
-        state.loading = false;
+      if (action.payload === undefined) {
+        state.loading = true;
         state.settings = [];
         state.settings = action.payload;
       }
     });
     builder.addCase(updateFetchedSettings.rejected, (state, action) => {
-      state.loading = false;
+      state.loading = true;
       state.settings = [];
       state.errors = action.error.message;
     });

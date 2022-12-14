@@ -105,6 +105,7 @@ function AuthProvider({ children }) {
         ...state,
         method: "auth0",
         user: {
+          user: state?.user,
           id: state?.user?.sub,
           avatar: state?.user?.picture,
           email: state?.user?.email,
