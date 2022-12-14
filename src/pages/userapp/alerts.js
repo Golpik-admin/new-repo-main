@@ -497,69 +497,81 @@ function OrderList() {
     .asHours();
 
     const { user } = useAuth();
-  const userId = '6372c6c0a8b2c2ec60b2da52';  
+    const userId = '6372c6c0a8b2c2ec60b2da52';  
     useEffect(() => {
-      if (userId) { 
-        dispatch(fetchAlerts({userId:userId}));
-        dispatch(fetchSettings({ User_Id: user.id }));
+      const initialize = async () => {
+        try {
+          const isAuthenticated = await user;
+          if (isAuthenticated) {
+
+            dispatch(fetchSettings({ User_Id: user.id }));
+            dispatch(fetchAlerts({ userId: userId }));
+      
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Processed",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Processed",
+                count: true,
+              })
+            );
+
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Unprocessed",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Unprocessed",
+                count: true,
+              })
+            );
+
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Expired",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Expired",
+                count: true,
+              })
+            );
+          }
+        } catch (err) {
+          console.error(err);
+        }
+    
+
       }
-    dispatch(
-      fetchAlerts({
-        userId:userId,
-        startDate: currentMonthFirstDay,
-        endDate: currentMonthLastDay,
-        status: "Processed",
-        count: true,
-      })
-    );
-    dispatch(
-      previousFetchAlerts({
-        userId:userId,
-        startDate: previousMonthFirstDay,
-        endDate: previousMonthLastDay,
-        status: "Processed",
-        count: true,
-      })
-    );
-
-    dispatch(
-      fetchAlerts({
-        userId:userId,
-        startDate: currentMonthFirstDay,
-        endDate: currentMonthLastDay,
-        status: "Unprocessed",
-        count: true,
-      })
-    );
-    dispatch(
-      previousFetchAlerts({
-        userId:userId,
-        startDate: previousMonthFirstDay,
-        endDate: previousMonthLastDay,
-        status: "Unprocessed",
-        count: true,
-      })
-    );
-
-    dispatch(
-      fetchAlerts({
-        userId:userId,
-        startDate: currentMonthFirstDay,
-        endDate: currentMonthLastDay,
-        status: "Expired",
-        count: true,
-      })
-    );
-    dispatch(
-      previousFetchAlerts({
-        userId:userId,
-        startDate: previousMonthFirstDay,
-        endDate: previousMonthLastDay,
-        status: "Expired",
-        count: true,
-      })
-    );
-    }, [currentMonthFirstDay, currentMonthLastDay, dispatch, previousMonthFirstDay, previousMonthLastDay, user.id, userId]);
+      initialize();
+    }, [currentMonthFirstDay, currentMonthLastDay, dispatch, previousMonthFirstDay, previousMonthLastDay, user, user.id, userId]);
 
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
