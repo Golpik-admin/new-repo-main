@@ -24,7 +24,7 @@ import NavbarLanguagesDropdown from "./NavbarLanguagesDropdown";
 import NavbarUserDropdown from "./NavbarUserDropdown";
 
 const AppBar = styled(MuiAppBar)`
-  background: ${(props) => props.theme.header.background};
+  background: ${(props) => props.theme.palette.background.default};
   color: ${(props) => props.theme.header.color};
 `;
 

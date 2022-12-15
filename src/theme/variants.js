@@ -103,10 +103,10 @@ const darkVariant = merge(defaultVariant, {
       contrastText: "#FFF",
     },
     background: {
-      default: "#1B2635",
-      paper: "#233044",
-      // default: "#1B202A",
-      // paper: "#1B202A",
+      // default: "#1B2635",
+      // paper: "#233044",
+      default: "#1B202A",
+      paper: "#1B202A",
     },
     text: {
       primary: "rgba(255, 255, 255, 0.95)",
