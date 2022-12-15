@@ -366,7 +366,7 @@ const EnhancedTableToolbar = (props) => {
                   : null;
               if (startDate !== null && endDate !== null) {
                 dispatch(
-                  fetchAlerts({ startDate: startDate, endDate: endDate })
+                  fetchPositions({ startDate: startDate, endDate: endDate })
                 );
               }
               setValue(newValue);
