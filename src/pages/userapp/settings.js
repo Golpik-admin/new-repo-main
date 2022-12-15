@@ -32,14 +32,19 @@ const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)``;
 
 const Box = styled.div`
-  &.top-head {
-    margin: 0 0 20px 0;
-  }
+  margin: 0 0 20px 0;
 `;
 
 const Paper = styled(MuiPaper)`
   padding: 24px;
   min-height: 440px;
+  &.bot-paper {
+    margin-top: 24px;
+    min-height: 40px;
+    .bold {
+      font-weight: 900;
+    }
+  }
 `;
 
 function Settings() {
@@ -277,7 +282,8 @@ function Settings() {
                       <Grid
                         justifyContent="space-between"
                         container
-                        spacing={6}
+                        sx={{ my: 3 }}
+                        spacing={4}
                       >
                         <Grid item xs={12} sm={6} md={4} lg={6}>
                           <Input
@@ -401,7 +407,8 @@ function Settings() {
                         </Grid>
                       </Grid>
                       <Grid
-                        spacing={10}
+                        sx={{ my: 3 }}
+                        spacing={6}
                         container
                         justifyContent="space-between"
                       >
@@ -470,147 +477,7 @@ function Settings() {
                             }
                           />
                         </Grid>
-                      </Grid>
-
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        disabled={isSubmitting}
-                      >
-                        Update
-                      </Button>
-                    </form>
-                  )}
-                </Formik>
-              </Paper>
-            </Grid>
-          </Grid>
-
-          <Grid justifyContent="space-between" container spacing={6}>
-            <Grid item xs={12} sm={6} md={4} lg={4}>
-              <Paper className="cus-paper">
-                <Box className="top-head">
-                  <Typography variant="h5" fontWeight={700}>
-                    Personal information
-                  </Typography>
-                  <Typography>
-                    This information is private and never shared with anynone
-                  </Typography>
-                </Box>
-                {/* <Formik
-                  initialValues={{
-                    firstName: user.displayName,
-                    email: user.email,
-                    password: "",
-                    submit: false,
-                  }}
-                  validationSchema={Yup.object().shape({
-                    firstName: Yup.string()
-                      .max(255)
-                      .required("First name is required"),
-                    lastName: Yup.string()
-                      .max(255)
-                      .required("Last name is required"),
-                    email: Yup.string()
-                      .email("Must be a valid email")
-                      .max(255)
-                      .required("Email is required"),
-                    password: Yup.string()
-                      .min(12, "Must be at least 12 characters")
-                      .max(255)
-                      .required("Required"),
-                  })}
-                  onSubmit={async (
-                    values,
-                    { setErrors, setStatus, setSubmitting }
-                  ) => {
-                    try {
-                      // submit api key
-                      // signUp(values.email, values.password, values.firstName);
-                      navigate("/auth/sign-in");
-                    } catch (error) {
-                      const message = error.message || "Something went wrong";
-
-                      setStatus({ success: false });
-                      setErrors({ submit: message });
-                      setSubmitting(false);
-                    }
-                  }}
-                >
-                  {({
-                    errors,
-                    handleBlur,
-                    handleChange,
-                    handleSubmit,
-                    isSubmitting,
-                    touched,
-                    values,
-                  }) => (
-                    <form noValidate onSubmit={handleSubmit}>
-                      {errors.submit && (
-                        <Alert mt={2} mb={1} severity="warning">
-                          {errors.submit}
-                        </Alert>
-                      )}
-                      <Grid
-                        justifyContent="space-between"
-                        alignItems="center"
-                        container
-                        spacing={6}
-                      >
-                        <Grid item xs={12} sm={6} md={4} lg={4}>
-                          Full Name
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={8} lg={8}>
-                          <TextField
-                            fullWidth
-                            type="text"
-                            name="firstName"
-                            label="First name"
-                            value={values.firstName}
-                            error={touched.firstName && errors.firstName}
-                            helpertext={touched.firstName && errors.firstName}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            my={3}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={4}>
-                          Email
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={8} lg={8}>
-                          <TextField
-                            fullWidth
-                            type="email"
-                            name="email"
-                            label="Email address"
-                            value={values.email}
-                            error={touched.email && errors.email}
-                            helpertext={touched.email && errors.email}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            my={3}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={4}>
-                          Email
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={8} lg={8}>
-                          <TextField
-                            fullWidth
-                            type="password"
-                            name="password"
-                            label="Password"
-                            value={values.password}
-                            error={!!(touched.password && errors.password)}
-                            helpertext={touched.password && errors.password}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            my={3}
-                          />
-                        </Grid>
-                        <Grid item xs={12} textAlign="end">
+                        <Grid textAlign="end">
                           <Button
                             type="submit"
                             variant="contained"
@@ -623,7 +490,35 @@ function Settings() {
                       </Grid>
                     </form>
                   )}
-                </Formik> */}
+                </Formik>
+              </Paper>
+            </Grid>
+          </Grid>
+
+          <Grid justifyContent="space-between" container spacing={6}>
+            <Grid item xs={12}>
+              <Paper className="bot-paper">
+                <Box className="bot-head">
+                  <Typography variant="h5" fontWeight={700}>
+                    Subscripions
+                  </Typography>
+                </Box>
+                <Grid justifyContent="space-between" container spacing={6}>
+                  <Grid item xs={12} sm={6} md={4} lg={2}>
+                    Plan &nbsp; &nbsp; <span className="bold">Pro+</span>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={2}>
+                    Alert &nbsp; &nbsp; 10
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={6}>
+                    Per Account &nbsp; &nbsp; $20K Monthly
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={2} textAlign="end">
+                    <Button type="submit" variant="contained" color="primary">
+                      Update
+                    </Button>
+                  </Grid>
+                </Grid>
               </Paper>
             </Grid>
           </Grid>
