@@ -318,7 +318,7 @@ const EnhancedTableToolbar = (props) => {
   const today = moment().format("YYYY-MM-DD");
   return (
     <Toolbar>
-      <ToolbarTitle>
+      {/* <ToolbarTitle>
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
             {numSelected} selected
@@ -328,8 +328,7 @@ const EnhancedTableToolbar = (props) => {
             Positions
           </Typography>
         )}
-      </ToolbarTitle>
-      <Spacer />
+      </ToolbarTitle> */}
       <Box className="radio-parent">
         <RadioGroup
           aria-label="Filters"

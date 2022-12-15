@@ -16,18 +16,21 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const Popover = styled(MuiPopover)`
   .MuiPaper-root {
-    width: 250px;
     background-color: ${(props) => props.theme.palette.tableTh.background};
     ${(props) => props.theme.shadows[1]};
     //border: 1px solid ${(props) => props.theme.palette.divider};
     .multi-select {
+      width: 250px;
       color: #1b202a;
-      margin: 10px;
-      position: relative;
+      .field {
+      }
     }
-    .item {
-      display: none;
+  }
+  + .MuiAutocomplete-popper {
+    .MuiPaper-root {
       background-color: ${(props) => props.theme.palette.tableTh.background};
+      .li-item {
+      }
     }
   }
 `;
@@ -72,10 +75,9 @@ export default function FilterPop() {
           freeSolo
           id="checkboxes-tags-demo"
           options={top100Films}
-          disableCloseOnSelect
           getOptionLabel={(option) => option.title}
           renderOption={(props, option, { selected }) => (
-            <li className="item" {...props}>
+            <li className="li-item" {...props}>
               <Checkbox
                 icon={icon}
                 checkedIcon={checkedIcon}
@@ -87,7 +89,12 @@ export default function FilterPop() {
           )}
           className="multi-select"
           renderInput={(params) => (
-            <TextField {...params} label="search" placeholder="Favorites" />
+            <TextField
+              className="field"
+              {...params}
+              label="search"
+              placeholder="Favorites"
+            />
           )}
         />
       </Popover>
