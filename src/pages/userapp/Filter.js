@@ -15,6 +15,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const Popover = styled(MuiPopover)`
+  height: 300px;
   .MuiPaper-root {
     background-color: ${(props) => props.theme.palette.tableTh.background};
     ${(props) => props.theme.shadows[1]};
@@ -23,6 +24,9 @@ const Popover = styled(MuiPopover)`
       width: 250px;
       color: #1b202a;
       .field {
+        input {
+          padding: 0;
+        }
       }
     }
   }
@@ -89,12 +93,7 @@ export default function FilterPop() {
           )}
           className="multi-select"
           renderInput={(params) => (
-            <TextField
-              className="field"
-              {...params}
-              label="search"
-              placeholder="Favorites"
-            />
+            <TextField className="field" {...params} placeholder="search" />
           )}
         />
       </Popover>
