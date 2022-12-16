@@ -133,11 +133,10 @@ const EnhancedTableHead = (props) => {
               <FilterPop />
               {/* SyncAltTwoToneIcon  */}
               <TableSortLabel
-                active={orderBy === headCell.id}
+                active={true}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
                 icon="SyncAltTwoToneIcon"
-                active
               >
               </TableSortLabel>
             </Box>
