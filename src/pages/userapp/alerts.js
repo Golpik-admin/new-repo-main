@@ -503,10 +503,17 @@ function OrderList() {
       const initialize = async () => {
         try {
           const isAuthenticated = await user;
+          let date = new Date();
+          const last30Days = moment(date)
+            .subtract(30,"days")
+            .format("YYYY-MM-DD");
+          const todayDate = moment().format("YYYY-MM-DD");
+        
           if (isAuthenticated) {
 
             dispatch(fetchSettings({ User_Id: user.id }));
-            dispatch(fetchAlerts({ userId: userId }));
+            dispatch(fetchAlerts({ startDate: last30Days,
+              endDate: todayDate,userId: userId }));
       
             dispatch(
               fetchAlerts({
