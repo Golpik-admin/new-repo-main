@@ -54,13 +54,20 @@ function Settings() {
   }, [dispatch, User_Id]);
 
   const getSettings_val = useSelector((state) => state.fetchSettingsList);
-
+  const updateSettings_val = useSelector(
+    (state) => state.updateFetchedSettingsList
+  );
   const navigate = useNavigate();
   const LinearProgress = styled(MuiLinearProgress)(spacing);
+
   return (
     <React.Fragment>
       <Helmet title="Settings" />
       {getSettings_val.loading && <LinearProgress />}
+
+      {updateSettings_val.message && (
+        <Alert severity="success">{updateSettings_val.message}</Alert>
+      )}
       {!getSettings_val.loading ? (
         <div>
           <Grid justifyContent="space-between" container spacing={6}>
