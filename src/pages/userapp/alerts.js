@@ -48,17 +48,17 @@ const Divider = styled(MuiDivider)(spacing);
 const Paper = styled(MuiPaper)(spacing);
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (b["time_Received"] < a["time_Received"]) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (b["time_Received"] > a["time_Received"]) {
     return 1;
   }
   return 0;
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === "asc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -262,6 +262,7 @@ const EnhancedTableToolbar = () => {
             className="picker-range"
             value={value}
             onChange={(newValue) => {
+              const userId = '6372c6c0a8b2c2ec60b2da52';
               let startDate =
                 newValue[0] !== null
                   ? moment(newValue[0].$d).format("YYYY-MM-DD")
@@ -272,7 +273,7 @@ const EnhancedTableToolbar = () => {
                   : null;
               if (startDate !== null && endDate !== null) {
                 dispatch(
-                  fetchAlerts({ startDate: startDate, endDate: endDate })
+                  fetchAlerts({ startDate: startDate, endDate: endDate,userId:userId, })
                 );
               }
               setValue(newValue);
