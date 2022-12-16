@@ -14,6 +14,7 @@ const initialState = {
   RiskManagementActive: null,
   TestMode: null,
   Scope: null,
+  message: false,
 };
 // const userId = "6372c6c0a8b2c2ec60b2da52";
 export const updateFetchedSettings = createAsyncThunk(
@@ -44,7 +45,7 @@ export const updateFetchedSettings = createAsyncThunk(
         }
       )
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         return response.data;
       })
       .catch(function (error) {
@@ -78,13 +79,16 @@ export const updateFetchedSettingSlice = createSlice({
       state.RiskManagementActive = action.payload.RiskManagementActive;
       state.TestMode = action.payload.TestMode;
       state.Scope = action.payload.Scope;
+      state.message = action.payload.Status;
       if (action.payload === undefined) {
+        state.message = action.payload.Status;
         state.loading = true;
         state.settings = [];
         state.settings = action.payload;
       }
     });
     builder.addCase(updateFetchedSettings.rejected, (state, action) => {
+      state.message = action.message;
       state.loading = true;
       state.settings = [];
       state.errors = action.error.message;
