@@ -1,11 +1,14 @@
-.MuiDateRangePickerInput-root.picker-range {min-width: 205px; border: 1px solid #D7DBEC;border-radius: 4px;margin-left: 25px}
+.MuiDateRangePickerInput-root.picker-range {min-width: 210px; border: 1px solid #D7DBEC;border-radius: 4px;margin-left: 25px}
+.MuiDateRangePickerInput-root.picker-range .hyphen{margin-left: -9px;margin-right: 
+  -10px;}
 .MuiDateRangePickerInput-root.picker-range .date-1 .MuiFormLabel-root{padding-left: 25px;background-image: url('../../../public/static/img/avatars/calender.svg');
-  background-size: contain;background-repeat: no-repeat;}
-  .MuiDateRangePickerInput-root.picker-range .MuiInputLabel-shrink{opacity: 0;}
-.MuiDateRangePickerInput-root.picker-range .MuiFormLabel-root{top: -6px;font-size: 14px;}
-.MuiDateRangePickerInput-root.picker-range input {padding: 8.6px 10px;}
-.date-1 fieldset,.date-2 fieldset{border: none;} 
-
+  background-size: 16px;background-repeat: no-repeat;}
+.MuiDateRangePickerInput-root.picker-range .date-2 .MuiFormLabel-root{}
+.MuiDateRangePickerInput-root.picker-range .MuiInputLabel-shrink{opacity: 0;}
+.MuiDateRangePickerInput-root.picker-range .MuiFormLabel-root{top: -8px;font-size: 14px;}
+.MuiDateRangePickerInput-root.picker-range input {padding: 9px 0 9px 8px;width: 150px;}
+.MuiDateRangePickerInput-root.picker-range .date-2 input {padding: 9px 0 9px 16px;width: 119px;}
+.date-1 fieldset,.date-2 fieldset{border: none; padding: 0;} 
 .MuiPickersPopper-paper .picker-range > div:first-child {display: none;}
 /* .pro-card .MuiCard-root:last-child{background: #000;color: #fff;} */
 

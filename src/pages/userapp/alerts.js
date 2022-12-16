@@ -21,6 +21,7 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  SyncAltTwoToneIcon,
 } from "@mui/material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
@@ -130,10 +131,13 @@ const EnhancedTableHead = (props) => {
             className="filter-box"
             >
               <FilterPop />
+              {/* SyncAltTwoToneIcon  */}
               <TableSortLabel
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
+                icon="SyncAltTwoToneIcon"
+                active
               >
               </TableSortLabel>
             </Box>
@@ -180,7 +184,7 @@ const Box = styled.div`
           border-radius: 4px;
           left: 0;
           right: 0;
-          padding: 18px 22px;
+          padding: 18px 18px;
           margin: 1px;
           background: ${(props) => props.theme.palette.toolbarbtn.background};
           border:  ${(props) => props.theme.palette.toolbarbtn.border};
@@ -198,7 +202,7 @@ const Box = styled.div`
       .MuiFormControlLabel-label {
         position: relative;
         z-index: 9;
-        padding: 8px 22px;
+        padding: 8px 13px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
         color: ${(props) => props.theme.palette.toolbarbtn.color};
@@ -280,7 +284,7 @@ const EnhancedTableToolbar = () => {
             renderInput={(startProps, endProps) => (
               <React.Fragment>
                 <TextField className="date-1" {...startProps} />
-                <Box> - </Box>
+                <Box className="hyphen"> - </Box>
                 <TextField className="date-2" {...endProps} />
               </React.Fragment>
             )}
