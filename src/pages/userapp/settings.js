@@ -29,7 +29,11 @@ import { useEffect } from "react";
 
 const Alert = styled(MuiAlert)(spacing);
 
-const TextField = styled(MuiTextField)``;
+const TextField = styled(MuiTextField)`
+  input {
+    padding: 10px;
+  }
+`;
 
 const Box = styled.div`
   margin: 0 0 20px 0;
@@ -148,7 +152,6 @@ function Settings() {
                             fullWidth
                             type="text"
                             name="firstName"
-                            label="First name"
                             value={values.firstName}
                             error={touched.firstName && errors.firstName}
                             helpertext={touched.firstName && errors.firstName}
@@ -165,7 +168,6 @@ function Settings() {
                             fullWidth
                             type="email"
                             name="email"
-                            label="Email address"
                             value={values.email}
                             error={touched.email && errors.email}
                             helpertext={touched.email && errors.email}
@@ -182,7 +184,6 @@ function Settings() {
                             fullWidth
                             type="password"
                             name="password"
-                            label="Password"
                             value={values.password}
                             error={!!(touched.password && errors.password)}
                             helpertext={touched.password && errors.password}
