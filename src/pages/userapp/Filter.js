@@ -17,15 +17,16 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const Popover = styled(MuiPopover)`
   height: 300px;
   .MuiPaper-root {
+    border: 0;
     background-color: ${(props) => props.theme.palette.tableTh.background};
-    ${(props) => props.theme.shadows[1]};
-    //border: 1px solid ${(props) => props.theme.palette.divider};
     .multi-select {
       width: 250px;
       color: #1b202a;
       .field {
         input {
-          padding: 0;
+          border: 1px solid ${(props) => props.theme.palette.divider};
+          border-radius: 4px;
+          padding: 5px;
         }
       }
     }

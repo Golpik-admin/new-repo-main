@@ -21,8 +21,8 @@ import {
   FormControlLabel,
   Radio,
   TextField,
-  SyncAltTwoToneIcon,
 } from "@mui/material";
+import { SyncAlt } from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
@@ -80,18 +80,18 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: "ticker", alignment: "left", label: "TICKER" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "order_action", alignment: "right", label: "ORDER ACTION" },
+  { id: "order_action", alignment: "left", label: "ORDER ACTION" },
   {
     id: "price_fired_alert",
     alignment: "left",
     label: "PRICE WHEN ALERT FIRED",
   },
   { id: "price_now", alignment: "left", label: "PRICE NOW" },
-  { id: "status", alignment: "right", label: "STATUS" },
-  { id: "alert_comment", alignment: "right", label: "ALERT COMMENT" },
-  { id: "time_received", alignment: "right", label: "TIME RECIEVED" },
-  { id: "time_executed", alignment: "right", label: "TIME EXCUTED" },
-  { id: "alert_Name", alignment: "right", label: "ALERT NAME" },
+  { id: "status", alignment: "left", label: "STATUS" },
+  { id: "alert_comment", alignment: "left", label: "ALERT COMMENT" },
+  { id: "time_received", alignment: "left", label: "TIME RECEIVED" },
+  { id: "time_executed", alignment: "left", label: "TIME EXECUTED" },
+  { id: "alert_Name", alignment: "left", label: "ALERT NAME" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -131,13 +131,13 @@ const EnhancedTableHead = (props) => {
             className="filter-box"
             >
               <FilterPop />
-              {/* SyncAltTwoToneIcon  */}
               <TableSortLabel
                 active={true}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
-                icon="SyncAltTwoToneIcon"
+                IconComponent={SyncAlt}
               >
+                
               </TableSortLabel>
             </Box>
           </TableCell>
@@ -148,6 +148,9 @@ const EnhancedTableHead = (props) => {
 };
 
 const Table = styled(MuiTable)`
+  th.table-th:first-child{
+    width:300px;
+  }
   th.table-th{
     background: ${(props) => props.theme.palette.tableTh.background};
     padding: 10px;
@@ -159,7 +162,16 @@ const Table = styled(MuiTable)`
     .filter-box{
       display: flex;
       justify-content: space-between;
-      color: ${(props) => props.theme.palette.filterTh.color}
+      button{
+        color: ${(props) => props.theme.palette.filterTh.color};
+      }
+      .MuiTableSortLabel-root{
+        transform: rotate(90deg);
+        svg{
+          color: ${(props) => props.theme.palette.filterTh.color};
+        }
+
+      }
     }
   }
 `;

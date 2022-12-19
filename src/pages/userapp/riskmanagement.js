@@ -159,14 +159,21 @@ const Table = styled(MuiTable)`
     text-align:left;
     .filter-box{
       display: flex;
-      flex: 0 0 100%
+      flex: 0 0 100%;
       justify-content: space-between;
+      align-items: center;
       //color: ${(props) => props.theme.palette.filterTh.color}
+      button{
+        justify-content: center;
+        min-width: auto;
+      }
     }
   }
   th.filter-th{
     background: ${(props) => props.theme.palette.filterTh.background};
     padding: 10px;
+    text-align:left;
+
   }
 `;
 
