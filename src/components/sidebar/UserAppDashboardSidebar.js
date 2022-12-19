@@ -36,6 +36,11 @@ const pagesSection = [
     icon: HelpOutlineOutlined,
     title: "Help Center",
   },
+  {
+    href: "/risk-management",
+    icon: HelpOutlineOutlined,
+    title: "Risk Management",
+  },
 ];
 
 const navItems = [
