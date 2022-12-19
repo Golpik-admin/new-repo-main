@@ -151,12 +151,14 @@ const Table = styled(MuiTable)`
   th.table-th{
     background: ${(props) => props.theme.palette.tableTh.background};
     padding: 10px;
+    text-align:left;
   }
   th.filter-th{
     background: ${(props) => props.theme.palette.filterTh.background};
     padding: 10px;
     .filter-box{
       display: flex;
+      justify-content: space-between;
       color: ${(props) => props.theme.palette.filterTh.color}
     }
   }
@@ -380,8 +382,8 @@ function EnhancedTable() {
                         <TableCell align="left">{"N/A"}</TableCell>
                         <TableCell align="left">{row.price}</TableCell>
                         <TableCell align="left">{row.status}</TableCell>
-                        <TableCell align="right">{row.alert_Comment}</TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">{row.alert_Comment}</TableCell>
+                        <TableCell align="left">
                           {row.time_Received !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.time_Received}
@@ -390,7 +392,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.time_Executed !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.time_Executed}
@@ -399,7 +401,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">{row.alert_Name}</TableCell>
+                        <TableCell align="left">{row.alert_Name}</TableCell>
                       </TableRow>
                     );
                   })}

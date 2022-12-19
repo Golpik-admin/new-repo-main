@@ -26,6 +26,11 @@ import NavbarUserDropdown from "./NavbarUserDropdown";
 const AppBar = styled(MuiAppBar)`
   background: ${(props) => props.theme.palette.background.default};
   color: ${(props) => props.theme.header.color};
+  .date{
+    color: ${(props) => props.theme.header.date};
+    font-size: 14px;
+    margin-left: 22px;
+  }
 `;
 
 const IconButton = styled(MuiIconButton)`
@@ -85,6 +90,15 @@ const Input = styled(InputBase)`
   }
 `;
 
+const date = new Date();
+const [day, year] = [
+  date.getDate(),
+  date.getFullYear(),
+];
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+let monthIndex = (new Date().getMonth());
+let monthName = monthNames[monthIndex];
+
 const Navbar = ({ onDrawerToggle }) => {
   const { t } = useTranslation();
   const pathName = window.location.pathname.substr(1);
@@ -117,7 +131,12 @@ const Navbar = ({ onDrawerToggle }) => {
                     textTransform: 'capitalize',
                   }}
                 >
-                  {pathName}
+                  {pathName }
+                  <span className="date">
+                    {monthName }&nbsp;
+                    {day },&nbsp;
+                    {year }
+                  </span>
                 </Typography>
               </ToolbarTitle>
             </Grid>

@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import {
   Popover as MuiPopover,
   Typography,
-  Button,
+  Button as MuiButton,
   Checkbox,
   TextField,
   Autocomplete,
@@ -36,6 +36,14 @@ const Popover = styled(MuiPopover)`
       .li-item {
       }
     }
+  }
+`;
+
+const Button = styled(MuiButton)`
+  padding: 0 6px;
+  justify-content: start;
+  &:hover {
+    background: transparent;
   }
 `;
 

@@ -54,13 +54,14 @@ const defaultVariant = {
     },
   },
   header: {
-    color: grey[500],
+    color: "#171725",
     background: "#F7F9FC",
+    date: "#7E84A3",
     search: {
       color: grey[800],
     },
     indicator: {
-      background: customBlue[600],
+      background: "#F0142F",
     },
   },
   footer: {
@@ -148,13 +149,9 @@ const lightVariant = merge(defaultVariant, {
     mode: "light",
   },
   header: {
-    color: grey[800],
     background: "#F7F9FC",
     search: {
       color: grey[100],
-    },
-    indicator: {
-      background: red[700],
     },
   },
   sidebar: {

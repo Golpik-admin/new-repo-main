@@ -496,8 +496,8 @@ function EnhancedTable() {
                             ? parseFloat(row.capital_Committed).toFixed(2)
                             : ""}
                         </TableCell>
-                        <TableCell align="right">{row.status}</TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">{row.status}</TableCell>
+                        <TableCell align="left">
                           {row.buy_Time_Executed !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.buy_Time_Executed}
@@ -506,7 +506,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.sell_Time_Executed !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.sell_Time_Executed}
@@ -515,15 +515,15 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.sell_Price_Executed}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.pnL !== null
                             ? parseFloat(row.pnL).toFixed(2)
                             : ""}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.sell_Order_Reason}
                         </TableCell>
                       </TableRow>
