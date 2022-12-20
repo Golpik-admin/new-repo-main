@@ -117,23 +117,8 @@ function Demo({ title, themeVariant }) {
     </Grid>
   );
 }
-
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
-
 const SidebarFooter = ({ ...rest }) => {
-  const { user } = useAuth();
-  const colorMode = React.useContext(ColorModeContext);
   const theme = useTheme();
-  const [mode, setMode] = React.useState('light');
-  // const colorMode = React.useMemo(
-  //   () => ({
-  //     toggleColorMode: () => {
-  //       setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-  //     },
-  //   }),
-  //   [],
-  // );
-
   return (
     <Footer {...rest}>
       <Box className="logo" sx={{ display: { xs: "none", md: "block" } }}>
@@ -142,7 +127,6 @@ const SidebarFooter = ({ ...rest }) => {
                 <strong>Consilience </strong> Trading
               </em>
             </Typography>
-            {/* <Button></Button> */}
           </Box>
           <Box
             sx={{
@@ -162,33 +146,6 @@ const SidebarFooter = ({ ...rest }) => {
             <Demo title="Dark" themeVariant={THEMES.DARK}></Demo>
           }
           </Box>
-      <Grid container spacing={2}>
-          {/* <FooterBadge
-            overlap="circular"
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            variant="dot"
-          >
-            {!!user && <Avatar alt={user.displayName} src={user.avatar} />}
-            {!user && (
-              <Avatar
-                alt="Lucy Lavender"
-                src="/static/img/avatars/avatar-1.jpg"
-              />
-            )}
-          </FooterBadge> */}
-        <Grid item>
-        </Grid>
-        {/* <Grid item>
-          {!!user && (
-            <FooterText variant="body2">{user.displayName}</FooterText>
-          )}
-          {!user && <FooterText variant="body2">Lucy Lavender</FooterText>}
-          <FooterSubText variant="caption">UX Designer</FooterSubText>
-        </Grid> */}
-      </Grid>
     </Footer>
   );
 };

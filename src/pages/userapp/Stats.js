@@ -101,6 +101,7 @@ const Stats = ({
   chip,
   percentagetext,
   percentagecolor,
+  ispercentage,
   illustration,
 }) => {
   return (
@@ -118,7 +119,8 @@ const Stats = ({
           percentagecolor={percentagecolor}
           illustration={illustration}
         >
-          <span>{percentagetext}</span> than last year
+          <span>{percentagetext}</span>
+          {ispercentage === "true" && <span>since last month</span>}
         </Percentage>
         {/* {!illustration && <Chip label={chip} />}  */}
       </CardContent>
