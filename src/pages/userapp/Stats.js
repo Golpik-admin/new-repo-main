@@ -68,7 +68,6 @@ const Percentage = styled(MuiTypography)`
     color: ${(props) => props.percentagecolor};
     font-size: 16px;
     font-weight: 700;
-    //background: ${(props) => rgba(props.percentagecolor, 0.1)};
     padding: 2px;
     border-radius: 3px;
     margin-right: ${(props) => props.theme.spacing(2)};
@@ -120,7 +119,9 @@ const Stats = ({
           illustration={illustration}
         >
           <span>{percentagetext}</span>
-          {ispercentage === "true" && <span>since last month</span>}
+          {ispercentage === "true" && (
+            <span sx={{ color: "#7E84A3" }}>since last month</span>
+          )}
         </Percentage>
         {/* {!illustration && <Chip label={chip} />}  */}
       </CardContent>
