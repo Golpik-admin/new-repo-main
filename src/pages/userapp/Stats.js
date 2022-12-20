@@ -16,7 +16,7 @@ const illustrationCardStyle = (props) => css`
   ${props.illustration &&
   props.theme.palette.mode !== "dark" &&
   `
-    background: ${rgba(props.theme.palette.primary.main, 0.125)};
+    //background: ${rgba(props.theme.palette.primary.main, 0.125)};
     color: ${props.theme.palette.primary.main};
   `}
 `;
@@ -77,10 +77,12 @@ const Percentage = styled(MuiTypography)`
 `;
 
 const IllustrationImage = styled.img`
-  height: 100px;
+  height: 62px;
   position: absolute;
-  right: ${(props) => props.theme.spacing(1)};
+  right: ${(props) => props.theme.spacing(5)};
   bottom: ${(props) => props.theme.spacing(1)};
+  top: ${(props) => props.theme.spacing(1)};
+  margin: auto;
   display: none;
 
   ${(props) => props.theme.breakpoints.between("xs", "lg")} {
@@ -117,12 +119,12 @@ const Stats = ({
         >
           <span>{percentagetext}</span> Since last month
         </Percentage>
-        {/* {!illustration && <Chip label={chip} />} */}
+        {/* {!illustration && <Chip label={chip} />}  */}
       </CardContent>
 
-      {!!illustration && (
-        <IllustrationImage src={illustration} alt="Illustration" />
-      )}
+      {/* {!!illustration && (
+        )} */}
+      <IllustrationImage src={illustration} alt="Illustration" />
     </Card>
   );
 };
