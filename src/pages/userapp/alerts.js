@@ -485,9 +485,9 @@ function OrderList() {
   function percentageStatusDisplay(previous, current) {
     var percentageColorProcessed;
     if (parseInt(current) < parseInt(previous)) {
-      percentageColorProcessed = red[500];
+      percentageColorProcessed = "#F0142F";
     } else {
-      percentageColorProcessed = green[500];
+      percentageColorProcessed = "#3DD598";
     }
 
     return percentageColorProcessed;
@@ -620,7 +620,7 @@ function OrderList() {
               calculatePercentage(
                 previousAlertList.previousProcessedAlertsCount,
                 alertList.processedAlertsCount
-              ) + "%"
+              ) + "%↑"
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousProcessedAlertsCount,
@@ -637,7 +637,7 @@ function OrderList() {
               calculatePercentage(
                 previousAlertList.previousUnprocessedAlertsCount,
                 alertList.unprocessedAlertsCount
-              ) + "%"
+              ) + "%↑"
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousUnprocessedAlertsCount,
@@ -654,7 +654,7 @@ function OrderList() {
               calculatePercentage(
                 previousAlertList.previousExpiredAlertsCount,
                 alertList.expiredAlertsCount
-              ) + "%"
+              ) + "%↑"
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousExpiredAlertsCount,
@@ -674,7 +674,7 @@ function OrderList() {
               calculatePercentage(
                 previousAlertList.previousTotalAlertsCount,
                 alertList.totalAlertsCount
-              ) + "%"
+              ) + "%↑"
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousTotalAlertsCount,
@@ -689,7 +689,7 @@ function OrderList() {
             amount="Subscription"
             chip=""
             percentagetext="Details"
-            percentagecolor={red[500]}
+            percentagecolor={"rgba(0,0,0,1)"}
           />
         </Grid>
       </Grid>
@@ -705,6 +705,16 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
+  .card-head{
+    color:#5A607F;
+    font-size:16px;
+    font-weight:400;
+    margin-bottom:10px;
+  }
+  h3{
+    font-size:28px;
+    font-weight:900;
+  }
   &.pro-card{
     .MuiPaper-root{
       color: ${(props) => props.theme.palette.proCard.color};
@@ -715,7 +725,20 @@ const Grid = styled(MuiGrid)`
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
+        top:12px;
         color:${(props) => props.theme.palette.proCard.beforeColor};
+      }
+      .card-head{
+        color:#fff;
+        font-size:31px;
+        font-weight:700;
+        margin-bottom:10px;
+      }
+      h3{
+        font-size:19px;
+      }
+      .MuiTypography-subtitle2{
+        
       }
     }
   }
