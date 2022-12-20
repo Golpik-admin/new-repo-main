@@ -120,7 +120,7 @@ const Stats = ({
         >
           <span>{percentagetext}</span>
           {ispercentage === "true" && (
-            <span sx={{ color: "#7E84A3" }}>since last month</span>
+            <span className="percentage-text">since last month</span>
           )}
         </Percentage>
         {/* {!illustration && <Chip label={chip} />}  */}

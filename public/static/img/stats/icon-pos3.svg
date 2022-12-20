@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="clip-Icon_7">
+      <rect width="64" height="64"/>
+    </clipPath>
+  </defs>
+  <g id="Icon_7" data-name="Icon 7" clip-path="url(#clip-Icon_7)">
+    <g id="ic-bounce_rate" data-name="ic-bounce rate" transform="translate(1 1)">
+      <g id="Oval" fill="rgba(0,88,255,0.1)" stroke="rgba(0,88,255,0.1)" stroke-miterlimit="10" stroke-width="1">
+        <circle cx="31" cy="31" r="31" stroke="none"/>
+        <circle cx="31" cy="31" r="30.5" fill="none"/>
+      </g>
+    </g>
+    <path id="switch_right_FILL0_wght400_GRAD0_opsz48" d="M28,38,42,24,28,10Zm-8,0V10L6,24Zm-2.75-6.65L9.9,24l7.35-7.35Z" transform="translate(8 8)" fill="#0058ff"/>
+  </g>
+</svg>

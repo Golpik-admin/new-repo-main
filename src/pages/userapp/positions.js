@@ -30,6 +30,7 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
+import { SyncAlt } from "@mui/icons-material";
 import { green, orange, red } from "@mui/material/colors";
 import {
   Add as AddIcon,
@@ -152,24 +153,24 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  // { id: "id", alignment: "right", label: "ID" },
+  // { id: "id", alignment: "left", label: "ID" },
   { id: "ticker", alignment: "left", label: "TICKER" },
   { id: "option_Symbol", alignment: "left", label: "OPTION SYMBOL" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "price_excuted", alignment: "right", label: "PRICE EXECUTED" },
+  { id: "price_excuted", alignment: "left", label: "PRICE EXECUTED" },
   {
     id: "qty",
     alignment: "left",
     label: "QTY",
   },
   { id: "alert_description", alignment: "left", label: "ALERT DESCRIPTION" },
-  { id: "capital_commited", alignment: "right", label: "CAPITAL COMMITED" },
-  { id: "status", alignment: "right", label: "STATUS" },
-  { id: "time_bought", alignment: "right", label: "TIME BOUGHT" },
-  { id: "time_sold", alignment: "right", label: "TIME SOLD" },
-  { id: "price_now", alignment: "right", label: "PRICE NOW" },
-  { id: "p_l", alignment: "right", label: "P & L" },
-  { id: "description", alignment: "right", label: "Description" },
+  { id: "capital_commited", alignment: "left", label: "CAPITAL COMMITED" },
+  { id: "status", alignment: "left", label: "STATUS" },
+  { id: "time_bought", alignment: "left", label: "TIME BOUGHT" },
+  { id: "time_sold", alignment: "left", label: "TIME SOLD" },
+  { id: "price_now", alignment: "left", label: "PRICE NOW" },
+  { id: "p_l", alignment: "left", label: "P & L" },
+  { id: "description", alignment: "left", label: "Description" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -196,13 +197,7 @@ const EnhancedTableHead = (props) => {
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
+            {headCell.label}
           </TableCell>
         ))}
       </TableRow>
@@ -218,9 +213,10 @@ const EnhancedTableHead = (props) => {
             <Box className="filter-box">
               <FilterPop />
               <TableSortLabel
-                active={orderBy === headCell.id}
+                active={true}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
+                IconComponent={SyncAlt}
               ></TableSortLabel>
             </Box>
           </TableCell>
@@ -231,17 +227,33 @@ const EnhancedTableHead = (props) => {
 };
 
 const Table = styled(MuiTable)`
+  // th.table-th:first-child {
+  //   min-width: 300px;
+  // }
+  th {
+    border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+    border-bottom: 0;
+    padding: 6px 8px;
+    line-height: 1.2;
+  }
   th.table-th {
     background: ${(props) => props.theme.palette.tableTh.background};
-    padding: 10px;
   }
   th.filter-th {
     background: ${(props) => props.theme.palette.filterTh.background};
-    padding: 10px;
     .filter-box {
       display: flex;
-      width: 50px;
-      color: ${(props) => props.theme.palette.filterTh.color};
+      justify-content: space-between;
+      button {
+        color: ${(props) => props.theme.palette.filterTh.color};
+        min-width: 30px;
+      }
+      .MuiTableSortLabel-root {
+        transform: rotate(90deg);
+        svg {
+          color: ${(props) => props.theme.palette.filterTh.color};
+        }
+      }
     }
   }
 `;
@@ -447,7 +459,12 @@ function EnhancedTable() {
     <div>
       {positionsList.loading && <LinearProgress />}
       {!positionsList.loading && positionsList.positions.length ? (
-        <Paper>
+        <Paper
+          sx={{
+            padding: 8,
+            minHeight: 450,
+          }}
+        >
           <EnhancedTableToolbar numSelected={selected.length} />
           <TableContainer>
             <Table
@@ -717,6 +734,25 @@ function OrderList() {
               positionsListPrevious.positionsOpenPrevious,
               positionsList.positionsOpen
             )}
+            illustration="/static/img/stats/icon-pos1.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+          <Stats
+            title="Total Positions Closed"
+            amount={positionsList.positionsOpen}
+            // chip="Today"
+            percentagetext={
+              calculatePercentage(
+                positionsListPrevious.positionsClosedPrevious,
+                positionsList.positionsClosed
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              positionsListPrevious.positionsClosedPrevious,
+              positionsList.positionsClosed
+            )}
+            illustration="/static/img/stats/icon-pos2.svg"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -734,6 +770,7 @@ function OrderList() {
               positionsListPrevious.todayPnlPrevious,
               positionsList.todayPnl
             )}
+            illustration="/static/img/stats/icon-pos1.svg"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -751,6 +788,7 @@ function OrderList() {
               positionsListPrevious.pnlPrevious,
               positionsList.pnl
             )}
+            illustration="/static/img/stats/icon-pos3.svg"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -760,7 +798,7 @@ function OrderList() {
             // chip="Yearly"
             percentagetext="-9%"
             percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
+            illustration="/static/img/stats/icon-pos3.svg"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
@@ -787,17 +825,54 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
+  .MuiPaper-root {
+    border: ${(props) =>
+      props.theme.name === "DARK" ? "1px solid white;" : "unset"};
+  }
+  .card-head {
+    color: #5a607f;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 28px;
+    font-weight: 900;
+  }
+  .MuiTypography-subtitle2 {
+    .percentage-text {
+      color: #7e84a3;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
   &.pro-card {
     .MuiPaper-root {
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
+      border: unset !important;
       &:before {
         content: "PRO+";
         font-size: 70px;
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
+        top: 12px;
         color: ${(props) => props.theme.palette.proCard.beforeColor};
+      }
+      .card-head {
+        color: #fff;
+        font-size: 31px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      h3 {
+        font-size: 19px;
+      }
+      .MuiTypography-subtitle2 {
+        span {
+          color: #a1a7c4;
+        }
       }
     }
   }

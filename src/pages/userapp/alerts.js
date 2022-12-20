@@ -22,7 +22,7 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
-import { SyncAlt, AlarmOn } from "@mui/icons-material";
+import { SyncAlt } from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
@@ -153,7 +153,7 @@ const Table = styled(MuiTable)`
   th{
     border-left: 4px solid ${(props) => props.theme.palette.background.paper};
     border-bottom: 0;
-    padding: 6px 8px;
+    padding: 6px;
     line-height: 1.2;
   }
   th.table-th{
@@ -166,6 +166,7 @@ const Table = styled(MuiTable)`
       justify-content: space-between;
       button{
         color: ${(props) => props.theme.palette.filterTh.color};
+        min-width:30px;
       }
       .MuiTableSortLabel-root{
         transform: rotate(90deg);
@@ -726,6 +727,13 @@ const Grid = styled(MuiGrid)`
     font-size:28px;
     font-weight:900;
   }
+  .MuiTypography-subtitle2{
+    .percentage-text{
+      color:#7E84A3;
+      font-size:12px;
+      font-weight:400;
+    }
+  }
   &.pro-card{
     .MuiPaper-root{
       color: ${(props) => props.theme.palette.proCard.color};
@@ -750,7 +758,9 @@ const Grid = styled(MuiGrid)`
         font-size:19px;
       }
       .MuiTypography-subtitle2{
-        
+        span{
+          color:#A1A7C4;
+        }
       }
     }
   }
