@@ -42,7 +42,6 @@ import moment from "moment-timezone";
 import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
 import { fetchSettings } from "../../redux/slices/getSettings";
-
 const Divider = styled(MuiDivider)(spacing);
 
 
@@ -606,7 +605,6 @@ function OrderList() {
   const previousAlertList = useSelector((state) => state.previousAlertsList);
 
   // "% &#8593;";
-
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -615,12 +613,13 @@ function OrderList() {
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Processed"
+            ispercentage="true"
             amount={alertList.processedAlertsCount}
             percentagetext={
               calculatePercentage(
                 previousAlertList.previousProcessedAlertsCount,
                 alertList.processedAlertsCount
-              ) + "%↑"
+              ) + "%↓"
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousProcessedAlertsCount,
@@ -632,12 +631,16 @@ function OrderList() {
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Unprocessed"
+            ispercentage="true"
             amount={alertList.unprocessedAlertsCount}
             percentagetext={
               calculatePercentage(
                 previousAlertList.previousUnprocessedAlertsCount,
                 alertList.unprocessedAlertsCount
-              ) + "%↑"
+              ) + (calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              )  > 0 ? "%↑" : "%↓")
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousUnprocessedAlertsCount,
@@ -650,11 +653,15 @@ function OrderList() {
           <Stats
             title="Total Alerts Expired"
             amount={alertList.expiredAlertsCount}
+            ispercentage="true"
             percentagetext={
               calculatePercentage(
                 previousAlertList.previousExpiredAlertsCount,
                 alertList.expiredAlertsCount
-              ) + "%↑"
+              ) +  ( calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              ) ? "%↑" : "%↓")
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousExpiredAlertsCount,
@@ -665,6 +672,7 @@ function OrderList() {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
+                        ispercentage="true"
             title="Alerts Per Hour"
             amount={(
               alertList.totalAlertsCount / parseInt(totalCurrentHours)
@@ -686,6 +694,7 @@ function OrderList() {
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
           <Stats
             title="Pro +"
+            ispercentage="false"
             amount="Subscription"
             chip=""
             percentagetext="Details"
@@ -705,6 +714,9 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
+    .MuiPaper-root{
+      border: ${(props) => props.theme.name === 'DARK' ? '1px solid white;' :'unset'} 
+    }
   .card-head{
     color:#5A607F;
     font-size:16px;
@@ -719,6 +731,7 @@ const Grid = styled(MuiGrid)`
     .MuiPaper-root{
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
+      border: unset !important; 
       &:before{
         content: "PRO+";
         font-size: 70px;
