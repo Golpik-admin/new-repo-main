@@ -689,7 +689,6 @@ function OrderList() {
             amount="Subscription"
             chip=""
             percentagetext="Details"
-            percentagecolor={"rgba(0,0,0,1)"}
           />
         </Grid>
       </Grid>
