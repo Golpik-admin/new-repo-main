@@ -626,7 +626,7 @@ function OrderList() {
               previousAlertList.previousProcessedAlertsCount,
               alertList.processedAlertsCount
             )}
-            illustration="/static/img/stats/icon1.svg"
+            illustration="/static/img/stats/icon-1.svg"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -643,7 +643,7 @@ function OrderList() {
               previousAlertList.previousUnprocessedAlertsCount,
               alertList.unprocessedAlertsCount
             )}
-            illustration="/static/img/stats/icon2.svg"
+            illustration="/static/img/stats/icon-2.svg"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -660,7 +660,7 @@ function OrderList() {
               previousAlertList.previousExpiredAlertsCount,
               alertList.expiredAlertsCount
             )}
-            illustration="/static/img/stats/icon3.svg"
+            illustration="/static/img/stats/icon-3.svg"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -680,7 +680,7 @@ function OrderList() {
               previousAlertList.previousTotalAlertsCount,
               alertList.totalAlertsCount
             )}
-            illustration="/static/img/stats/icon4.svg"
+            illustration="/static/img/stats/icon-4.svg"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >

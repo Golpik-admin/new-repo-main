@@ -77,9 +77,9 @@ const Percentage = styled(MuiTypography)`
 `;
 
 const IllustrationImage = styled.img`
-  height: 35px;
+  height: 62px;
   position: absolute;
-  right: ${(props) => props.theme.spacing(1)};
+  right: ${(props) => props.theme.spacing(5)};
   bottom: ${(props) => props.theme.spacing(1)};
   top: ${(props) => props.theme.spacing(1)};
   margin: auto;
