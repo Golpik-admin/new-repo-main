@@ -85,6 +85,7 @@ import UserPositions from "./pages/userapp/positions";
 
 import UserSettings from "./pages/userapp/settings";
 import UserHelpCenter from "./pages/userapp/helpcenter";
+import UserRiskManagement from "./pages/userapp/riskmanagement";
 import UserIntegration from "./pages/userapp/integration";
 
 // Landing
@@ -209,6 +210,16 @@ const routes = [
       {
         path: "",
         element: <UserHelpCenter />,
+      },
+    ],
+  },
+  {
+    path: "risk-management",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UserRiskManagement />,
       },
     ],
   },

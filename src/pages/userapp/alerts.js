@@ -22,6 +22,7 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
+import { SyncAlt } from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
@@ -79,18 +80,18 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: "ticker", alignment: "left", label: "TICKER" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "order_action", alignment: "right", label: "ORDER ACTION" },
+  { id: "order_action", alignment: "left", label: "ORDER ACTION" },
   {
     id: "price_fired_alert",
     alignment: "left",
     label: "PRICE WHEN ALERT FIRED",
   },
   { id: "price_now", alignment: "left", label: "PRICE NOW" },
-  { id: "status", alignment: "right", label: "STATUS" },
-  { id: "alert_comment", alignment: "right", label: "ALERT COMMENT" },
-  { id: "time_received", alignment: "right", label: "TIME RECIEVED" },
-  { id: "time_executed", alignment: "right", label: "TIME EXCUTED" },
-  { id: "alert_Name", alignment: "right", label: "ALERT NAME" },
+  { id: "status", alignment: "left", label: "STATUS" },
+  { id: "alert_comment", alignment: "left", label: "ALERT COMMENT" },
+  { id: "time_received", alignment: "left", label: "TIME RECEIVED" },
+  { id: "time_executed", alignment: "left", label: "TIME EXECUTED" },
+  { id: "alert_Name", alignment: "left", label: "ALERT NAME" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -131,10 +132,12 @@ const EnhancedTableHead = (props) => {
             >
               <FilterPop />
               <TableSortLabel
-                active={orderBy === headCell.id}
+                active={true}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
+                IconComponent={SyncAlt}
               >
+                
               </TableSortLabel>
             </Box>
           </TableCell>
@@ -145,16 +148,30 @@ const EnhancedTableHead = (props) => {
 };
 
 const Table = styled(MuiTable)`
+  th.table-th:first-child{
+    width:300px;
+  }
   th.table-th{
     background: ${(props) => props.theme.palette.tableTh.background};
     padding: 10px;
+    text-align:left;
   }
   th.filter-th{
     background: ${(props) => props.theme.palette.filterTh.background};
     padding: 10px;
     .filter-box{
       display: flex;
-      color: ${(props) => props.theme.palette.filterTh.color}
+      justify-content: space-between;
+      button{
+        color: ${(props) => props.theme.palette.filterTh.color};
+      }
+      .MuiTableSortLabel-root{
+        transform: rotate(90deg);
+        svg{
+          color: ${(props) => props.theme.palette.filterTh.color};
+        }
+
+      }
     }
   }
 `;
@@ -180,7 +197,7 @@ const Box = styled.div`
           border-radius: 4px;
           left: 0;
           right: 0;
-          padding: 18px 22px;
+          padding: 18px 18px;
           margin: 1px;
           background: ${(props) => props.theme.palette.toolbarbtn.background};
           border:  ${(props) => props.theme.palette.toolbarbtn.border};
@@ -198,7 +215,7 @@ const Box = styled.div`
       .MuiFormControlLabel-label {
         position: relative;
         z-index: 9;
-        padding: 8px 22px;
+        padding: 8px 13px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
         color: ${(props) => props.theme.palette.toolbarbtn.color};
@@ -281,7 +298,7 @@ const EnhancedTableToolbar = () => {
             renderInput={(startProps, endProps) => (
               <React.Fragment>
                 <TextField className="date-1" {...startProps} />
-                <Box> - </Box>
+                <Box className="hyphen"> - </Box>
                 <TextField className="date-2" {...endProps} />
               </React.Fragment>
             )}
@@ -378,8 +395,8 @@ function EnhancedTable() {
                         <TableCell align="left">{"N/A"}</TableCell>
                         <TableCell align="left">{row.price}</TableCell>
                         <TableCell align="left">{row.status}</TableCell>
-                        <TableCell align="right">{row.alert_Comment}</TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">{row.alert_Comment}</TableCell>
+                        <TableCell align="left">
                           {row.time_Received !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.time_Received}
@@ -388,7 +405,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.time_Executed !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.time_Executed}
@@ -397,7 +414,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">{row.alert_Name}</TableCell>
+                        <TableCell align="left">{row.alert_Name}</TableCell>
                       </TableRow>
                     );
                   })}
@@ -503,10 +520,17 @@ function OrderList() {
       const initialize = async () => {
         try {
           const isAuthenticated = await user;
+          let date = new Date();
+          const last30Days = moment(date)
+            .subtract(30,"days")
+            .format("YYYY-MM-DD");
+          const todayDate = moment().format("YYYY-MM-DD");
+        
           if (isAuthenticated) {
 
             dispatch(fetchSettings({ User_Id: user.id }));
-            dispatch(fetchAlerts({ userId: userId }));
+            dispatch(fetchAlerts({ startDate: last30Days,
+              endDate: todayDate,userId: userId }));
       
             dispatch(
               fetchAlerts({

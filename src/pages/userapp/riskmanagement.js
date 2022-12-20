@@ -1,17 +1,11 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 import styled from "@emotion/styled";
-import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Breadcrumbs as MuiBreadcrumbs,
-  Button as MuiButton,
-  Checkbox,
-  Chip as MuiChip,
   Divider as MuiDivider,
   Grid as MuiGrid,
-  IconButton,
-  Link,
   Paper as MuiPaper,
   Table as MuiTable,
   TableBody,
@@ -22,30 +16,25 @@ import {
   TableRow,
   TableSortLabel,
   Toolbar,
-  Tooltip,
-  Typography,
   LinearProgress as MuiLinearProgress,
   RadioGroup,
   FormControlLabel,
   Radio,
   TextField,
+  SyncAltTwoToneIcon,
+  IconButton,
 } from "@mui/material";
-import { green, orange, red } from "@mui/material/colors";
-import {
-  Add as AddIcon,
-  Archive as ArchiveIcon,
-  FilterList as FilterListIcon,
-  RemoveRedEye as RemoveRedEyeIcon,
-} from "@mui/icons-material";
+import { AddCircle } from "@mui/icons-material";
+import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
-import { fetchPositions, fetchPNL } from "../../redux/slices/possitions";
+import { fetchAlerts } from "../../redux/slices/alerts";
 import {
-  fetchPositionsPrevious,
-  fetchPNLPrevious,
-} from "../../redux/slices/positionsPreviousMonth";
+  previousFetchAlerts,
+} from "../../redux/slices/alertsPreviousMonth";
 import Moment from "react-moment";
+
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
@@ -53,74 +42,13 @@ import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
 import FilterPop from "./Filter";
+import useAuth from "../../hooks/useAuth";
+import { fetchSettings } from "../../redux/slices/getSettings";
 
 const Divider = styled(MuiDivider)(spacing);
 
-const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 
 const Paper = styled(MuiPaper)(spacing);
-
-const Chip = styled(MuiChip)`
-  ${spacing};
-
-  background: ${(props) => props.shipped && green[500]};
-  background: ${(props) => props.processing && orange[700]};
-  background: ${(props) => props.cancelled && red[500]};
-  color: ${(props) => props.theme.palette.common.white};
-`;
-
-const Spacer = styled.div`
-  flex: 1 1 100%;
-`;
-
-const ToolbarTitle = styled.div`
-  min-width: 150px;
-`;
-
-function createData(id, product, date, total, status, method) {
-  return { id, product, date, total, status, method };
-}
-
-const rows = [
-  createData(
-    "000253",
-    "Salt & Pepper Grinder",
-    "2021-01-02",
-    "$32,00",
-    0,
-    "Visa"
-  ),
-  createData("000254", "Backpack", "2021-01-04", "$130,00", 0, "PayPal"),
-  createData(
-    "000255",
-    "Pocket Speaker",
-    "2021-01-04",
-    "$80,00",
-    2,
-    "Mastercard"
-  ),
-  createData("000256", "Glass Teapot", "2021-01-08", "$45,00", 0, "Visa"),
-  createData(
-    "000257",
-    "Unbreakable Water Bottle",
-    "2021-01-09",
-    "$40,00",
-    0,
-    "PayPal"
-  ),
-  createData("000258", "Spoon Saver", "2021-01-14", "$15,00", 0, "Mastercard"),
-  createData("000259", "Hip Flash", "2021-01-16", "$25,00", 1, "Visa"),
-  createData("000260", "Woven Slippers", "2021-01-22", "$20,00", 0, "PayPal"),
-  createData("000261", "Womens Watch", "2021-01-22", "$65,00", 2, "Visa"),
-  createData(
-    "000262",
-    "Over-Ear Headphones",
-    "2021-01-23",
-    "$210,00",
-    0,
-    "Mastercard"
-  ),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -152,57 +80,56 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  // { id: "id", alignment: "right", label: "ID" },
   { id: "ticker", alignment: "left", label: "TICKER" },
-  { id: "option_Symbol", alignment: "left", label: "OPTION SYMBOL" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "price_excuted", alignment: "right", label: "PRICE EXECUTED" },
+  { id: "order_action", alignment: "right", label: "ORDER ACTION" },
   {
-    id: "qty",
+    id: "price_fired_alert",
     alignment: "left",
-    label: "QTY",
+    label: "PRICE WHEN ALERT FIRED",
   },
-  { id: "alert_description", alignment: "left", label: "ALERT DESCRIPTION" },
-  { id: "capital_commited", alignment: "right", label: "CAPITAL COMMITED" },
+  { id: "price_now", alignment: "left", label: "PRICE NOW" },
   { id: "status", alignment: "right", label: "STATUS" },
-  { id: "time_bought", alignment: "right", label: "TIME BOUGHT" },
-  { id: "time_sold", alignment: "right", label: "TIME SOLD" },
-  { id: "price_now", alignment: "right", label: "PRICE NOW" },
-  { id: "p_l", alignment: "right", label: "P & L" },
-  { id: "description", alignment: "right", label: "Description" },
+  { id: "alert_comment", alignment: "right", label: "ALERT COMMENT" },
+  { id: "time_received", alignment: "right", label: "TIME RECIEVED" },
+  { id: "time_executed", alignment: "right", label: "TIME EXCUTED" },
+  { id: "alert_Name", alignment: "right", label: "ALERT NAME" },
 ];
 
 const EnhancedTableHead = (props) => {
   const {
-    onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
     onRequestSort,
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
   return (
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
-            className="table-th"
             key={headCell.id}
             align={headCell.alignment}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            className="table-th"
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
+            <Box 
+            className="filter-box"
             >
               {headCell.label}
-            </TableSortLabel>
+              <FilterPop />
+              {/* SyncAltTwoToneIcon  */}
+              <TableSortLabel
+                active={true}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+                icon="SyncAltTwoToneIcon"
+              >
+              </TableSortLabel>
+            </Box>
           </TableCell>
         ))}
       </TableRow>
@@ -215,14 +142,9 @@ const EnhancedTableHead = (props) => {
             sortDirection={orderBy === headCell.id ? order : false}
             className="filter-th"
           >
-            <Box className="filter-box">
-              <FilterPop />
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              ></TableSortLabel>
-            </Box>
+            <IconButton>
+              <AddCircle />
+            </IconButton>
           </TableCell>
         ))}
       </TableRow>
@@ -231,18 +153,27 @@ const EnhancedTableHead = (props) => {
 };
 
 const Table = styled(MuiTable)`
-  th.table-th {
+  th.table-th{
     background: ${(props) => props.theme.palette.tableTh.background};
     padding: 10px;
+    text-align:left;
+    .filter-box{
+      display: flex;
+      flex: 0 0 100%;
+      justify-content: space-between;
+      align-items: center;
+      //color: ${(props) => props.theme.palette.filterTh.color}
+      button{
+        justify-content: center;
+        min-width: auto;
+      }
+    }
   }
-  th.filter-th {
+  th.filter-th{
     background: ${(props) => props.theme.palette.filterTh.background};
     padding: 10px;
-    .filter-box {
-      display: flex;
-      width: 50px;
-      color: ${(props) => props.theme.palette.filterTh.color};
-    }
+    text-align:left;
+
   }
 `;
 
@@ -267,10 +198,10 @@ const Box = styled.div`
           border-radius: 4px;
           left: 0;
           right: 0;
-          padding: 18px 22px;
+          padding: 18px 18px;
           margin: 1px;
           background: ${(props) => props.theme.palette.toolbarbtn.background};
-          border: ${(props) => props.theme.palette.toolbarbtn.border};
+          border:  ${(props) => props.theme.palette.toolbarbtn.border};
           &.Mui-checked {
             background: ${(props) => props.theme.sidebar.background};
             + .MuiTypography-root {
@@ -285,7 +216,7 @@ const Box = styled.div`
       .MuiFormControlLabel-label {
         position: relative;
         z-index: 9;
-        padding: 8px 22px;
+        padding: 8px 13px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
         color: ${(props) => props.theme.palette.toolbarbtn.color};
@@ -295,56 +226,49 @@ const Box = styled.div`
   }
 `;
 
-const Button = styled(MuiButton)`
-  color: ${(props) => props.theme.sidebar.color};
-  background: ${(props) => props.theme.sidebar.background};
-  padding: 8px 22px;
-  margin: 0 19px 0 17px;
-  ${(props) => props.theme.palette.toolbarbtn.border};
-  &:hover{
-    background: ${(props) => props.theme.sidebar.background};
-  }
-} 
-`;
+const EnhancedTableToolbar = () => {
+  const getSettings = useSelector((state) => state.fetchSettingsList);
 
-const EnhancedTableToolbar = (props) => {
-  // Here was 'let'
-  const { numSelected } = props;
   const dispatch = useDispatch();
-  const handleChange = (event) => {
-    dispatch(fetchPositions({ status: event.target.value, count: null }));
-  };
   const [value, setValue] = React.useState([null, null]);
+  const userId = '6372c6c0a8b2c2ec60b2da52';
+  
+  const handleChange = (event) => {
+    dispatch(fetchAlerts({ status: event.target.value, count: null,userId:userId, }));
+  };
   const today = moment().format("YYYY-MM-DD");
   return (
     <Toolbar>
-      {/* <ToolbarTitle>
-        {numSelected > 0 ? (
-          <Typography color="inherit" variant="subtitle1">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography variant="h6" id="tableTitle">
-            Positions
-          </Typography>
-        )}
-      </ToolbarTitle> */}
       <Box className="radio-parent">
         <RadioGroup
           aria-label="Filters"
-          name="positionsFilters"
+          name="alertFilters"
           onChange={handleChange}
           defaultValue="all"
         >
           <FormControlLabel value="all" control={<Radio />} label="All" />
-          <FormControlLabel value="open" control={<Radio />} label="Open" />
-          <FormControlLabel value="closed" control={<Radio />} label="Closed" />
-          <FormControlLabel value="failed" control={<Radio />} label="Failed" />
           <FormControlLabel
-            value="riskmanaged"
+            value="Processed"
             control={<Radio />}
-            label="Risk Managed"
+            label="Processed"
           />
+          <FormControlLabel
+            value="Unprocessed"
+            control={<Radio />}
+            label="Un Processed"
+          />
+          <FormControlLabel
+            value="Expired"
+            control={<Radio />}
+            label="Expired"
+          />
+        {getSettings.TestMode &&           
+          <FormControlLabel
+            value="Test"
+            control={<Radio />}
+            label="Test"
+          />
+        }
         </RadioGroup>
       </Box>
       <StyledEngineProvider injectFirst>
@@ -366,7 +290,7 @@ const EnhancedTableToolbar = (props) => {
                   : null;
               if (startDate !== null && endDate !== null) {
                 dispatch(
-                  fetchPositions({ startDate: startDate, endDate: endDate })
+                  fetchAlerts({ startDate: startDate, endDate: endDate })
                 );
               }
               setValue(newValue);
@@ -374,7 +298,7 @@ const EnhancedTableToolbar = (props) => {
             renderInput={(startProps, endProps) => (
               <React.Fragment>
                 <TextField className="date-1" {...startProps} />
-                <Box> - </Box>
+                <Box className="hyphen"> - </Box>
                 <TextField className="date-2" {...endProps} />
               </React.Fragment>
             )}
@@ -400,32 +324,13 @@ function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = positionsList.positions.map((n) => n.id);
+      const newSelecteds = alertList.alerts.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -438,17 +343,21 @@ function EnhancedTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const positionsList = useSelector((state) => state.positionsList);
+  const alertList = useSelector((state) => state.alertsList);
   const LinearProgress = styled(MuiLinearProgress)(spacing);
-  const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, positionsList.positions.length - page * rowsPerPage);
+
+
+
   return (
     <div>
-      {positionsList.loading && <LinearProgress />}
-      {!positionsList.loading && positionsList.positions.length ? (
-        <Paper>
-          <EnhancedTableToolbar numSelected={selected.length} />
+      <Paper
+        sx={{
+          minHeight: 450,
+        }}
+      >
+        <EnhancedTableToolbar numSelected={selected.length} />
+        {alertList.loading && <LinearProgress />}
+        {!alertList.loading && alertList.alerts.length ? (
           <TableContainer>
             <Table
               aria-labelledby="tableTitle"
@@ -461,17 +370,14 @@ function EnhancedTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={positionsList.positions.length}
+                rowCount={alertList.alerts.length}
               />
               <TableBody>
-                {stableSort(
-                  positionsList.positions,
-                  getComparator(order, orderBy)
-                )
+                {stableSort(alertList.alerts, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
+                  .map((row) => {
                     const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${row.id}`;
+                    // -${index}
                     return (
                       <TableRow
                         hover
@@ -482,75 +388,40 @@ function EnhancedTable() {
                         selected={isItemSelected}
                       >
                         <TableCell align="left">{row.ticker}</TableCell>
-                        <TableCell align="left">{row.option_Symbol}</TableCell>
                         <TableCell align="left">{row.option_Type}</TableCell>
                         <TableCell align="left">
-                          {row.buy_Price_Executed}
+                          {row.order_Action.replace(/_/g, " ")}
                         </TableCell>
-                        <TableCell align="left">{row.quantity}</TableCell>
-                        <TableCell align="left">
-                          {row.buy_Order_Reason}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.capital_Committed !== null
-                            ? parseFloat(row.capital_Committed).toFixed(2)
-                            : ""}
-                        </TableCell>
+                        <TableCell align="left">{"N/A"}</TableCell>
+                        <TableCell align="left">{row.price}</TableCell>
                         <TableCell align="left">{row.status}</TableCell>
+                        <TableCell align="left">{row.alert_Comment}</TableCell>
                         <TableCell align="left">
-                          {row.buy_Time_Executed !== null ? (
+                          {row.time_Received !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.buy_Time_Executed}
+                              {row.time_Received}
                             </Moment>
                           ) : (
                             ""
                           )}
                         </TableCell>
                         <TableCell align="left">
-                          {row.sell_Time_Executed !== null ? (
+                          {row.time_Executed !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.sell_Time_Executed}
+                              {row.time_Executed}
                             </Moment>
                           ) : (
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="left">
-                          {row.sell_Price_Executed}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.pnL !== null
-                            ? parseFloat(row.pnL).toFixed(2)
-                            : ""}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.sell_Order_Reason}
-                        </TableCell>
+                        <TableCell align="left">{row.alert_Name}</TableCell>
                       </TableRow>
                     );
                   })}
-                {/* {emptyRows > 0 && (
-                  //  style={{ height: 53 * emptyRows }}
-                  <TableRow>
-                    <TableCell colSpan={12} />
-                  </TableRow>
-                )} */}
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={positionsList.positions.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      ) : (
-        <Paper>
-          <EnhancedTableToolbar numSelected={selected.length} />
+        ) : (
           <TableContainer>
             <Table
               aria-labelledby="tableTitle"
@@ -563,24 +434,24 @@ function EnhancedTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={positionsList.positions.length}
+                rowCount={alertList.alerts.length}
               />
               <TableBody>
                 <TableCell colSpan={12}>{"Record not found"}</TableCell>
               </TableBody>
             </Table>
           </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={positionsList.positions.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      )}
+        )}
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={alertList.alerts.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
     </div>
   );
 }
@@ -621,9 +492,6 @@ function OrderList() {
   const dispatch = useDispatch();
 
   let date = new Date();
-
-  const today = moment().format("YYYY-MM-DD");
-
   const currentMonthFirstDay = moment(date)
     .startOf("month")
     .format("YYYY-MM-DD");
@@ -646,133 +514,168 @@ function OrderList() {
     )
     .asHours();
 
-  useEffect(() => {
-    dispatch(fetchPositions());
-    dispatch(
-      fetchPositions({
-        startDate: currentMonthFirstDay,
-        endDate: currentMonthLastDay,
-        status: "open",
-        count: true,
-      })
-    );
+    const { user } = useAuth();
+    const userId = '6372c6c0a8b2c2ec60b2da52';  
+    useEffect(() => {
+      const initialize = async () => {
+        try {
+          const isAuthenticated = await user;
+          if (isAuthenticated) {
 
-    dispatch(
-      fetchPositionsPrevious({
-        startDate: previousMonthFirstDay,
-        endDate: previousMonthLastDay,
-        status: "open",
-        count: true,
-      })
-    );
+            dispatch(fetchSettings({ User_Id: user.id }));
+            dispatch(fetchAlerts({ userId: userId }));
+      
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Processed",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Processed",
+                count: true,
+              })
+            );
 
-    dispatch(
-      fetchPNL({
-        startDate: currentMonthFirstDay,
-        endDate: currentMonthLastDay,
-        apiCall: "totalPnl",
-        count: true,
-      })
-    );
-    dispatch(
-      fetchPNLPrevious({
-        startDate: previousMonthFirstDay,
-        endDate: previousMonthLastDay,
-        apiCall: "totalPnl",
-        count: true,
-      })
-    );
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Unprocessed",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Unprocessed",
+                count: true,
+              })
+            );
 
-    dispatch(
-      fetchPNL({
-        startDate: today,
-        endDate: today,
-        apiCall: "today",
-        count: true,
-      })
-    );
-  }, []);
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Expired",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Expired",
+                count: true,
+              })
+            );
+          }
+        } catch (err) {
+          console.error(err);
+        }
+    
 
-  const positionsList = useSelector((state) => state.positionsList);
-  const positionsListPrevious = useSelector(
-    (state) => state.positionsListPrevious
-  );
+      }
+      initialize();
+    }, [currentMonthFirstDay, currentMonthLastDay, dispatch, previousMonthFirstDay, previousMonthLastDay, user, user.id, userId]);
+
+  const alertList = useSelector((state) => state.alertsList);
+  const previousAlertList = useSelector((state) => state.previousAlertsList);
+
+  // "% &#8593;";
 
   return (
     <React.Fragment>
       <Helmet title="Orders" />
+
       <Grid container spacing={6}>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="Total Positions Open"
-            amount={positionsList.positionsOpen}
-            // chip="Today"
+            title="Total Alerts Processed"
+            amount={alertList.processedAlertsCount}
             percentagetext={
               calculatePercentage(
-                positionsListPrevious.positionsOpenPrevious,
-                positionsList.positionsOpen
+                previousAlertList.previousProcessedAlertsCount,
+                alertList.processedAlertsCount
               ) + "%"
             }
             percentagecolor={percentageStatusDisplay(
-              positionsListPrevious.positionsOpenPrevious,
-              positionsList.positionsOpen
+              previousAlertList.previousProcessedAlertsCount,
+              alertList.processedAlertsCount
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="Today P & L"
-            amount={parseFloat(positionsList.todayPnl).toFixed(2)}
-            // chip="Annual"
+            title="Total Alerts Unprocessed"
+            amount={alertList.unprocessedAlertsCount}
             percentagetext={
               calculatePercentage(
-                positionsListPrevious.todayPnlPrevious,
-                positionsList.todayPnl
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
               ) + "%"
             }
             percentagecolor={percentageStatusDisplay(
-              positionsListPrevious.todayPnlPrevious,
-              positionsList.todayPnl
+              previousAlertList.previousUnprocessedAlertsCount,
+              alertList.unprocessedAlertsCount
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="P & L"
-            amount={parseFloat(positionsList.pnl).toFixed(2)}
-            // chip="Monthly"
+            title="Total Alerts Expired"
+            amount={alertList.expiredAlertsCount}
             percentagetext={
               calculatePercentage(
-                positionsListPrevious.pnlPrevious,
-                positionsList.pnl
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
               ) + "%"
             }
             percentagecolor={percentageStatusDisplay(
-              positionsListPrevious.pnlPrevious,
-              positionsList.pnl
+              previousAlertList.previousExpiredAlertsCount,
+              alertList.expiredAlertsCount
             )}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6} lg>
+        <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="Recent Positions"
-            amount="45"
+            title="Alerts Per Hour"
+            amount={(
+              alertList.totalAlertsCount / parseInt(totalCurrentHours)
+            ).toFixed(2)}
             // chip="Yearly"
-            percentagetext="-9%"
-            percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousTotalAlertsCount,
+                alertList.totalAlertsCount
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousTotalAlertsCount,
+              alertList.totalAlertsCount
+            )}
           />
         </Grid>
-        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
           <Stats
             title="Pro +"
             amount="Subscription"
             chip=""
             percentagetext="Details"
             percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
           />
-          {/* <Typography variant="h4">Pro+</Typography> */}
         </Grid>
       </Grid>
       <Divider my={6} />
@@ -787,17 +690,17 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
-  &.pro-card {
-    .MuiPaper-root {
+  &.pro-card{
+    .MuiPaper-root{
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
-      &:before {
+      &:before{
         content: "PRO+";
         font-size: 70px;
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
-        color: ${(props) => props.theme.palette.proCard.beforeColor};
+        color:${(props) => props.theme.palette.proCard.beforeColor};
       }
     }
   }
