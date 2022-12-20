@@ -67,6 +67,7 @@ export default function FilterPop() {
   return (
     <div>
       <Button
+        open
         aria-describedby={id}
         variant="text"
         onClick={handleClick}
@@ -84,8 +85,8 @@ export default function FilterPop() {
         }}
       >
         <Autocomplete
-          multiple
           freeSolo
+          multiple
           id="checkboxes-tags-demo"
           options={top100Films}
           getOptionLabel={(option) => option.title}
@@ -102,7 +103,12 @@ export default function FilterPop() {
           )}
           className="multi-select"
           renderInput={(params) => (
-            <TextField className="field" {...params} placeholder="search" />
+            <TextField
+              className="field"
+              {...params}
+              placeholder="search"
+              open
+            />
           )}
         />
       </Popover>
