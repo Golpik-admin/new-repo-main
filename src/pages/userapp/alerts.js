@@ -22,7 +22,7 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
-import { SyncAlt } from "@mui/icons-material";
+import { SyncAlt, AlarmOn } from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
@@ -149,16 +149,19 @@ const EnhancedTableHead = (props) => {
 
 const Table = styled(MuiTable)`
   th.table-th:first-child{
-    width:300px;
+    min-width:300px;
+  }
+  th{
+    border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+    border-bottom: 0;
+    padding: 6px 8px;
+    line-height: 1.2;
   }
   th.table-th{
     background: ${(props) => props.theme.palette.tableTh.background};
-    padding: 10px;
-    text-align:left;
   }
   th.filter-th{
     background: ${(props) => props.theme.palette.filterTh.background};
-    padding: 10px;
     .filter-box{
       display: flex;
       justify-content: space-between;
@@ -352,6 +355,7 @@ function EnhancedTable() {
     <div>
       <Paper
         sx={{
+          padding: 8,
           minHeight: 450,
         }}
       >
@@ -622,6 +626,7 @@ function OrderList() {
               previousAlertList.previousProcessedAlertsCount,
               alertList.processedAlertsCount
             )}
+            illustration="/static/img/stats/icon1.svg"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -638,6 +643,7 @@ function OrderList() {
               previousAlertList.previousUnprocessedAlertsCount,
               alertList.unprocessedAlertsCount
             )}
+            illustration="/static/img/stats/icon2.svg"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -654,6 +660,7 @@ function OrderList() {
               previousAlertList.previousExpiredAlertsCount,
               alertList.expiredAlertsCount
             )}
+            illustration="/static/img/stats/icon3.svg"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
@@ -662,7 +669,7 @@ function OrderList() {
             amount={(
               alertList.totalAlertsCount / parseInt(totalCurrentHours)
             ).toFixed(2)}
-            // chip="Yearly"
+            // chip="dasfvl"
             percentagetext={
               calculatePercentage(
                 previousAlertList.previousTotalAlertsCount,
@@ -673,6 +680,7 @@ function OrderList() {
               previousAlertList.previousTotalAlertsCount,
               alertList.totalAlertsCount
             )}
+            illustration="/static/img/stats/icon4.svg"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
