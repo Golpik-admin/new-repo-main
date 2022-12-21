@@ -22,7 +22,7 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
-import { SyncAlt, AlarmOn } from "@mui/icons-material";
+import { SyncAlt } from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
@@ -42,7 +42,6 @@ import moment from "moment-timezone";
 import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
 import { fetchSettings } from "../../redux/slices/getSettings";
-
 const Divider = styled(MuiDivider)(spacing);
 
 
@@ -154,7 +153,7 @@ const Table = styled(MuiTable)`
   th{
     border-left: 4px solid ${(props) => props.theme.palette.background.paper};
     border-bottom: 0;
-    padding: 6px 8px;
+    padding: 6px;
     line-height: 1.2;
   }
   th.table-th{
@@ -167,6 +166,7 @@ const Table = styled(MuiTable)`
       justify-content: space-between;
       button{
         color: ${(props) => props.theme.palette.filterTh.color};
+        min-width:30px;
       }
       .MuiTableSortLabel-root{
         transform: rotate(90deg);
@@ -355,11 +355,15 @@ function EnhancedTable() {
     <div>
       <Paper
         sx={{
-          padding: 8,
+          px: 6,
+          py:2,
           minHeight: 450,
         }}
       >
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length}
+          sx={{p:0}}
+          className="murtaza"
+        />
         {alertList.loading && <LinearProgress />}
         {!alertList.loading && alertList.alerts.length ? (
           <TableContainer>
@@ -606,7 +610,6 @@ function OrderList() {
   const previousAlertList = useSelector((state) => state.previousAlertsList);
 
   // "% &#8593;";
-
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -615,12 +618,13 @@ function OrderList() {
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Processed"
+            ispercentage="true"
             amount={alertList.processedAlertsCount}
             percentagetext={
               calculatePercentage(
                 previousAlertList.previousProcessedAlertsCount,
                 alertList.processedAlertsCount
-              ) + "%↑"
+              ) + "%↓"
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousProcessedAlertsCount,
@@ -632,12 +636,16 @@ function OrderList() {
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Alerts Unprocessed"
+            ispercentage="true"
             amount={alertList.unprocessedAlertsCount}
             percentagetext={
               calculatePercentage(
                 previousAlertList.previousUnprocessedAlertsCount,
                 alertList.unprocessedAlertsCount
-              ) + "%↑"
+              ) + (calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              )  > 0 ? "%↑" : "%↓")
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousUnprocessedAlertsCount,
@@ -650,11 +658,15 @@ function OrderList() {
           <Stats
             title="Total Alerts Expired"
             amount={alertList.expiredAlertsCount}
+            ispercentage="true"
             percentagetext={
               calculatePercentage(
                 previousAlertList.previousExpiredAlertsCount,
                 alertList.expiredAlertsCount
-              ) + "%↑"
+              ) +  ( calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              ) ? "%↑" : "%↓")
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousExpiredAlertsCount,
@@ -665,6 +677,7 @@ function OrderList() {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
+                        ispercentage="true"
             title="Alerts Per Hour"
             amount={(
               alertList.totalAlertsCount / parseInt(totalCurrentHours)
@@ -686,10 +699,10 @@ function OrderList() {
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
           <Stats
             title="Pro +"
+            ispercentage="false"
             amount="Subscription"
             chip=""
             percentagetext="Details"
-            percentagecolor={"rgba(0,0,0,1)"}
           />
         </Grid>
       </Grid>
@@ -705,6 +718,9 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
+    .MuiPaper-root{
+      border: ${(props) => props.theme.name === 'DARK' ? '1px solid white;' :'unset'} 
+    }
   .card-head{
     color:#5A607F;
     font-size:16px;
@@ -715,10 +731,18 @@ const Grid = styled(MuiGrid)`
     font-size:28px;
     font-weight:900;
   }
+  .MuiTypography-subtitle2{
+    .percentage-text{
+      color:#7E84A3;
+      font-size:12px;
+      font-weight:400;
+    }
+  }
   &.pro-card{
     .MuiPaper-root{
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
+      border: unset !important; 
       &:before{
         content: "PRO+";
         font-size: 70px;
@@ -738,7 +762,9 @@ const Grid = styled(MuiGrid)`
         font-size:19px;
       }
       .MuiTypography-subtitle2{
-        
+        span{
+          color:#A1A7C4;
+        }
       }
     }
   }

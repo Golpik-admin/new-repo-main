@@ -68,7 +68,6 @@ const Percentage = styled(MuiTypography)`
     color: ${(props) => props.percentagecolor};
     font-size: 16px;
     font-weight: 700;
-    //background: ${(props) => rgba(props.percentagecolor, 0.1)};
     padding: 2px;
     border-radius: 3px;
     margin-right: ${(props) => props.theme.spacing(2)};
@@ -101,6 +100,7 @@ const Stats = ({
   chip,
   percentagetext,
   percentagecolor,
+  ispercentage,
   illustration,
 }) => {
   return (
@@ -118,7 +118,10 @@ const Stats = ({
           percentagecolor={percentagecolor}
           illustration={illustration}
         >
-          <span>{percentagetext}</span> than last year
+          <span>{percentagetext}</span>
+          {ispercentage === "true" && (
+            <span className="percentage-text">since last month</span>
+          )}
         </Percentage>
         {/* {!illustration && <Chip label={chip} />}  */}
       </CardContent>
