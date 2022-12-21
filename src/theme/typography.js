@@ -16,7 +16,9 @@ const typography = {
   fontWeightLight: 300,
   fontWeightRegular: 400,
   fontWeightMedium: 500,
-  fontWeightBold: 600,
+  fontWeightSemiBold: 600,
+  fontWeightBold: 800,
+  fontWeightblack: 900,
   h1: {
     fontSize: "2rem",
     fontWeight: 600,

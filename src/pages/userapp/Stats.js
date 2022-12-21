@@ -17,7 +17,7 @@ const illustrationCardStyle = (props) => css`
   props.theme.palette.mode !== "dark" &&
   `
     //background: ${rgba(props.theme.palette.primary.main, 0.125)};
-    color: ${props.theme.palette.primary.main};
+    //color: ${props.theme.palette.primary.main};
   `}
 `;
 
@@ -32,7 +32,7 @@ const Typography = styled(MuiTypography)(spacing);
 
 const CardContent = styled(MuiCardContent)`
   position: relative;
-
+  padding: ${(props) => props.theme.spacing(6, 4)};
   &:last-child {
     padding-bottom: ${(props) => props.theme.spacing(4)};
   }
@@ -66,8 +66,8 @@ const illustrationPercentageStyle = (props) => css`
 const Percentage = styled(MuiTypography)`
   span {
     color: ${(props) => props.percentagecolor};
-    font-weight: ${(props) => props.theme.typography.fontWeightBold};
-    background: ${(props) => rgba(props.percentagecolor, 0.1)};
+    font-size: 16px;
+    font-weight: 700;
     padding: 2px;
     border-radius: 3px;
     margin-right: ${(props) => props.theme.spacing(2)};
@@ -100,12 +100,13 @@ const Stats = ({
   chip,
   percentagetext,
   percentagecolor,
+  ispercentage,
   illustration,
 }) => {
   return (
     <Card illustration={illustration}>
       <CardContent>
-        <Typography variant="h6" mb={4}>
+        <Typography variant="h6" mb={4} className="card-head">
           {title}
         </Typography>
         <Typography variant="h3" mb={3}>
@@ -117,14 +118,17 @@ const Stats = ({
           percentagecolor={percentagecolor}
           illustration={illustration}
         >
-          <span>{percentagetext}</span> Since last month
+          <span>{percentagetext}</span>
+          {ispercentage === "true" && (
+            <span className="percentage-text">since last month</span>
+          )}
         </Percentage>
         {/* {!illustration && <Chip label={chip} />}  */}
       </CardContent>
 
-      {/* {!!illustration && (
-        )} */}
-      <IllustrationImage src={illustration} alt="Illustration" />
+      {!!illustration && (
+        <IllustrationImage src={illustration} alt="Illustration" />
+      )}
     </Card>
   );
 };
