@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import {
   Popover as MuiPopover,
   Typography,
-  Button,
+  Button as MuiButton,
   Checkbox,
   TextField,
   Autocomplete,
@@ -15,12 +15,36 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const Popover = styled(MuiPopover)`
+  height: 300px;
   .MuiPaper-root {
-    width: 300px;
-    bachground-color: ${(props) =>
-      props.theme.palette.tableTh.background} !important;
-    ${(props) => props.theme.shadows[1]};
-    border: 1px solid ${(props) => props.theme.palette.divider};
+    border: 0;
+    background-color: ${(props) => props.theme.palette.tableTh.background};
+    .multi-select {
+      width: 250px;
+      color: #1b202a;
+      .field {
+        input {
+          border: 1px solid ${(props) => props.theme.palette.divider};
+          border-radius: 4px;
+          padding: 5px;
+        }
+      }
+    }
+  }
+  + .MuiAutocomplete-popper {
+    .MuiPaper-root {
+      background-color: ${(props) => props.theme.palette.tableTh.background};
+      .li-item {
+      }
+    }
+  }
+`;
+
+const Button = styled(MuiButton)`
+  padding: 0 6px;
+  justify-content: start;
+  &:hover {
+    background: transparent;
   }
 `;
 
@@ -43,13 +67,12 @@ export default function FilterPop() {
   return (
     <div>
       <Button
+        open
         aria-describedby={id}
-        variant="dense"
+        variant="text"
         onClick={handleClick}
         startIcon={<SortIcon />}
-      >
-        Filter
-      </Button>
+      ></Button>
       <Popover
         variant="popover"
         id={id}
@@ -62,13 +85,13 @@ export default function FilterPop() {
         }}
       >
         <Autocomplete
+          freeSolo
           multiple
           id="checkboxes-tags-demo"
           options={top100Films}
-          disableCloseOnSelect
           getOptionLabel={(option) => option.title}
           renderOption={(props, option, { selected }) => (
-            <li {...props}>
+            <li className="li-item" {...props}>
               <Checkbox
                 icon={icon}
                 checkedIcon={checkedIcon}
@@ -78,9 +101,14 @@ export default function FilterPop() {
               {option.title}
             </li>
           )}
-          sx={{ width: 300, padding: 3 }}
+          className="multi-select"
           renderInput={(params) => (
-            <TextField {...params} label="Checkboxes" placeholder="Favorites" />
+            <TextField
+              className="field"
+              {...params}
+              placeholder="search"
+              open
+            />
           )}
         />
       </Popover>

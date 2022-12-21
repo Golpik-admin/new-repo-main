@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import ReactPerfectScrollbar from "react-perfect-scrollbar";
-import { List, Typography, Button, Box } from "@mui/material";
+import { List } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 

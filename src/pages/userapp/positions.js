@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Breadcrumbs as MuiBreadcrumbs,
-  Button,
+  Button as MuiButton,
   Checkbox,
   Chip as MuiChip,
   Divider as MuiDivider,
@@ -13,7 +13,7 @@ import {
   IconButton,
   Link,
   Paper as MuiPaper,
-  Table,
+  Table as MuiTable,
   TableBody,
   TableCell,
   TableContainer,
@@ -30,6 +30,7 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
+import { SyncAlt } from "@mui/icons-material";
 import { green, orange, red } from "@mui/material/colors";
 import {
   Add as AddIcon,
@@ -52,6 +53,7 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
+import FilterPop from "./Filter";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -151,24 +153,24 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  // { id: "id", alignment: "right", label: "ID" },
+  // { id: "id", alignment: "left", label: "ID" },
   { id: "ticker", alignment: "left", label: "TICKER" },
   { id: "option_Symbol", alignment: "left", label: "OPTION SYMBOL" },
   { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "price_excuted", alignment: "right", label: "PRICE EXECUTED" },
+  { id: "price_excuted", alignment: "left", label: "PRICE EXECUTED" },
   {
     id: "qty",
     alignment: "left",
     label: "QTY",
   },
   { id: "alert_description", alignment: "left", label: "ALERT DESCRIPTION" },
-  { id: "capital_commited", alignment: "right", label: "CAPITAL COMMITED" },
-  { id: "status", alignment: "right", label: "STATUS" },
-  { id: "time_bought", alignment: "right", label: "TIME BOUGHT" },
-  { id: "time_sold", alignment: "right", label: "TIME SOLD" },
-  { id: "price_now", alignment: "right", label: "PRICE NOW" },
-  { id: "p_l", alignment: "right", label: "P & L" },
-  { id: "description", alignment: "right", label: "Description" },
+  { id: "capital_commited", alignment: "left", label: "CAPITAL COMMITED" },
+  { id: "status", alignment: "left", label: "STATUS" },
+  { id: "time_bought", alignment: "left", label: "TIME BOUGHT" },
+  { id: "time_sold", alignment: "left", label: "TIME SOLD" },
+  { id: "price_now", alignment: "left", label: "PRICE NOW" },
+  { id: "p_l", alignment: "left", label: "P & L" },
+  { id: "description", alignment: "left", label: "Description" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -189,18 +191,34 @@ const EnhancedTableHead = (props) => {
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
+            className="table-th"
             key={headCell.id}
             align={headCell.alignment}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
+            {headCell.label}
+          </TableCell>
+        ))}
+      </TableRow>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.alignment}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+            className="filter-th"
+          >
+            <Box className="filter-box">
+              <FilterPop />
+              <TableSortLabel
+                active={true}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+                IconComponent={SyncAlt}
+              ></TableSortLabel>
+            </Box>
           </TableCell>
         ))}
       </TableRow>
@@ -208,29 +226,72 @@ const EnhancedTableHead = (props) => {
   );
 };
 
+const Table = styled(MuiTable)`
+  // th.table-th:first-child {
+  //   min-width: 300px;
+  // }
+  th {
+    border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+    border-bottom: 0;
+    padding: 6px 8px;
+    line-height: 1.2;
+  }
+  th.table-th {
+    background: ${(props) => props.theme.palette.tableTh.background};
+  }
+  th.filter-th {
+    background: ${(props) => props.theme.palette.filterTh.background};
+    .filter-box {
+      display: flex;
+      justify-content: space-between;
+      button {
+        color: ${(props) => props.theme.palette.filterTh.color};
+        min-width: 30px;
+      }
+      .MuiTableSortLabel-root {
+        transform: rotate(90deg);
+        svg {
+          color: ${(props) => props.theme.palette.filterTh.color};
+        }
+      }
+    }
+  }
+`;
+
 const Box = styled.div`
   &.radio-parent {
     flex: 1 1 100%;
+    text-align: right;
     div {
-      display: flex;
+      display: inline-flex;
       flex-direction: row;
       justify-content: end;
+      display: inline-flex;
+      padding: 2px;
+      border-radius: 4px;
       label {
         position: relative;
-      }
-      .MuiRadio-root {
-        position: absolute;
-        z-index: 1;
-        background: #eee;
-        border-radius: 4px;
-        left: 0;
-        right: 0;
-        padding: 18px 22px;
-        &.Mui-checked {
-          background: #2f65cbd1;
-        }
-        svg {
-          display: none;
+        margin: 0;
+        .MuiRadio-root {
+          position: absolute;
+          z-index: 1;
+          background: #eee;
+          border-radius: 4px;
+          left: 0;
+          right: 0;
+          padding: 18px 22px;
+          margin: 1px;
+          background: ${(props) => props.theme.palette.toolbarbtn.background};
+          border: ${(props) => props.theme.palette.toolbarbtn.border};
+          &.Mui-checked {
+            background: ${(props) => props.theme.sidebar.background};
+            + .MuiTypography-root {
+              color: #fff;
+            }
+          }
+          svg {
+            display: none;
+          }
         }
       }
       .MuiFormControlLabel-label {
@@ -239,9 +300,23 @@ const Box = styled.div`
         padding: 8px 22px;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.87);
+        color: ${(props) => props.theme.palette.toolbarbtn.color};
+        line-height: 1.7;
       }
     }
   }
+`;
+
+const Button = styled(MuiButton)`
+  color: ${(props) => props.theme.sidebar.color};
+  background: ${(props) => props.theme.sidebar.background};
+  padding: 8px 22px;
+  margin: 0 19px 0 17px;
+  ${(props) => props.theme.palette.toolbarbtn.border};
+  &:hover{
+    background: ${(props) => props.theme.sidebar.background};
+  }
+} 
 `;
 
 const EnhancedTableToolbar = (props) => {
@@ -255,7 +330,7 @@ const EnhancedTableToolbar = (props) => {
   const today = moment().format("YYYY-MM-DD");
   return (
     <Toolbar>
-      <ToolbarTitle>
+      {/* <ToolbarTitle>
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
             {numSelected} selected
@@ -265,8 +340,7 @@ const EnhancedTableToolbar = (props) => {
             Positions
           </Typography>
         )}
-      </ToolbarTitle>
-      <Spacer />
+      </ToolbarTitle> */}
       <Box className="radio-parent">
         <RadioGroup
           aria-label="Filters"
@@ -311,9 +385,9 @@ const EnhancedTableToolbar = (props) => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField {...startProps} />
-                {/* <Box sx={{ mx: 2 }}> to </Box> */}
-                <TextField {...endProps} />
+                <TextField className="date-1" {...startProps} />
+                <Box> - </Box>
+                <TextField className="date-2" {...endProps} />
               </React.Fragment>
             )}
           />
@@ -385,7 +459,12 @@ function EnhancedTable() {
     <div>
       {positionsList.loading && <LinearProgress />}
       {!positionsList.loading && positionsList.positions.length ? (
-        <Paper>
+        <Paper
+          sx={{
+            padding: 8,
+            minHeight: 450,
+          }}
+        >
           <EnhancedTableToolbar numSelected={selected.length} />
           <TableContainer>
             <Table
@@ -434,8 +513,8 @@ function EnhancedTable() {
                             ? parseFloat(row.capital_Committed).toFixed(2)
                             : ""}
                         </TableCell>
-                        <TableCell align="right">{row.status}</TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">{row.status}</TableCell>
+                        <TableCell align="left">
                           {row.buy_Time_Executed !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.buy_Time_Executed}
@@ -444,7 +523,7 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.sell_Time_Executed !== null ? (
                             <Moment format="YYYY-MM-DD hh:mm:ss">
                               {row.sell_Time_Executed}
@@ -453,15 +532,15 @@ function EnhancedTable() {
                             ""
                           )}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.sell_Price_Executed}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.pnL !== null
                             ? parseFloat(row.pnL).toFixed(2)
                             : ""}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="left">
                           {row.sell_Order_Reason}
                         </TableCell>
                       </TableRow>
@@ -655,6 +734,25 @@ function OrderList() {
               positionsListPrevious.positionsOpenPrevious,
               positionsList.positionsOpen
             )}
+            illustration="/static/img/stats/icon-pos1.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={3} xl>
+          <Stats
+            title="Total Positions Closed"
+            amount={positionsList.positionsOpen}
+            // chip="Today"
+            percentagetext={
+              calculatePercentage(
+                positionsListPrevious.positionsClosedPrevious,
+                positionsList.positionsClosed
+              ) + "%"
+            }
+            percentagecolor={percentageStatusDisplay(
+              positionsListPrevious.positionsClosedPrevious,
+              positionsList.positionsClosed
+            )}
+            illustration="/static/img/stats/icon-pos2.svg"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -672,6 +770,7 @@ function OrderList() {
               positionsListPrevious.todayPnlPrevious,
               positionsList.todayPnl
             )}
+            illustration="/static/img/stats/icon-pos1.svg"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -689,6 +788,7 @@ function OrderList() {
               positionsListPrevious.pnlPrevious,
               positionsList.pnl
             )}
+            illustration="/static/img/stats/icon-pos3.svg"
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg>
@@ -698,7 +798,7 @@ function OrderList() {
             // chip="Yearly"
             percentagetext="-9%"
             percentagecolor={red[500]}
-            // illustration="/static/img/illustrations/waiting.png"
+            illustration="/static/img/stats/icon-pos3.svg"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
@@ -725,17 +825,54 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
+  .MuiPaper-root {
+    border: ${(props) =>
+      props.theme.name === "DARK" ? "1px solid white;" : "unset"};
+  }
+  .card-head {
+    color: #5a607f;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 28px;
+    font-weight: 900;
+  }
+  .MuiTypography-subtitle2 {
+    .percentage-text {
+      color: #7e84a3;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
   &.pro-card {
     .MuiPaper-root {
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
+      border: unset !important;
       &:before {
         content: "PRO+";
         font-size: 70px;
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
+        top: 12px;
         color: ${(props) => props.theme.palette.proCard.beforeColor};
+      }
+      .card-head {
+        color: #fff;
+        font-size: 31px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      h3 {
+        font-size: 19px;
+      }
+      .MuiTypography-subtitle2 {
+        span {
+          color: #a1a7c4;
+        }
       }
     }
   }

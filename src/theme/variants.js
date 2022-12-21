@@ -54,13 +54,14 @@ const defaultVariant = {
     },
   },
   header: {
-    color: grey[500],
+    color: "#171725",
     background: "#F7F9FC",
+    date: "#7E84A3",
     search: {
       color: grey[800],
     },
     indicator: {
-      background: customBlue[600],
+      background: "#F0142F",
     },
   },
   footer: {
@@ -103,10 +104,10 @@ const darkVariant = merge(defaultVariant, {
       contrastText: "#FFF",
     },
     background: {
-      default: "#1B2635",
-      paper: "#233044",
-      // default: "#1B202A",
-      // paper: "#1B202A",
+      // default: "#1B2635",
+      // paper: "#233044",
+      default: "#1B202A",
+      paper: "#1B202A",
     },
     text: {
       primary: "rgba(255, 255, 255, 0.95)",
@@ -148,13 +149,9 @@ const lightVariant = merge(defaultVariant, {
     mode: "light",
   },
   header: {
-    color: grey[800],
     background: "#F7F9FC",
     search: {
       color: grey[100],
-    },
-    indicator: {
-      background: red[700],
     },
   },
   sidebar: {
