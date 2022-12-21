@@ -21,10 +21,9 @@ import {
   FormControlLabel,
   Radio,
   TextField,
-  SyncAltTwoToneIcon,
   IconButton,
 } from "@mui/material";
-import { AddCircle } from "@mui/icons-material";
+import { SyncAlt, AddOutlined, SystemUpdateAltOutlined, DeleteOutlineOutlined } from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
@@ -81,19 +80,14 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: "ticker", alignment: "left", label: "TICKER" },
-  { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "order_action", alignment: "right", label: "ORDER ACTION" },
+  { id: "option_type", alignment: "left", label: "PROFIT TARGET" },
+  { id: "order_action", alignment: "left", label: "LOSS / MINIMUM PROFIT" },
   {
     id: "price_fired_alert",
     alignment: "left",
-    label: "PRICE WHEN ALERT FIRED",
+    label: "ACTIVE POSITIONS",
   },
-  { id: "price_now", alignment: "left", label: "PRICE NOW" },
-  { id: "status", alignment: "right", label: "STATUS" },
-  { id: "alert_comment", alignment: "right", label: "ALERT COMMENT" },
-  { id: "time_received", alignment: "right", label: "TIME RECIEVED" },
-  { id: "time_executed", alignment: "right", label: "TIME EXCUTED" },
-  { id: "alert_Name", alignment: "right", label: "ALERT NAME" },
+  { id: "price_now", alignment: "left", label: "ACTIVE" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -119,21 +113,21 @@ const EnhancedTableHead = (props) => {
             <Box 
             className="filter-box"
             >
-              {headCell.label}
+              <div className="txt">{headCell.label}</div>
               <FilterPop />
               {/* SyncAltTwoToneIcon  */}
               <TableSortLabel
                 active={true}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
-                icon="SyncAltTwoToneIcon"
+                IconComponent={SyncAlt}
               >
               </TableSortLabel>
             </Box>
           </TableCell>
         ))}
       </TableRow>
-      <TableRow>
+      {/* <TableRow>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -147,12 +141,99 @@ const EnhancedTableHead = (props) => {
             </IconButton>
           </TableCell>
         ))}
+      </TableRow> */}
+      <TableRow>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <SystemUpdateAltOutlined />
+            </IconButton>
+            <IconButton fontSize="small" className="del-btn">
+              <DeleteOutlineOutlined />
+            </IconButton>
+          </TableCell>
+          
       </TableRow>
+
     </TableHead>
   );
 };
 
+// const Table = styled(MuiTable)`
+//   th.table-th:first-child{
+//     min-width:300px;
+//   }
+//   th{
+//     border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+//     border-bottom: 0;
+//     padding: 6px;
+//     line-height: 1.2;
+//   }
+//   th.table-th{
+//     background: ${(props) => props.theme.palette.tableTh.background};
+//   }
+//   th.filter-th{
+//     background: ${(props) => props.theme.palette.filterTh.background};
+//     .filter-box{
+//       display: flex;
+//       justify-content: space-between;
+//       button{
+//         color: ${(props) => props.theme.palette.filterTh.color};
+//         min-width:30px;
+//       }
+//       .MuiTableSortLabel-root{
+//         transform: rotate(90deg);
+//         svg{
+//           color: ${(props) => props.theme.palette.filterTh.color};
+//         }
+
+//       }
+//     }
+//   }
+// `;
+
+
 const Table = styled(MuiTable)`
+  th{
+    border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+    border-bottom: 0;
+    padding: 6px;
+    line-height: 1.2;
+   }
   th.table-th{
     background: ${(props) => props.theme.palette.tableTh.background};
     padding: 10px;
@@ -162,17 +243,42 @@ const Table = styled(MuiTable)`
       flex: 0 0 100%;
       justify-content: space-between;
       align-items: center;
-      //color: ${(props) => props.theme.palette.filterTh.color}
+      .txt{
+        flex-grow: 1;
+      }
       button{
         justify-content: center;
         min-width: auto;
+        color: ${(props) => props.theme.palette.filterTh.color}
+      }
+    }
+    .MuiTableSortLabel-root{
+      transform: rotate(90deg);
+      svg{
+        color: ${(props) => props.theme.palette.filterTh.color};
       }
     }
   }
   th.filter-th{
-    background: ${(props) => props.theme.palette.filterTh.background};
+    border-bottom: 1px solid;
     padding: 10px;
-    text-align:left;
+    text-align:center;
+    button{
+      background:${(props) => props.theme.palette.filterTh.color};
+      color:#fff;
+      padding: 5px;
+      svg{
+        font-size: 1.3rem;
+      }
+    }
+    .del-btn{
+      background: #A1A7C4;
+      margin-left: 12px;
+      padding: 3.5px;
+      svg{
+        font-size: 1.5rem;
+      }
+    }
 
   }
 `;
@@ -352,6 +458,7 @@ function EnhancedTable() {
     <div>
       <Paper
         sx={{
+          px:6,
           minHeight: 450,
         }}
       >
@@ -387,34 +494,13 @@ function EnhancedTable() {
                         key={`${row.id}`}
                         selected={isItemSelected}
                       >
-                        <TableCell align="left">{row.ticker}</TableCell>
-                        <TableCell align="left">{row.option_Type}</TableCell>
+                        <TableCell align="left"></TableCell>
+                        <TableCell align="left"></TableCell>
                         <TableCell align="left">
-                          {row.order_Action.replace(/_/g, " ")}
+                          {/* {row.order_Action.replace(/_/g, " ")} */}
                         </TableCell>
-                        <TableCell align="left">{"N/A"}</TableCell>
-                        <TableCell align="left">{row.price}</TableCell>
-                        <TableCell align="left">{row.status}</TableCell>
-                        <TableCell align="left">{row.alert_Comment}</TableCell>
-                        <TableCell align="left">
-                          {row.time_Received !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.time_Received}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.time_Executed !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.time_Executed}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="left">{row.alert_Name}</TableCell>
+                        <TableCell align="left"></TableCell>
+                        <TableCell align="left"></TableCell>
                       </TableRow>
                     );
                   })}

@@ -355,11 +355,15 @@ function EnhancedTable() {
     <div>
       <Paper
         sx={{
-          padding: 8,
+          px: 6,
+          py:2,
           minHeight: 450,
         }}
       >
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length}
+          sx={{p:0}}
+          className="murtaza"
+        />
         {alertList.loading && <LinearProgress />}
         {!alertList.loading && alertList.alerts.length ? (
           <TableContainer>
