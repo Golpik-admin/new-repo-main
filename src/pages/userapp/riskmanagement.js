@@ -23,15 +23,18 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
-import { SyncAlt, AddOutlined, SystemUpdateAltOutlined, DeleteOutlineOutlined } from "@mui/icons-material";
+import {
+  SyncAlt,
+  AddOutlined,
+  SystemUpdateAltOutlined,
+  DeleteOutlineOutlined,
+} from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchAlerts } from "../../redux/slices/alerts";
-import {
-  previousFetchAlerts,
-} from "../../redux/slices/alertsPreviousMonth";
+import { previousFetchAlerts } from "../../redux/slices/alertsPreviousMonth";
 import Moment from "react-moment";
 
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
@@ -45,7 +48,6 @@ import useAuth from "../../hooks/useAuth";
 import { fetchSettings } from "../../redux/slices/getSettings";
 
 const Divider = styled(MuiDivider)(spacing);
-
 
 const Paper = styled(MuiPaper)(spacing);
 
@@ -91,11 +93,7 @@ const headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const {
-    order,
-    orderBy,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -110,9 +108,7 @@ const EnhancedTableHead = (props) => {
             sortDirection={orderBy === headCell.id ? order : false}
             className="table-th"
           >
-            <Box 
-            className="filter-box"
-            >
+            <Box className="filter-box">
               <div className="txt">{headCell.label}</div>
               <FilterPop />
               {/* SyncAltTwoToneIcon  */}
@@ -121,8 +117,7 @@ const EnhancedTableHead = (props) => {
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
                 IconComponent={SyncAlt}
-              >
-              </TableSortLabel>
+              ></TableSortLabel>
             </Box>
           </TableCell>
         ))}
@@ -143,52 +138,35 @@ const EnhancedTableHead = (props) => {
         ))}
       </TableRow> */}
       <TableRow>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <SystemUpdateAltOutlined />
-            </IconButton>
-            <IconButton fontSize="small" className="del-btn">
-              <DeleteOutlineOutlined />
-            </IconButton>
-          </TableCell>
-          
+        <TableCell padding="" className="filter-th">
+          <IconButton>
+            <AddOutlined />
+          </IconButton>
+        </TableCell>
+        <TableCell padding="" className="filter-th">
+          <IconButton>
+            <AddOutlined />
+          </IconButton>
+        </TableCell>
+        <TableCell padding="" className="filter-th">
+          <IconButton>
+            <AddOutlined />
+          </IconButton>
+        </TableCell>
+        <TableCell padding="" className="filter-th">
+          <IconButton>
+            <AddOutlined />
+          </IconButton>
+        </TableCell>
+        <TableCell padding="" className="filter-th">
+          <IconButton>
+            <SystemUpdateAltOutlined />
+          </IconButton>
+          <IconButton fontSize="small" className="del-btn">
+            <DeleteOutlineOutlined />
+          </IconButton>
+        </TableCell>
       </TableRow>
-
     </TableHead>
   );
 };
@@ -226,60 +204,58 @@ const EnhancedTableHead = (props) => {
 //   }
 // `;
 
-
 const Table = styled(MuiTable)`
-  th{
+  th {
     border-left: 4px solid ${(props) => props.theme.palette.background.paper};
     border-bottom: 0;
     padding: 6px;
     line-height: 1.2;
-   }
-  th.table-th{
+  }
+  th.table-th {
     background: ${(props) => props.theme.palette.tableTh.background};
     padding: 10px;
-    text-align:left;
-    .filter-box{
+    text-align: left;
+    .filter-box {
       display: flex;
       flex: 0 0 100%;
       justify-content: space-between;
       align-items: center;
-      .txt{
+      .txt {
         flex-grow: 1;
       }
-      button{
+      button {
         justify-content: center;
         min-width: auto;
-        color: ${(props) => props.theme.palette.filterTh.color}
+        color: ${(props) => props.theme.palette.filterTh.color};
       }
     }
-    .MuiTableSortLabel-root{
+    .MuiTableSortLabel-root {
       transform: rotate(90deg);
-      svg{
+      svg {
         color: ${(props) => props.theme.palette.filterTh.color};
       }
     }
   }
-  th.filter-th{
+  th.filter-th {
     border-bottom: 1px solid;
     padding: 10px;
-    text-align:center;
-    button{
-      background:${(props) => props.theme.palette.filterTh.color};
-      color:#fff;
+    text-align: center;
+    button {
+      background: ${(props) => props.theme.palette.filterTh.color};
+      color: #fff;
       padding: 5px;
-      svg{
+      svg {
         font-size: 1.3rem;
       }
     }
-    .del-btn{
-      background: #A1A7C4;
+    .del-btn {
+      background: #a1a7c4;
       margin-left: 12px;
       padding: 3.5px;
-      svg{
+      svg {
         font-size: 1.5rem;
       }
     }
-
   }
 `;
 
@@ -307,7 +283,7 @@ const Box = styled.div`
           padding: 18px 18px;
           margin: 1px;
           background: ${(props) => props.theme.palette.toolbarbtn.background};
-          border:  ${(props) => props.theme.palette.toolbarbtn.border};
+          border: ${(props) => props.theme.palette.toolbarbtn.border};
           &.Mui-checked {
             background: ${(props) => props.theme.sidebar.background};
             + .MuiTypography-root {
@@ -337,10 +313,10 @@ const EnhancedTableToolbar = () => {
 
   const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
-  const userId = '6372c6c0a8b2c2ec60b2da52';
-  
+  const userId = "6372c6c0a8b2c2ec60b2da52";
+
   const handleChange = (event) => {
-    dispatch(fetchAlerts({ status: event.target.value, count: null,userId:userId, }));
+    // dispatch(fetchAlerts({ status: event.target.value, count: null,userId:userId, }));
   };
   const today = moment().format("YYYY-MM-DD");
   return (
@@ -368,13 +344,9 @@ const EnhancedTableToolbar = () => {
             control={<Radio />}
             label="Expired"
           />
-        {getSettings.TestMode &&           
-          <FormControlLabel
-            value="Test"
-            control={<Radio />}
-            label="Test"
-          />
-        }
+          {getSettings.TestMode && (
+            <FormControlLabel value="Test" control={<Radio />} label="Test" />
+          )}
         </RadioGroup>
       </Box>
       <StyledEngineProvider injectFirst>
@@ -395,9 +367,9 @@ const EnhancedTableToolbar = () => {
                   ? moment(newValue[1].$d).format("YYYY-MM-DD")
                   : null;
               if (startDate !== null && endDate !== null) {
-                dispatch(
-                  fetchAlerts({ startDate: startDate, endDate: endDate })
-                );
+                // dispatch(
+                //   fetchAlerts({ startDate: startDate, endDate: endDate })
+                // );
               }
               setValue(newValue);
             }}
@@ -437,7 +409,6 @@ function EnhancedTable() {
     setSelected([]);
   };
 
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -452,13 +423,11 @@ function EnhancedTable() {
   const alertList = useSelector((state) => state.alertsList);
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
-
-
   return (
     <div>
       <Paper
         sx={{
-          px:6,
+          px: 6,
           minHeight: 450,
         }}
       >
@@ -600,82 +569,84 @@ function OrderList() {
     )
     .asHours();
 
-    const { user } = useAuth();
-    const userId = '6372c6c0a8b2c2ec60b2da52';  
-    useEffect(() => {
-      const initialize = async () => {
-        try {
-          const isAuthenticated = await user;
-          if (isAuthenticated) {
-
-            dispatch(fetchSettings({ User_Id: user.id }));
-            dispatch(fetchAlerts({ userId: userId }));
-      
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
-
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
-
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-          }
-        } catch (err) {
-          console.error(err);
+  const { user } = useAuth();
+  const userId = "6372c6c0a8b2c2ec60b2da52";
+  useEffect(() => {
+    const initialize = async () => {
+      try {
+        const isAuthenticated = await user;
+        if (isAuthenticated) {
+          // dispatch(fetchSettings({ User_Id: user.id }));
+          // dispatch(fetchAlerts({ userId: userId }));
+          // dispatch(
+          //   fetchAlerts({
+          //     userId: userId,
+          //     startDate: currentMonthFirstDay,
+          //     endDate: currentMonthLastDay,
+          //     status: "Processed",
+          //     count: true,
+          //   })
+          // );
+          // dispatch(
+          //   previousFetchAlerts({
+          //     userId: userId,
+          //     startDate: previousMonthFirstDay,
+          //     endDate: previousMonthLastDay,
+          //     status: "Processed",
+          //     count: true,
+          //   })
+          // );
+          // dispatch(
+          //   fetchAlerts({
+          //     userId: userId,
+          //     startDate: currentMonthFirstDay,
+          //     endDate: currentMonthLastDay,
+          //     status: "Unprocessed",
+          //     count: true,
+          //   })
+          // );
+          // dispatch(
+          //   previousFetchAlerts({
+          //     userId: userId,
+          //     startDate: previousMonthFirstDay,
+          //     endDate: previousMonthLastDay,
+          //     status: "Unprocessed",
+          //     count: true,
+          //   })
+          // );
+          // dispatch(
+          //   fetchAlerts({
+          //     userId: userId,
+          //     startDate: currentMonthFirstDay,
+          //     endDate: currentMonthLastDay,
+          //     status: "Expired",
+          //     count: true,
+          //   })
+          // );
+          // dispatch(
+          //   previousFetchAlerts({
+          //     userId: userId,
+          //     startDate: previousMonthFirstDay,
+          //     endDate: previousMonthLastDay,
+          //     status: "Expired",
+          //     count: true,
+          //   })
+          // );
         }
-    
-
+      } catch (err) {
+        console.error(err);
       }
-      initialize();
-    }, [currentMonthFirstDay, currentMonthLastDay, dispatch, previousMonthFirstDay, previousMonthLastDay, user, user.id, userId]);
+    };
+    initialize();
+  }, [
+    currentMonthFirstDay,
+    currentMonthLastDay,
+    previousMonthFirstDay,
+    previousMonthLastDay,
+    user,
+    user.id,
+    userId,
+  ]);
 
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
@@ -754,7 +725,7 @@ function OrderList() {
             )}
           />
         </Grid>
-        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
           <Stats
             title="Pro +"
             amount="Subscription"
@@ -776,17 +747,17 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
-  &.pro-card{
-    .MuiPaper-root{
+  &.pro-card {
+    .MuiPaper-root {
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
-      &:before{
+      &:before {
         content: "PRO+";
         font-size: 70px;
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
-        color:${(props) => props.theme.palette.proCard.beforeColor};
+        color: ${(props) => props.theme.palette.proCard.beforeColor};
       }
     }
   }
