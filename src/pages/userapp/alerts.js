@@ -300,7 +300,7 @@ const EnhancedTableToolbar = () => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField className="date-1" {...startProps} />
+                <TextField className="date-1" {...startProps}/>
                 <Box className="hyphen"> - </Box>
                 <TextField className="date-2" {...endProps} />
               </React.Fragment>
@@ -604,7 +604,7 @@ function OrderList() {
 
       }
       initialize();
-    }, [currentMonthFirstDay, currentMonthLastDay, dispatch, previousMonthFirstDay, previousMonthLastDay, user, user.id, userId]);
+    }, []);
 
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);

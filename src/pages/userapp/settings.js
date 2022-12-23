@@ -60,7 +60,7 @@ function Settings() {
     if (User_Id) {
       dispatch(fetchSettings({ User_Id }));
     }
-  }, [dispatch, User_Id]);
+  }, []);
 
   const getSettings_val = useSelector((state) => state.fetchSettingsList);
   const updateSettings_val = useSelector(

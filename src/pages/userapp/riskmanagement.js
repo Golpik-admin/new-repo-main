@@ -636,15 +636,7 @@ function OrderList() {
       }
     };
     initialize();
-  }, [
-    currentMonthFirstDay,
-    currentMonthLastDay,
-    previousMonthFirstDay,
-    previousMonthLastDay,
-    user,
-    user.id,
-    userId,
-  ]);
+  }, []);
 
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
