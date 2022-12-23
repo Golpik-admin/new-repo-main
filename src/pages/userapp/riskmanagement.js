@@ -228,16 +228,14 @@ const EnhancedTableHead = (props) => {
 
 
 const Table = styled(MuiTable)`
-  th{
+
+  th.table-th{
     border-left: 4px solid ${(props) => props.theme.palette.background.paper};
     border-bottom: 0;
-    padding: 6px;
-    line-height: 1.2;
-   }
-  th.table-th{
     background: ${(props) => props.theme.palette.tableTh.background};
     padding: 10px;
     text-align:left;
+    line-height: 1.2;
     .filter-box{
       display: flex;
       flex: 0 0 100%;
@@ -260,7 +258,7 @@ const Table = styled(MuiTable)`
     }
   }
   th.filter-th{
-    border-bottom: 1px solid;
+    border-bottom: ${(props) => props.theme.name === 'DARK' ? '1px solid rgba(81, 81, 81, 1);' :'1px solid rgba(224, 224, 224, 1);'}
     padding: 10px;
     text-align:center;
     button{

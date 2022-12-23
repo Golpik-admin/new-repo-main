@@ -3,7 +3,7 @@ import { AddAlarmOutlined } from "@mui/icons-material";
 import { SettingsOutlined } from "@mui/icons-material";
 import { HomeOutlined } from "@mui/icons-material";
 import { CompareArrowsOutlined } from "@mui/icons-material";
-import { HelpOutlineOutlined } from "@mui/icons-material";
+import { HelpOutlineOutlined, AutoMode } from "@mui/icons-material";
 
 const pagesSection = [
   {
@@ -27,6 +27,11 @@ const pagesSection = [
     title: "Integration",
   },
   {
+    href: "/risk-management",
+    icon: AutoMode,
+    title: "Risk Management",
+  },
+  {
     href: "/settings",
     icon: SettingsOutlined,
     title: "Settings",
@@ -35,11 +40,6 @@ const pagesSection = [
     href: "/help-center",
     icon: HelpOutlineOutlined,
     title: "Help Center",
-  },
-  {
-    href: "/risk-management",
-    icon: HelpOutlineOutlined,
-    title: "Risk Management",
   },
 ];
 
