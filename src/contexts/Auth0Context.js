@@ -86,9 +86,9 @@ function AuthProvider({ children }) {
         });
       }
     };
-    if (localStorage.getItem("Authorization") === null) {
-      initialize();
-    }
+    // if (localStorage.getItem("Authorization") === null) {
+    initialize();
+    // }
   }, []);
 
   const signIn = async () => {
