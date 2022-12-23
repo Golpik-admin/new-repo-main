@@ -30,7 +30,7 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
-import { SyncAlt } from "@mui/icons-material";
+import { SyncAlt, AddOutlined } from "@mui/icons-material";
 import { green, orange, red } from "@mui/material/colors";
 import {
   Add as AddIcon,
@@ -252,6 +252,29 @@ const Table = styled(MuiTable)`
         transform: rotate(90deg);
         svg {
           color: ${(props) => props.theme.palette.filterTh.color};
+        }
+      }
+    }
+  }
+  .description-td {
+    padding: 0;
+    position: relative;
+    .description-box {
+      padding: 5px 40px 5px 5px;
+      button {
+        position: absolute;
+        border-radius: 0;
+        height: 100%;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: ${(props) => props.theme.palette.filterTh.background};
+        color: ${(props) => props.theme.palette.filterTh.color};
+        svg {
+          font-size: 16px;
+          border-radius: 100%;
+          color: ${(props) => props.theme.palette.filterTh.background};
+          background: ${(props) => props.theme.palette.filterTh.color};
         }
       }
     }
@@ -540,8 +563,13 @@ function EnhancedTable() {
                             ? parseFloat(row.pnL).toFixed(2)
                             : ""}
                         </TableCell>
-                        <TableCell align="left">
-                          {row.sell_Order_Reason}
+                        <TableCell align="left" className="description-td">
+                          <Box className="description-box">
+                            <span>{row.sell_Order_Reason}</span>
+                            <IconButton>
+                              <AddOutlined />
+                            </IconButton>
+                          </Box>
                         </TableCell>
                       </TableRow>
                     );
