@@ -93,6 +93,7 @@ import Landing from "./pages/presentation/Landing";
 
 // Protected routes
 import ProtectedPage from "./pages/protected/ProtectedPage";
+import GuestGuard from "./components/guards/GuestGuard";
 
 // Dashboard components
 const Default = async(() => import("./pages/dashboards/Default"));
@@ -128,7 +129,11 @@ const routes = [
     children: [
       {
         path: "",
-        element: <SignIn />,
+        element: (
+          <GuestGuard>
+            <SignIn />
+          </GuestGuard>
+        ),
       },
     ],
   },
@@ -155,7 +160,11 @@ const routes = [
   // },
   {
     path: "dashboard",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
