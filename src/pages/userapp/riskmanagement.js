@@ -234,7 +234,10 @@ const Table = styled(MuiTable)`
     }
   }
   th.filter-th{
-    border-bottom: ${(props) => props.theme.name === 'DARK' ? '1px solid rgba(81, 81, 81, 1);' :'1px solid rgba(224, 224, 224, 1);'}
+    border-bottom: ${(props) =>
+      props.theme.name === "DARK"
+        ? "1px solid rgba(81, 81, 81, 1);"
+        : "1px solid rgba(224, 224, 224, 1);"}
     padding: 10px;
     text-align: center;
     button {
@@ -399,7 +402,9 @@ function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = alertList.alerts.map((n) => n.id);
+      const newSelecteds = riskManagementsList.tickersRiskManagement.map(
+        (n) => n.id
+      );
       setSelected(newSelecteds);
       return;
     }
@@ -417,7 +422,8 @@ function EnhancedTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const alertList = useSelector((state) => state.alertsList);
+  const riskManagementsList = useSelector((state) => state.riskManagementsList);
+  console.log(riskManagementsList);
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
   return (
@@ -429,8 +435,9 @@ function EnhancedTable() {
         }}
       >
         <EnhancedTableToolbar numSelected={selected.length} />
-        {alertList.loading && <LinearProgress />}
-        {!alertList.loading && alertList.alerts.length ? (
+        {riskManagementsList.loading && <LinearProgress />}
+        {!riskManagementsList.loading &&
+        riskManagementsList.tickersRiskManagement.length ? (
           <TableContainer>
             <Table
               aria-labelledby="tableTitle"
@@ -443,10 +450,13 @@ function EnhancedTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={alertList.alerts.length}
+                rowCount={riskManagementsList.tickersRiskManagement.length}
               />
               <TableBody>
-                {stableSort(alertList.alerts, getComparator(order, orderBy))
+                {stableSort(
+                  riskManagementsList.tickersRiskManagement,
+                  getComparator(order, orderBy)
+                )
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
                     const isItemSelected = isSelected(row.id);
@@ -460,12 +470,13 @@ function EnhancedTable() {
                         key={`${row.id}`}
                         selected={isItemSelected}
                       >
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"></TableCell>
+                        <TableCell align="left">{row.Symbol}</TableCell>
+                        <TableCell align="left">{row.ProfitTarget}</TableCell>
                         <TableCell align="left">
+                          {row.LossTarget}
                           {/* {row.order_Action.replace(/_/g, " ")} */}
                         </TableCell>
-                        <TableCell align="left"></TableCell>
+                        <TableCell align="left">{row.Brokerage}</TableCell>
                         <TableCell align="left"></TableCell>
                       </TableRow>
                     );
@@ -486,7 +497,7 @@ function EnhancedTable() {
                 orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
-                rowCount={alertList.alerts.length}
+                rowCount={riskManagementsList.tickersRiskManagement.length}
               />
               <TableBody>
                 <TableCell colSpan={12}>{"Record not found"}</TableCell>
@@ -497,7 +508,7 @@ function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={alertList.alerts.length}
+          count={riskManagementsList.tickersRiskManagement.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
