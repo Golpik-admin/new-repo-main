@@ -5,52 +5,36 @@ import {
   Popover as MuiPopover,
   Typography,
   Button as MuiButton,
-  FormGroup,
-  FormControlLabel,
   Checkbox,
   TextField,
   Autocomplete,
 } from "@mui/material";
-import InputAdornment from "@mui/material/InputAdornment";
 
 import SortIcon from "@mui/icons-material/Sort";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import SearchIcon from "@mui/icons-material/Search";
-
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const Popover = styled(MuiPopover)`
   height: 300px;
   .MuiPaper-root {
-    padding: 10px;
     border: 0;
     background-color: ${(props) => props.theme.palette.tableTh.background};
-    .field {
-      .MuiInputBase-root {
-        border: 0;
-        background: #fff;
-        padding-left: 8px;
-        margin-bottom: 10px;
-      }
-      input {
-        border: 0;
-        border-radius: 4px;
-        padding-left: 0;
+    .multi-select {
+      width: 250px;
+      color: #1b202a;
+      .field {
+        input {
+          border: 1px solid ${(props) => props.theme.palette.divider};
+          border-radius: 4px;
+          padding: 5px;
+        }
       }
     }
-    .poper-check {
-      // padding: 4px 10px 4px 10px;
-      // color: #a1a7c4;
-      // &.mui-checked {
-      //   color: red;
-      // }
-      svg {
-        // border: 2px solid #a1a7c4;
-        // border-radius: 4px;
-        // background: #1b202a;
-        // path {
-          //color: ${(props) => props.theme.palette.tableTh.background};
-        }
+  }
+  + .MuiAutocomplete-popper {
+    .MuiPaper-root {
+      background-color: ${(props) => props.theme.palette.tableTh.background};
+      .li-item {
       }
     }
   }
@@ -90,7 +74,6 @@ export default function FilterPop() {
         startIcon={<SortIcon />}
       ></Button>
       <Popover
-        className="multi-select"
         variant="popover"
         id={id}
         open={open}
@@ -101,7 +84,7 @@ export default function FilterPop() {
           horizontal: "left",
         }}
       >
-        {/* <Autocomplete
+        <Autocomplete
           freeSolo
           multiple
           id="checkboxes-tags-demo"
@@ -127,43 +110,7 @@ export default function FilterPop() {
               open
             />
           )}
-        /> */}
-        {/* <TextField className="field" placeholder="search" open size="small" /> */}
-        <TextField
-          className="field"
-          size="small"
-          variant="outlined"
-          placeholder="Search"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
         />
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox className="poper-check" />}
-            label="Label"
-          />
-          <FormControlLabel
-            control={<Checkbox className="poper-check" />}
-            label="Label"
-          />
-          <FormControlLabel
-            control={<Checkbox className="poper-check" />}
-            label="Label"
-          />
-          <FormControlLabel
-            control={<Checkbox className="poper-check" />}
-            label="Label"
-          />
-          <FormControlLabel
-            control={<Checkbox className="poper-check" />}
-            label="Label"
-          />
-        </FormGroup>
       </Popover>
     </div>
   );
