@@ -33,8 +33,7 @@ import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
-import { fetchAlerts } from "../../redux/slices/alerts";
-import { previousFetchAlerts } from "../../redux/slices/alertsPreviousMonth";
+import { fetchRiskManagements } from "../../redux/slices/getRiskManagement";
 import Moment from "react-moment";
 
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
@@ -314,7 +313,7 @@ const EnhancedTableToolbar = () => {
   const userId = "6372c6c0a8b2c2ec60b2da52";
 
   const handleChange = (event) => {
-    // dispatch(fetchAlerts({ status: event.target.value, count: null,userId:userId, }));
+    // dispatch(fetchRiskManagements({ status: event.target.value, count: null,userId:userId, }));
   };
   const today = moment().format("YYYY-MM-DD");
   return (
@@ -366,7 +365,7 @@ const EnhancedTableToolbar = () => {
                   : null;
               if (startDate !== null && endDate !== null) {
                 // dispatch(
-                //   fetchAlerts({ startDate: startDate, endDate: endDate })
+                //   fetchRiskManagements({ startDate: startDate, endDate: endDate })
                 // );
               }
               setValue(newValue);
@@ -574,10 +573,9 @@ function OrderList() {
       try {
         const isAuthenticated = await user;
         if (isAuthenticated) {
-          // dispatch(fetchSettings({ User_Id: user.id }));
-          // dispatch(fetchAlerts({ userId: userId }));
+          dispatch(fetchRiskManagements({ userId: userId }));
           // dispatch(
-          //   fetchAlerts({
+          //   fetchRiskManagements({
           //     userId: userId,
           //     startDate: currentMonthFirstDay,
           //     endDate: currentMonthLastDay,
@@ -586,16 +584,7 @@ function OrderList() {
           //   })
           // );
           // dispatch(
-          //   previousFetchAlerts({
-          //     userId: userId,
-          //     startDate: previousMonthFirstDay,
-          //     endDate: previousMonthLastDay,
-          //     status: "Processed",
-          //     count: true,
-          //   })
-          // );
-          // dispatch(
-          //   fetchAlerts({
+          //   fetchRiskManagements({
           //     userId: userId,
           //     startDate: currentMonthFirstDay,
           //     endDate: currentMonthLastDay,
@@ -604,28 +593,10 @@ function OrderList() {
           //   })
           // );
           // dispatch(
-          //   previousFetchAlerts({
-          //     userId: userId,
-          //     startDate: previousMonthFirstDay,
-          //     endDate: previousMonthLastDay,
-          //     status: "Unprocessed",
-          //     count: true,
-          //   })
-          // );
-          // dispatch(
-          //   fetchAlerts({
+          //   fetchRiskManagements({
           //     userId: userId,
           //     startDate: currentMonthFirstDay,
           //     endDate: currentMonthLastDay,
-          //     status: "Expired",
-          //     count: true,
-          //   })
-          // );
-          // dispatch(
-          //   previousFetchAlerts({
-          //     userId: userId,
-          //     startDate: previousMonthFirstDay,
-          //     endDate: previousMonthLastDay,
           //     status: "Expired",
           //     count: true,
           //   })
@@ -650,7 +621,7 @@ function OrderList() {
       <Grid container spacing={6}>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="Total Alerts Processed"
+            title="Total Positions Closed"
             amount={alertList.processedAlertsCount}
             percentagetext={
               calculatePercentage(
@@ -666,7 +637,7 @@ function OrderList() {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="Total Alerts Unprocessed"
+            title="Total Positions Risk-Managed"
             amount={alertList.unprocessedAlertsCount}
             percentagetext={
               calculatePercentage(
@@ -682,7 +653,7 @@ function OrderList() {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="Total Alerts Expired"
+            title="Today's P & L"
             amount={alertList.expiredAlertsCount}
             percentagetext={
               calculatePercentage(
@@ -698,7 +669,7 @@ function OrderList() {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-            title="Alerts Per Hour"
+            title="P&L"
             amount={(
               alertList.totalAlertsCount / parseInt(totalCurrentHours)
             ).toFixed(2)}

@@ -15,15 +15,15 @@ const initialState = {
   totalRiskManagementsCount: 0,
 };
 // const userId = "6372c6c0a8b2c2ec60b2da52";
-export const fetchRiskManagements = createAsyncThunk(
-  "riskManagements/fetchRiskManagements",
+export const updateRiskManagements = createAsyncThunk(
+  "riskManagements/updateRiskManagements",
   async (args = null) => {
     const startDate =
       args !== null && args.startDate !== undefined ? args.startDate : null;
     const endDate =
       args !== null && args.endDate !== undefined ? args.endDate : null;
     const response = await axios
-      .get(`${apiEndpoint}GetRiskManagementByUserId`, {
+      .get(`${apiEndpoint}SetRiskManagementByUserId`, {
         params: {
           //   status: args !== null && args.status !== "all" ? args.status : null,
           //   count: args !== null ? args.count : null,
@@ -40,14 +40,14 @@ export const fetchRiskManagements = createAsyncThunk(
   }
 );
 
-export const riskManagementsSlice = createSlice({
-  name: "riskManagementsList",
+export const riskManagementsUpdateSlice = createSlice({
+  name: "riskManagementsUpdateList",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchRiskManagements.pending, (state) => {
+    builder.addCase(updateRiskManagements.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchRiskManagements.fulfilled, (state, action) => {
+    builder.addCase(updateRiskManagements.fulfilled, (state, action) => {
       console.log("state: " + action.payload.Status);
       console.log("action: " + JSON.stringify(action));
       if (action.payload.Status === undefined) {
@@ -59,11 +59,11 @@ export const riskManagementsSlice = createSlice({
         state.riskManagements = action.payload;
       }
     });
-    builder.addCase(fetchRiskManagements.rejected, (state, action) => {
+    builder.addCase(updateRiskManagements.rejected, (state, action) => {
       state.loading = false;
       state.riskManagements = [];
       state.errors = action.error.message;
     });
   },
 });
-export default riskManagementsSlice.reducer;
+export default riskManagementsUpdateSlice.reducer;
