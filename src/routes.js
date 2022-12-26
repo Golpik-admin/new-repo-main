@@ -125,15 +125,15 @@ const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
 const routes = [
   {
     path: "/",
-    element: <AuthLayout />,
+    element: (
+      <GuestGuard>
+        <AuthLayout />
+      </GuestGuard>
+    ),
     children: [
       {
         path: "",
-        element: (
-          <GuestGuard>
-            <SignIn />
-          </GuestGuard>
-        ),
+        element: <SignIn />,
       },
     ],
   },
