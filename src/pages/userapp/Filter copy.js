@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 
 import {
   Popover as MuiPopover,
-  Typography,
   Button as MuiButton,
   Checkbox,
   TextField,
