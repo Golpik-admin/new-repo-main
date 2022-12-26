@@ -1,17 +1,11 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  Breadcrumbs as MuiBreadcrumbs,
-  Button as MuiButton,
-  Checkbox,
-  Chip as MuiChip,
   Divider as MuiDivider,
   Grid as MuiGrid,
   IconButton,
-  Link,
   Paper as MuiPaper,
   Table as MuiTable,
   TableBody,
@@ -22,8 +16,6 @@ import {
   TableRow,
   TableSortLabel,
   Toolbar,
-  Tooltip,
-  Typography,
   LinearProgress as MuiLinearProgress,
   RadioGroup,
   FormControlLabel,
@@ -31,13 +23,7 @@ import {
   TextField,
 } from "@mui/material";
 import { SyncAlt, AddOutlined } from "@mui/icons-material";
-import { green, orange, red } from "@mui/material/colors";
-import {
-  Add as AddIcon,
-  Archive as ArchiveIcon,
-  FilterList as FilterListIcon,
-  RemoveRedEye as RemoveRedEyeIcon,
-} from "@mui/icons-material";
+import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
@@ -57,71 +43,7 @@ import FilterPop from "./Filter";
 
 const Divider = styled(MuiDivider)(spacing);
 
-const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
-
 const Paper = styled(MuiPaper)(spacing);
-
-const Chip = styled(MuiChip)`
-  ${spacing};
-
-  background: ${(props) => props.shipped && green[500]};
-  background: ${(props) => props.processing && orange[700]};
-  background: ${(props) => props.cancelled && red[500]};
-  color: ${(props) => props.theme.palette.common.white};
-`;
-
-const Spacer = styled.div`
-  flex: 1 1 100%;
-`;
-
-const ToolbarTitle = styled.div`
-  min-width: 150px;
-`;
-
-function createData(id, product, date, total, status, method) {
-  return { id, product, date, total, status, method };
-}
-
-const rows = [
-  createData(
-    "000253",
-    "Salt & Pepper Grinder",
-    "2021-01-02",
-    "$32,00",
-    0,
-    "Visa"
-  ),
-  createData("000254", "Backpack", "2021-01-04", "$130,00", 0, "PayPal"),
-  createData(
-    "000255",
-    "Pocket Speaker",
-    "2021-01-04",
-    "$80,00",
-    2,
-    "Mastercard"
-  ),
-  createData("000256", "Glass Teapot", "2021-01-08", "$45,00", 0, "Visa"),
-  createData(
-    "000257",
-    "Unbreakable Water Bottle",
-    "2021-01-09",
-    "$40,00",
-    0,
-    "PayPal"
-  ),
-  createData("000258", "Spoon Saver", "2021-01-14", "$15,00", 0, "Mastercard"),
-  createData("000259", "Hip Flash", "2021-01-16", "$25,00", 1, "Visa"),
-  createData("000260", "Woven Slippers", "2021-01-22", "$20,00", 0, "PayPal"),
-  createData("000261", "Womens Watch", "2021-01-22", "$65,00", 2, "Visa"),
-  createData(
-    "000262",
-    "Over-Ear Headphones",
-    "2021-01-23",
-    "$210,00",
-    0,
-    "Mastercard"
-  ),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -174,14 +96,7 @@ const headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -330,21 +245,8 @@ const Box = styled.div`
   }
 `;
 
-const Button = styled(MuiButton)`
-  color: ${(props) => props.theme.sidebar.color};
-  background: ${(props) => props.theme.sidebar.background};
-  padding: 8px 22px;
-  margin: 0 19px 0 17px;
-  ${(props) => props.theme.palette.toolbarbtn.border};
-  &:hover{
-    background: ${(props) => props.theme.sidebar.background};
-  }
-} 
-`;
-
 const EnhancedTableToolbar = (props) => {
   // Here was 'let'
-  const { numSelected } = props;
   const dispatch = useDispatch();
   const handleChange = (event) => {
     dispatch(fetchPositions({ status: event.target.value, count: null }));
@@ -442,26 +344,6 @@ function EnhancedTable() {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -475,9 +357,6 @@ function EnhancedTable() {
 
   const positionsList = useSelector((state) => state.positionsList);
   const LinearProgress = styled(MuiLinearProgress)(spacing);
-  const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, positionsList.positions.length - page * rowsPerPage);
   return (
     <div>
       {positionsList.loading && <LinearProgress />}
@@ -509,9 +388,8 @@ function EnhancedTable() {
                   getComparator(order, orderBy)
                 )
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => {
+                  .map((row) => {
                     const isItemSelected = isSelected(row.id);
-                    const labelId = `enhanced-table-checkbox-${row.id}`;
                     return (
                       <TableRow
                         hover
@@ -683,14 +561,6 @@ function OrderList() {
     .endOf("month")
     .format("YYYY-MM-DD");
 
-  const totalCurrentHours = moment
-    .duration(
-      moment(currentMonthLastDay, "YYYY/MM/DD").diff(
-        moment(currentMonthFirstDay, "YYYY/MM/DD")
-      )
-    )
-    .asHours();
-
   useEffect(() => {
     dispatch(fetchPositions());
     dispatch(
@@ -736,6 +606,7 @@ function OrderList() {
         count: true,
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const positionsList = useSelector((state) => state.positionsList);
