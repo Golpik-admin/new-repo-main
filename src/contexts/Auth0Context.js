@@ -18,6 +18,7 @@ const initialState = {
 const reducer = (state, action) => {
   if (action.type === INITIALIZE) {
     const { isAuthenticated, user } = action.payload;
+    console.log(isAuthenticated, user, action.type, "sadasd");
     return {
       ...state,
       isAuthenticated,
@@ -52,15 +53,7 @@ function AuthProvider({ children }) {
           domain: auth0Config.domain || "",
           redirect_uri: window.location.origin,
         });
-        const getTokenSilently = auth0Client.getTokenSilently({
-          detailedResponse: true,
-        });
-        localStorage.setItem(
-          "Authorization",
-          (await getTokenSilently).access_token
-        );
-        // localStorage.getItem("Authorization");
-        // console.log(localStorage.getItem("Authorization"));
+
         await auth0Client.checkSession();
 
         const isAuthenticated = await auth0Client.isAuthenticated();
@@ -86,9 +79,8 @@ function AuthProvider({ children }) {
         });
       }
     };
-    // if (localStorage.getItem("Authorization") === null) {
+
     initialize();
-    // }
   }, []);
 
   const signIn = async () => {
