@@ -44,7 +44,6 @@ import "./cus-style.css";
 import moment from "moment-timezone";
 import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
-import { fetchSettings } from "../../redux/slices/getSettings";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -309,7 +308,6 @@ const Box = styled.div`
 `;
 
 const EnhancedTableToolbar = () => {
-  const getSettings = useSelector((state) => state.fetchSettingsList);
 
   const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
@@ -326,27 +324,24 @@ const EnhancedTableToolbar = () => {
           aria-label="Filters"
           name="alertFilters"
           onChange={handleChange}
-          defaultValue="all"
+          defaultValue="All"
         >
-          <FormControlLabel value="all" control={<Radio />} label="All" />
+          <FormControlLabel value="All" control={<Radio />} label="All" />
           <FormControlLabel
-            value="Processed"
+            value="Open"
             control={<Radio />}
-            label="Processed"
+            label="Open"
           />
           <FormControlLabel
-            value="Unprocessed"
+            value="Closed"
             control={<Radio />}
-            label="Un Processed"
+            label="Closed"
           />
           <FormControlLabel
-            value="Expired"
+            value="Risk-Managed"
             control={<Radio />}
-            label="Expired"
+            label="Risk-Managed"
           />
-          {getSettings.TestMode && (
-            <FormControlLabel value="Test" control={<Radio />} label="Test" />
-          )}
         </RadioGroup>
       </Box>
       <StyledEngineProvider injectFirst>
