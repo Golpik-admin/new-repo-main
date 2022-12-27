@@ -67,6 +67,7 @@
     "jsonwebtoken": "8.5.1",
     "jss": "10.9.2",
     "jwt-decode": "3.1.2",
+    "material-table": "^2.0.3",
     "moment-timezone": "^0.5.39",
     "polished": "4.2.2",
     "process": "0.11.10",

@@ -26,13 +26,27 @@ module.exports = {
       // Reference: https://webpack.js.org/blog/2020-10-10-webpack-5-release/#automatic-nodejs-polyfills-removed
       // Solution: https://github.com/facebook/create-react-app/issues/11756#issuecomment-1001769356
       resolve: {
+        alias: {
+          process: "process/browser",
+        },
         fallback: {
           buffer: require.resolve("buffer"),
           crypto: require.resolve("crypto-browserify"),
           process: require.resolve("process/browser"),
           stream: require.resolve("stream-browserify"),
           util: require.resolve("util"),
+          // "process/browser": require.resolve("process/browser"),
         },
+      },
+      module: {
+        rules: [
+          {
+            test: /\.m?js$/,
+            resolve: {
+              fullySpecified: false,
+            },
+          },
+        ],
       },
       plugins: [
         new webpack.ProvidePlugin({
