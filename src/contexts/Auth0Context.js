@@ -18,6 +18,7 @@ const initialState = {
 const reducer = (state, action) => {
   if (action.type === INITIALIZE) {
     const { isAuthenticated, user } = action.payload;
+    console.log(isAuthenticated, user, action.type, "sadasd");
     return {
       ...state,
       isAuthenticated,

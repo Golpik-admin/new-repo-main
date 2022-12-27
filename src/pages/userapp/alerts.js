@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,16 +23,13 @@ import {
   TextField,
 } from "@mui/material";
 import { SyncAlt } from "@mui/icons-material";
-import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
-import { useEffect } from "react";
 import { fetchAlerts } from "../../redux/slices/alerts";
 import {
   previousFetchAlerts,
 } from "../../redux/slices/alertsPreviousMonth";
 import Moment from "react-moment";
-
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
@@ -42,110 +39,10 @@ import moment from "moment-timezone";
 import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
 import { fetchSettings } from "../../redux/slices/getSettings";
+
+/* Declearation */
 const Divider = styled(MuiDivider)(spacing);
-
-
 const Paper = styled(MuiPaper)(spacing);
-
-function descendingComparator(a, b, orderBy) {
-  if (b["time_Received"] < a["time_Received"]) {
-    return -1;
-  }
-  if (b["time_Received"] > a["time_Received"]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "asc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => ({
-    el,
-    index,
-  }));
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a.el, b.el);
-    if (order !== 0) return order;
-    return a.index - b.index;
-  });
-  return stabilizedThis.map((element) => element.el);
-}
-
-const headCells = [
-  { id: "ticker", alignment: "left", label: "TICKER" },
-  { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "order_action", alignment: "left", label: "ORDER ACTION" },
-  {
-    id: "price_fired_alert",
-    alignment: "left",
-    label: "PRICE WHEN ALERT FIRED",
-  },
-  { id: "price_now", alignment: "left", label: "PRICE NOW" },
-  { id: "status", alignment: "left", label: "STATUS" },
-  { id: "alert_comment", alignment: "left", label: "ALERT COMMENT" },
-  { id: "time_received", alignment: "left", label: "TIME RECEIVED" },
-  { id: "time_executed", alignment: "left", label: "TIME EXECUTED" },
-  { id: "alert_Name", alignment: "left", label: "ALERT NAME" },
-];
-
-const EnhancedTableHead = (props) => {
-  const {
-    order,
-    orderBy,
-    onRequestSort,
-  } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className="table-th"
-          >
-            {headCell.label}
-          </TableCell>
-        ))}
-      </TableRow>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className="filter-th"
-          >
-            <Box 
-            className="filter-box"
-            >
-              <FilterPop />
-              <TableSortLabel
-                active={true}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-                IconComponent={SyncAlt}
-              >
-                
-              </TableSortLabel>
-            </Box>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-};
-
 const Table = styled(MuiTable)`
   th.table-th:first-child{
     min-width:300px;
@@ -228,17 +125,121 @@ const Box = styled.div`
   }
 `;
 
+
+const headCells = [
+  { id: "ticker", alignment: "left", label: "TICKER" },
+  { id: "option_type", alignment: "left", label: "OPTION TYPE" },
+  { id: "order_action", alignment: "left", label: "ORDER ACTION" },
+  {
+    id: "price_fired_alert",
+    alignment: "left",
+    label: "PRICE WHEN ALERT FIRED",
+  },
+  { id: "price_now", alignment: "left", label: "PRICE NOW" },
+  { id: "status", alignment: "left", label: "STATUS" },
+  { id: "alert_comment", alignment: "left", label: "ALERT COMMENT" },
+  { id: "time_received", alignment: "left", label: "TIME RECEIVED" },
+  { id: "time_executed", alignment: "left", label: "TIME EXECUTED" },
+  { id: "alert_Name", alignment: "left", label: "ALERT NAME" },
+];
+
+/* Functions  */
+function descendingComparator(a, b, orderBy) {
+  if (b["time_Received"] < a["time_Received"]) {
+    return -1;
+  }
+  if (b["time_Received"] > a["time_Received"]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === "asc"
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => ({
+    el,
+    index,
+  }));
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a.el, b.el);
+    if (order !== 0) return order;
+    return a.index - b.index;
+  });
+  return stabilizedThis.map((element) => element.el);
+}
+
+
+const EnhancedTableHead = (props) => {
+  const {
+    order,
+    orderBy,
+    onRequestSort,
+  } = props;
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+  return (
+    <TableHead>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.alignment}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+            className="table-th"
+          >
+            {headCell.label}
+          </TableCell>
+        ))}
+      </TableRow>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.alignment}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+            className="filter-th"
+          >
+            <Box 
+            className="filter-box"
+            >
+              <FilterPop />
+              <TableSortLabel
+                active={true}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+                IconComponent={SyncAlt}
+              >
+                
+              </TableSortLabel>
+            </Box>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+};
+
 const EnhancedTableToolbar = () => {
   const getSettings = useSelector((state) => state.fetchSettingsList);
-
   const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
   const userId = '6372c6c0a8b2c2ec60b2da52';
-  
+  const today = moment().format("YYYY-MM-DD");
+  /* Functions */
   const handleChange = (event) => {
     dispatch(fetchAlerts({ status: event.target.value, count: null,userId:userId, }));
   };
-  const today = moment().format("YYYY-MM-DD");
+
+  
+
   return (
     <Toolbar>
       <Box className="radio-parent">
@@ -300,7 +301,7 @@ const EnhancedTableToolbar = () => {
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField className="date-1" {...startProps} />
+                <TextField className="date-1" {...startProps}/>
                 <Box className="hyphen"> - </Box>
                 <TextField className="date-2" {...endProps} />
               </React.Fragment>
@@ -334,7 +335,6 @@ function EnhancedTable() {
     setSelected([]);
   };
 
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -345,7 +345,6 @@ function EnhancedTable() {
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
-
   const alertList = useSelector((state) => state.alertsList);
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
@@ -604,7 +603,8 @@ function OrderList() {
 
       }
       initialize();
-    }, [currentMonthFirstDay, currentMonthLastDay, dispatch, previousMonthFirstDay, previousMonthLastDay, user, user.id, userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);

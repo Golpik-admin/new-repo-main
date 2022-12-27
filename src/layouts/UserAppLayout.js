@@ -52,7 +52,7 @@ const MainContent = styled(Paper)`
   }
 `;
 
-const Dashboard = ({ children }) => {
+const FrontEndDashboard = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -97,4 +97,4 @@ const Dashboard = ({ children }) => {
   );
 };
 
-export default Dashboard;
+export default FrontEndDashboard;

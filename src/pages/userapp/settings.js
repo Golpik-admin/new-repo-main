@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import {
   Grid,
@@ -25,7 +25,6 @@ import useAuth from "../../hooks/useAuth";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -60,7 +59,7 @@ function Settings() {
     if (User_Id) {
       dispatch(fetchSettings({ User_Id }));
     }
-  }, [dispatch, User_Id]);
+  }, [User_Id, dispatch]);
 
   const getSettings_val = useSelector((state) => state.fetchSettingsList);
   const updateSettings_val = useSelector(
