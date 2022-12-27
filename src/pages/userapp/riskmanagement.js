@@ -144,14 +144,14 @@ const EnhancedTableHead = (props) => {
       </TableRow> */}
       <TableRow>
           <TableCell
-            padding=""
+            colSpan={5}
             className="filter-th"
           >
             <IconButton>
               <AddOutlined />
             </IconButton>
           </TableCell>
-          <TableCell
+          {/* <TableCell
             padding=""
             className="filter-th"
           >
@@ -185,7 +185,7 @@ const EnhancedTableHead = (props) => {
             <IconButton fontSize="small" className="del-btn">
               <DeleteOutlineOutlined />
             </IconButton>
-          </TableCell>
+          </TableCell> */}
           
       </TableRow>
 

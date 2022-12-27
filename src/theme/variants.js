@@ -24,7 +24,7 @@ const defaultVariant = {
   palette: {
     mode: "light",
     primary: {
-      main: customBlue[2],
+      main: "#0058FF",
       contrastText: "#FFF",
     },
     secondary: {
