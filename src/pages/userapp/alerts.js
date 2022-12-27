@@ -352,6 +352,7 @@ function EnhancedTable() {
 
   return (
     <div>
+      {alertList.loading && <LinearProgress />}
       <Paper
         sx={{
           px: 6,
@@ -362,10 +363,10 @@ function EnhancedTable() {
         <EnhancedTableToolbar numSelected={selected.length}
           sx={{p:0}}
           className="murtaza"
-        />
-        {alertList.loading && <LinearProgress />}
-        {!alertList.loading && alertList.alerts.length ? (
-          <TableContainer>
+        />        
+
+        <TableContainer>
+
             <Table
               aria-labelledby="tableTitle"
               size={"medium"}
@@ -378,15 +379,17 @@ function EnhancedTable() {
                 onSelectAllClick={handleSelectAllClick}
                 onRequestSort={handleRequestSort}
                 rowCount={alertList.alerts.length}
-              />
+            />
+
+              {!alertList.loading && alertList.alerts.length &&
               <TableBody>
                 {stableSort(alertList.alerts, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
                     const isItemSelected = isSelected(row.id);
-                    // -${index}
                     return (
-                      <TableRow
+                      <>
+                        <TableRow
                         hover
                         role="checkbox"
                         aria-checked={isItemSelected}
@@ -422,42 +425,36 @@ function EnhancedTable() {
                           )}
                         </TableCell>
                         <TableCell align="left">{row.alert_Name}</TableCell>
-                      </TableRow>
+                        </TableRow>
+                      </>
                     );
                   })}
-              </TableBody>
-            </Table>
+            </TableBody>
+            }
+            {!alertList.loading && !alertList.alerts.length &&
+            <TableBody>
+              <TableRow>
+                  <TableBody>
+                    <TableCell colSpan={12}>{"Record not found"}</TableCell>
+                  </TableBody>
+              </TableRow>
+            </TableBody>
+            }
+          </Table>
+          {!alertList.loading && alertList.alerts.length &&
+
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={alertList.alerts.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          }
           </TableContainer>
-        ) : (
-          <TableContainer>
-            <Table
-              aria-labelledby="tableTitle"
-              size={"medium"}
-              aria-label="enhanced table"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={alertList.alerts.length}
-              />
-              <TableBody>
-                <TableCell colSpan={12}>{"Record not found"}</TableCell>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={alertList.alerts.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        
       </Paper>
     </div>
   );
