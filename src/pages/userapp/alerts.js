@@ -393,6 +393,13 @@ data={[
   { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
 ]}        
 options={{
+  filterCellStyle:{
+    background: 'theme.palette.filterTh.color',
+    '&:hover': {
+      backgroundColor: 'primary.main',
+      opacity: [0.9, 0.8, 0.7],
+    },
+  },
   filtering: true,
   search:false
 }}
@@ -407,7 +414,6 @@ options={{
       >
         <EnhancedTableToolbar numSelected={selected.length}
           sx={{p:0}}
-          className="murtaza"
         />        
 
         <TableContainer>
@@ -751,7 +757,7 @@ function OrderList() {
       <Divider my={6} />
 
       <Grid container spacing={6}>
-        <Grid item xs={12}>
+        <Grid item xs={12} className="mat-table">
           <EnhancedTable />
         </Grid>
       </Grid>
