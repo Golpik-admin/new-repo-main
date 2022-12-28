@@ -508,7 +508,8 @@ function EnhancedTable() {
         data={New_DATA}
         options={{
           filtering: true,
-          search: true,
+          search: false,
+          pageSize: 10,
         }}
       />
       {alertList.loading && <LinearProgress />}
