@@ -388,9 +388,6 @@ function EnhancedTable() {
     time_Received: o.time_Received,
     time_Executed: o.time_Executed,
     alert_Name: o.alert_Name,
-    id: o.id,
-    test_Mode: o.test_Mode,
-    user_Id: o.user_Id,
   }));
   console.log(
     Object.assign({}, [
@@ -401,7 +398,6 @@ function EnhancedTable() {
     <div>
       <MaterialTable
         icons={tableIcons}
-        title="Basic Filtering Preview"
         columns={[
           {
             title: "TICKER",
@@ -477,32 +473,6 @@ function EnhancedTable() {
             lookup: [
               ...new Set(alertList.alerts.map((x) => x.alert_Name)),
             ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-          {
-            title: "ID",
-            field: "id",
-            render: (rowData) => rowData.id,
-            lookup: [...new Set(alertList.alerts.map((x) => x.id))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
-          },
-          {
-            title: "TEST MODE",
-            field: "test_Mode",
-            render: (rowData) => rowData.test_Mode,
-            lookup: [
-              ...new Set(alertList.alerts.map((x) => x.test_Mode)),
-            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-          {
-            title: "USER ID",
-            field: "user_Id",
-            render: (rowData) => rowData.user_Id,
-            lookup: [...new Set(alertList.alerts.map((x) => x.user_Id))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
           },
         ]}
         data={New_DATA}
