@@ -398,119 +398,6 @@ function EnhancedTable() {
   );
   return (
     <div>
-      <MaterialTable
-        // icons={tableIcons}
-        // title="Basic Filtering Preview"
-        // columns={[
-        //   { title: 'Name', field: 'name' },
-        //   { title: 'Surname', field: 'surname' },
-        //   { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-        //   {
-        //     title: 'Birth Place',
-        //     field: 'birthCity',
-        //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa',65:'Pakistan' },
-        //   },
-        // ]}
-        // data={[
-        //   { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-        //   { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-        // ]}        
-        // options={{
-        //   filterCellStyle:{
-        //     background: 'sfsd',
-        //     '&:hover': {},
-        //   },
-        
-        //   filtering: true,
-        //   search:false
-        // }}
-        // />
-        icons={tableIcons}
-        title={false}
-        columns={[
-          {
-            title: "TICKER",
-            field: "ticker",
-            render: (rowData) => rowData.ticker,
-            lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
-          },
-          {
-            title: "OPTION TYPE",
-            field: "option_Type",
-            render: (rowData) => rowData.option_Type,
-            lookup: [
-              ...new Set(alertList.alerts.map((x) => x.option_Type)),
-            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-          {
-            title: "ORDER ACTION",
-            field: "order_Action",
-            render: (rowData) => rowData.order_Action,
-            lookup: [
-              ...new Set(alertList.alerts.map((x) => x.order_Action)),
-            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-          {
-            title: "PRICE NOW",
-            field: "price",
-            render: (rowData) => rowData.price,
-            lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
-          },
-          {
-            title: "STATUS",
-            field: "status",
-            render: (rowData) => rowData.status,
-            lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
-          },
-          {
-            title: "ALERT COMMENT",
-            field: "alert_Comment",
-            render: (rowData) => rowData.alert_Comment,
-            lookup: [
-              ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-          {
-            title: "TIME RECEIVED",
-            field: "time_Received",
-            render: (rowData) => rowData.time_Received,
-            lookup: [
-              ...new Set(alertList.alerts.map((x) => x.time_Received)),
-            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-          {
-            title: "TIME EXECUTED",
-            field: "time_Executed",
-            render: (rowData) => rowData.time_Executed,
-            lookup: [
-              ...new Set(alertList.alerts.map((x) => x.time_Executed)),
-            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-          {
-            title: "ALERT NAME",
-            field: "alert_Name",
-            render: (rowData) => rowData.alert_Name,
-            lookup: [
-              ...new Set(alertList.alerts.map((x) => x.alert_Name)),
-            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-          },
-        ]}
-        data={New_DATA}
-        options={{
-          filtering: true,
-          search: false,
-          pageSize: 10,
-        }}
-      />
       {alertList.loading && <LinearProgress />}
       <Paper
         sx={{
@@ -524,8 +411,96 @@ function EnhancedTable() {
           sx={{ p: 0 }}
           className="murtaza"
         />
+        <MaterialTable
+          icons={tableIcons}
+          title={false}
+          columns={[
+            {
+              title: "TICKER",
+              field: "ticker",
+              render: (rowData) => rowData.ticker,
+              lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
+                (a, v) => ({ ...a, [v]: v }),
+                {}
+              ),
+            },
+            {
+              title: "OPTION TYPE",
+              field: "option_Type",
+              render: (rowData) => rowData.option_Type,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.option_Type)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "ORDER ACTION",
+              field: "order_Action",
+              render: (rowData) => rowData.order_Action,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.order_Action)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "PRICE NOW",
+              field: "price",
+              render: (rowData) => rowData.price,
+              lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
+                (a, v) => ({ ...a, [v]: v }),
+                {}
+              ),
+            },
+            {
+              title: "STATUS",
+              field: "status",
+              render: (rowData) => rowData.status,
+              lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
+                (a, v) => ({ ...a, [v]: v }),
+                {}
+              ),
+            },
+            {
+              title: "ALERT COMMENT",
+              field: "alert_Comment",
+              render: (rowData) => rowData.alert_Comment,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "TIME RECEIVED",
+              field: "time_Received",
+              render: (rowData) => rowData.time_Received,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.time_Received)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "TIME EXECUTED",
+              field: "time_Executed",
+              render: (rowData) => rowData.time_Executed,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.time_Executed)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "ALERT NAME",
+              field: "alert_Name",
+              render: (rowData) => rowData.alert_Name,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.alert_Name)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+          ]}
+          data={New_DATA}
+          options={{
+            filtering: true,
+            search: false,
+            pageSize: 10,
+          }}
+        />
+      
 
-        <TableContainer>
+        {/* <TableContainer>
           <Table
             aria-labelledby="tableTitle"
             size={"medium"}
@@ -613,7 +588,7 @@ function EnhancedTable() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           )}
-        </TableContainer>
+        </TableContainer> */}
       </Paper>
     </div>
   );
