@@ -389,11 +389,6 @@ function EnhancedTable() {
     time_Executed: o.time_Executed,
     alert_Name: o.alert_Name,
   }));
-  console.log(
-    Object.assign({}, [
-      ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-    ])
-  );
   return (
     <div>
       <MaterialTable
@@ -404,17 +399,18 @@ function EnhancedTable() {
             title: "TICKER",
             field: "ticker",
             render: (rowData) => rowData.ticker,
-            lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.ticker).filter(Boolean)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
             title: "OPTION TYPE",
             field: "option_Type",
             render: (rowData) => rowData.option_Type,
             lookup: [
-              ...new Set(alertList.alerts.map((x) => x.option_Type)),
+              ...new Set(
+                alertList.alerts.map((x) => x.option_Type).filter(Boolean)
+              ),
             ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
@@ -422,33 +418,35 @@ function EnhancedTable() {
             field: "order_Action",
             render: (rowData) => rowData.order_Action,
             lookup: [
-              ...new Set(alertList.alerts.map((x) => x.order_Action)),
+              ...new Set(
+                alertList.alerts.map((x) => x.order_Action).filter(Boolean)
+              ),
             ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
             title: "PRICE NOW",
             field: "price",
             render: (rowData) => rowData.price,
-            lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.price).filter(Boolean)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
             title: "STATUS",
             field: "status",
             render: (rowData) => rowData.status,
-            lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
-              (a, v) => ({ ...a, [v]: v }),
-              {}
-            ),
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.status).filter(Boolean)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
             title: "ALERT COMMENT",
             field: "alert_Comment",
             render: (rowData) => rowData.alert_Comment,
             lookup: [
-              ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
+              ...new Set(
+                alertList.alerts.map((x) => x.alert_Comment).filter(Boolean)
+              ),
             ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
@@ -456,7 +454,9 @@ function EnhancedTable() {
             field: "time_Received",
             render: (rowData) => rowData.time_Received,
             lookup: [
-              ...new Set(alertList.alerts.map((x) => x.time_Received)),
+              ...new Set(
+                alertList.alerts.map((x) => x.time_Received).filter(Boolean)
+              ),
             ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
@@ -464,7 +464,9 @@ function EnhancedTable() {
             field: "time_Executed",
             render: (rowData) => rowData.time_Executed,
             lookup: [
-              ...new Set(alertList.alerts.map((x) => x.time_Executed)),
+              ...new Set(
+                alertList.alerts.map((x) => x.time_Executed).filter(Boolean)
+              ),
             ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
           {
@@ -472,7 +474,9 @@ function EnhancedTable() {
             field: "alert_Name",
             render: (rowData) => rowData.alert_Name,
             lookup: [
-              ...new Set(alertList.alerts.map((x) => x.alert_Name)),
+              ...new Set(
+                alertList.alerts.map((x) => x.alert_Name).filter(Boolean)
+              ),
             ].reduce((a, v) => ({ ...a, [v]: v }), {}),
           },
         ]}
