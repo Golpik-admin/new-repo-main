@@ -23,13 +23,23 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
-import { AddBox, ArrowDownward, Clear, DeleteOutline, FilterList, FirstPage, LastPage, Remove, SaveAlt, SyncAlt, ViewColumn } from "@mui/icons-material";
+import {
+  AddBox,
+  ArrowDownward,
+  Clear,
+  DeleteOutline,
+  FilterList,
+  FirstPage,
+  LastPage,
+  Remove,
+  SaveAlt,
+  SyncAlt,
+  ViewColumn,
+} from "@mui/icons-material";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { fetchAlerts } from "../../redux/slices/alerts";
-import {
-  previousFetchAlerts,
-} from "../../redux/slices/alertsPreviousMonth";
+import { previousFetchAlerts } from "../../redux/slices/alertsPreviousMonth";
 import Moment from "react-moment";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
@@ -41,42 +51,40 @@ import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
 import { fetchSettings } from "../../redux/slices/getSettings";
 
-import MaterialTable from 'material-table';
+import MaterialTable from "material-table";
 import { Check, ChevronLeft, ChevronRight, Edit, Search } from "react-feather";
 import useTheme from "../../hooks/useTheme";
-
 
 /* Declearation */
 const Divider = styled(MuiDivider)(spacing);
 const Paper = styled(MuiPaper)(spacing);
 const Table = styled(MuiTable)`
-  th.table-th:first-child{
-    min-width:300px;
+  th.table-th:first-child {
+    min-width: 300px;
   }
-  th{
+  th {
     border-left: 4px solid ${(props) => props.theme.palette.background.paper};
     border-bottom: 0;
     padding: 6px;
     line-height: 1.2;
   }
-  th.table-th{
+  th.table-th {
     background: ${(props) => props.theme.palette.tableTh.background};
   }
-  th.filter-th{
+  th.filter-th {
     background: ${(props) => props.theme.palette.filterTh.background};
-    .filter-box{
+    .filter-box {
       display: flex;
       justify-content: space-between;
-      button{
+      button {
         color: ${(props) => props.theme.palette.filterTh.color};
-        min-width:30px;
+        min-width: 30px;
       }
-      .MuiTableSortLabel-root{
+      .MuiTableSortLabel-root {
         transform: rotate(90deg);
-        svg{
+        svg {
           color: ${(props) => props.theme.palette.filterTh.color};
         }
-
       }
     }
   }
@@ -106,7 +114,7 @@ const Box = styled.div`
           padding: 18px 18px;
           margin: 1px;
           background: ${(props) => props.theme.palette.toolbarbtn.background};
-          border:  ${(props) => props.theme.palette.toolbarbtn.border};
+          border: ${(props) => props.theme.palette.toolbarbtn.border};
           &.Mui-checked {
             background: ${(props) => props.theme.sidebar.background};
             + .MuiTypography-root {
@@ -130,7 +138,6 @@ const Box = styled.div`
     }
   }
 `;
-
 
 const headCells = [
   { id: "ticker", alignment: "left", label: "TICKER" },
@@ -179,13 +186,8 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((element) => element.el);
 }
 
-
 const EnhancedTableHead = (props) => {
-  const {
-    order,
-    orderBy,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -213,18 +215,14 @@ const EnhancedTableHead = (props) => {
             sortDirection={orderBy === headCell.id ? order : false}
             className="filter-th"
           >
-            <Box 
-            className="filter-box"
-            >
+            <Box className="filter-box">
               <FilterPop />
               <TableSortLabel
                 active={true}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
                 IconComponent={SyncAlt}
-              >
-                
-              </TableSortLabel>
+              ></TableSortLabel>
             </Box>
           </TableCell>
         ))}
@@ -237,14 +235,14 @@ const EnhancedTableToolbar = () => {
   const getSettings = useSelector((state) => state.fetchSettingsList);
   const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
-  const userId = '6372c6c0a8b2c2ec60b2da52';
+  const userId = "6372c6c0a8b2c2ec60b2da52";
   const today = moment().format("YYYY-MM-DD");
   /* Functions */
   const handleChange = (event) => {
-    dispatch(fetchAlerts({ status: event.target.value, count: null,userId:userId, }));
+    dispatch(
+      fetchAlerts({ status: event.target.value, count: null, userId: userId })
+    );
   };
-
-  
 
   return (
     <Toolbar>
@@ -271,13 +269,9 @@ const EnhancedTableToolbar = () => {
             control={<Radio />}
             label="Expired"
           />
-        {getSettings.TestMode &&           
-          <FormControlLabel
-            value="Test"
-            control={<Radio />}
-            label="Test"
-          />
-        }
+          {getSettings.TestMode && (
+            <FormControlLabel value="Test" control={<Radio />} label="Test" />
+          )}
         </RadioGroup>
       </Box>
       <StyledEngineProvider injectFirst>
@@ -289,7 +283,7 @@ const EnhancedTableToolbar = () => {
             className="picker-range"
             value={value}
             onChange={(newValue) => {
-              const userId = '6372c6c0a8b2c2ec60b2da52';
+              const userId = "6372c6c0a8b2c2ec60b2da52";
               let startDate =
                 newValue[0] !== null
                   ? moment(newValue[0].$d).format("YYYY-MM-DD")
@@ -300,14 +294,18 @@ const EnhancedTableToolbar = () => {
                   : null;
               if (startDate !== null && endDate !== null) {
                 dispatch(
-                  fetchAlerts({ startDate: startDate, endDate: endDate,userId:userId, })
+                  fetchAlerts({
+                    startDate: startDate,
+                    endDate: endDate,
+                    userId: userId,
+                  })
                 );
               }
               setValue(newValue);
             }}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
-                <TextField className="date-1" {...startProps}/>
+                <TextField className="date-1" {...startProps} />
                 <Box className="hyphen"> - </Box>
                 <TextField className="date-2" {...endProps} />
               </React.Fragment>
@@ -354,85 +352,223 @@ function EnhancedTable() {
   const alertList = useSelector((state) => state.alertsList);
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
-
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    DetailPanel: forwardRef((props, ref) => (
+      <ChevronRight {...props} ref={ref} />
+    )),
     Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
     Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
     LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
     NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+    PreviousPage: forwardRef((props, ref) => (
+      <ChevronLeft {...props} ref={ref} />
+    )),
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+    SortArrow: forwardRef((props, ref) => (
+      <ArrowDownward {...props} ref={ref} />
+    )),
+    ThirdStateCheck: forwardRef((props, ref) => (
+      <Remove {...props} ref={ref} />
+    )),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
   };
 
+  const New_DATA = alertList.alerts.map((o) => ({
+    ticker: o.ticker,
+    option_Type: o.option_Type,
+    order_Action: o.order_Action,
+    price: o.price,
+    status: o.status,
+    alert_Comment: o.alert_Comment,
+    time_Received: o.time_Received,
+    time_Executed: o.time_Executed,
+    alert_Name: o.alert_Name,
+    id: o.id,
+    test_Mode: o.test_Mode,
+    user_Id: o.user_Id,
+  }));
+  console.log(
+    Object.assign({}, [
+      ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
+    ])
+  );
   return (
     <div>
       <MaterialTable
-      icons={tableIcons}
-title="Basic Filtering Preview"
-columns={[
-  { title: 'Name', field: 'name' },
-  { title: 'Surname', field: 'surname' },
-  { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-  {
-    title: 'Birth Place',
-    field: 'birthCity',
-    lookup: { 34: 'İstanbul', 63: 'Şanlıurfa',65:'Pakistan' },
-  },
-]}
-data={[
-  { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-  { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-]}        
-options={{
-  filterCellStyle:{
-    background: 'sfsd',
-    '&:hover': {},
-  },
-
-  filtering: true,
-  search:false
-}}
-/>
+        // icons={tableIcons}
+        // title="Basic Filtering Preview"
+        // columns={[
+        //   { title: 'Name', field: 'name' },
+        //   { title: 'Surname', field: 'surname' },
+        //   { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+        //   {
+        //     title: 'Birth Place',
+        //     field: 'birthCity',
+        //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa',65:'Pakistan' },
+        //   },
+        // ]}
+        // data={[
+        //   { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
+        //   { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
+        // ]}        
+        // options={{
+        //   filterCellStyle:{
+        //     background: 'sfsd',
+        //     '&:hover': {},
+        //   },
+        
+        //   filtering: true,
+        //   search:false
+        // }}
+        // />
+        icons={tableIcons}
+        title="Basic Filtering Preview"
+        columns={[
+          {
+            title: "TICKER",
+            field: "ticker",
+            render: (rowData) => rowData.ticker,
+            lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
+              (a, v) => ({ ...a, [v]: v }),
+              {}
+            ),
+          },
+          {
+            title: "OPTION TYPE",
+            field: "option_Type",
+            render: (rowData) => rowData.option_Type,
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.option_Type)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+          },
+          {
+            title: "ORDER ACTION",
+            field: "order_Action",
+            render: (rowData) => rowData.order_Action,
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.order_Action)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+          },
+          {
+            title: "PRICE NOW",
+            field: "price",
+            render: (rowData) => rowData.price,
+            lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
+              (a, v) => ({ ...a, [v]: v }),
+              {}
+            ),
+          },
+          {
+            title: "STATUS",
+            field: "status",
+            render: (rowData) => rowData.status,
+            lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
+              (a, v) => ({ ...a, [v]: v }),
+              {}
+            ),
+          },
+          {
+            title: "ALERT COMMENT",
+            field: "alert_Comment",
+            render: (rowData) => rowData.alert_Comment,
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+          },
+          {
+            title: "TIME RECEIVED",
+            field: "time_Received",
+            render: (rowData) => rowData.time_Received,
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.time_Received)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+          },
+          {
+            title: "TIME EXECUTED",
+            field: "time_Executed",
+            render: (rowData) => rowData.time_Executed,
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.time_Executed)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+          },
+          {
+            title: "ALERT NAME",
+            field: "alert_Name",
+            render: (rowData) => rowData.alert_Name,
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.alert_Name)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+          },
+          {
+            title: "ID",
+            field: "id",
+            render: (rowData) => rowData.id,
+            lookup: [...new Set(alertList.alerts.map((x) => x.id))].reduce(
+              (a, v) => ({ ...a, [v]: v }),
+              {}
+            ),
+          },
+          {
+            title: "TEST MODE",
+            field: "test_Mode",
+            render: (rowData) => rowData.test_Mode,
+            lookup: [
+              ...new Set(alertList.alerts.map((x) => x.test_Mode)),
+            ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+          },
+          {
+            title: "USER ID",
+            field: "user_Id",
+            render: (rowData) => rowData.user_Id,
+            lookup: [...new Set(alertList.alerts.map((x) => x.user_Id))].reduce(
+              (a, v) => ({ ...a, [v]: v }),
+              {}
+            ),
+          },
+        ]}
+        data={New_DATA}
+        options={{
+          filtering: true,
+          search: true,
+        }}
+      />
       {alertList.loading && <LinearProgress />}
       <Paper
         sx={{
           px: 6,
-          py:2,
+          py: 2,
           minHeight: 450,
         }}
       >
-        <EnhancedTableToolbar numSelected={selected.length}
-          sx={{p:0}}
-        />        
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          sx={{ p: 0 }}
+          className="murtaza"
+        />
 
         <TableContainer>
-
-            <Table
-              aria-labelledby="tableTitle"
-              size={"medium"}
-              aria-label="enhanced table"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={alertList.alerts.length}
+          <Table
+            aria-labelledby="tableTitle"
+            size={"medium"}
+            aria-label="enhanced table"
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={alertList.alerts.length}
             />
 
-              {!alertList.loading && alertList.alerts.length &&
+            {!alertList.loading && alertList.alerts.length && (
               <TableBody>
                 {stableSort(alertList.alerts, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -441,59 +577,60 @@ options={{
                     return (
                       <>
                         <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={`${row.id}`}
-                        selected={isItemSelected}
-                      >
-                        <TableCell align="left">{row.ticker}</TableCell>
-                        <TableCell align="left">{row.option_Type}</TableCell>
-                        <TableCell align="left">
-                          {row.order_Action.replace(/_/g, " ")}
-                        </TableCell>
-                        <TableCell align="left">{"N/A"}</TableCell>
-                        <TableCell align="left">{row.price}</TableCell>
-                        <TableCell align="left">{row.status}</TableCell>
-                        <TableCell align="left">{row.alert_Comment}</TableCell>
-                        <TableCell align="left">
-                          {row.time_Received !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.time_Received}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.time_Executed !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.time_Executed}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="left">{row.alert_Name}</TableCell>
+                          hover
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={`${row.id}`}
+                          selected={isItemSelected}
+                        >
+                          <TableCell align="left">{row.ticker}</TableCell>
+                          <TableCell align="left">{row.option_Type}</TableCell>
+                          <TableCell align="left">
+                            {row.order_Action.replace(/_/g, " ")}
+                          </TableCell>
+                          <TableCell align="left">{"N/A"}</TableCell>
+                          <TableCell align="left">{row.price}</TableCell>
+                          <TableCell align="left">{row.status}</TableCell>
+                          <TableCell align="left">
+                            {row.alert_Comment}
+                          </TableCell>
+                          <TableCell align="left">
+                            {row.time_Received !== null ? (
+                              <Moment format="YYYY-MM-DD hh:mm:ss">
+                                {row.time_Received}
+                              </Moment>
+                            ) : (
+                              ""
+                            )}
+                          </TableCell>
+                          <TableCell align="left">
+                            {row.time_Executed !== null ? (
+                              <Moment format="YYYY-MM-DD hh:mm:ss">
+                                {row.time_Executed}
+                              </Moment>
+                            ) : (
+                              ""
+                            )}
+                          </TableCell>
+                          <TableCell align="left">{row.alert_Name}</TableCell>
                         </TableRow>
                       </>
                     );
                   })}
-            </TableBody>
-            }
-            {!alertList.loading && !alertList.alerts.length &&
-            <TableBody>
-              <TableRow>
+              </TableBody>
+            )}
+            {!alertList.loading && !alertList.alerts.length && (
+              <TableBody>
+                <TableRow>
                   <TableBody>
                     <TableCell colSpan={12}>{"Record not found"}</TableCell>
                   </TableBody>
-              </TableRow>
-            </TableBody>
-            }
+                </TableRow>
+              </TableBody>
+            )}
           </Table>
-          {!alertList.loading && alertList.alerts.length &&
-
+          {!alertList.loading && alertList.alerts.length && (
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
@@ -503,9 +640,8 @@ options={{
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-          }
-          </TableContainer>
-        
+          )}
+        </TableContainer>
       </Paper>
     </div>
   );
@@ -569,90 +705,92 @@ function OrderList() {
     )
     .asHours();
 
-    const { user } = useAuth();
-    const userId = '6372c6c0a8b2c2ec60b2da52';  
-    useEffect(() => {
-      const initialize = async () => {
-        try {
-          const isAuthenticated = await user;
-          let date = new Date();
-          const last30Days = moment(date)
-            .subtract(30,"days")
-            .format("YYYY-MM-DD");
-          const todayDate = moment().format("YYYY-MM-DD");
-        
-          if (isAuthenticated) {
+  const { user } = useAuth();
+  const userId = "6372c6c0a8b2c2ec60b2da52";
+  useEffect(() => {
+    const initialize = async () => {
+      try {
+        const isAuthenticated = await user;
+        let date = new Date();
+        const last30Days = moment(date)
+          .subtract(30, "days")
+          .format("YYYY-MM-DD");
+        const todayDate = moment().format("YYYY-MM-DD");
 
-            dispatch(fetchSettings({ User_Id: user.id }));
-            dispatch(fetchAlerts({ startDate: last30Days,
-              endDate: todayDate,userId: userId }));
-      
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
+        if (isAuthenticated) {
+          dispatch(fetchSettings({ User_Id: user.id }));
+          dispatch(
+            fetchAlerts({
+              startDate: last30Days,
+              endDate: todayDate,
+              userId: userId,
+            })
+          );
 
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
+          dispatch(
+            fetchAlerts({
+              userId: userId,
+              startDate: currentMonthFirstDay,
+              endDate: currentMonthLastDay,
+              status: "Processed",
+              count: true,
+            })
+          );
+          dispatch(
+            previousFetchAlerts({
+              userId: userId,
+              startDate: previousMonthFirstDay,
+              endDate: previousMonthLastDay,
+              status: "Processed",
+              count: true,
+            })
+          );
 
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-          }
-        } catch (err) {
-          console.error(err);
+          dispatch(
+            fetchAlerts({
+              userId: userId,
+              startDate: currentMonthFirstDay,
+              endDate: currentMonthLastDay,
+              status: "Unprocessed",
+              count: true,
+            })
+          );
+          dispatch(
+            previousFetchAlerts({
+              userId: userId,
+              startDate: previousMonthFirstDay,
+              endDate: previousMonthLastDay,
+              status: "Unprocessed",
+              count: true,
+            })
+          );
+
+          dispatch(
+            fetchAlerts({
+              userId: userId,
+              startDate: currentMonthFirstDay,
+              endDate: currentMonthLastDay,
+              status: "Expired",
+              count: true,
+            })
+          );
+          dispatch(
+            previousFetchAlerts({
+              userId: userId,
+              startDate: previousMonthFirstDay,
+              endDate: previousMonthLastDay,
+              status: "Expired",
+              count: true,
+            })
+          );
         }
-    
-
+      } catch (err) {
+        console.error(err);
       }
-      initialize();
+    };
+    initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  }, []);
 
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
@@ -690,10 +828,13 @@ function OrderList() {
               calculatePercentage(
                 previousAlertList.previousUnprocessedAlertsCount,
                 alertList.unprocessedAlertsCount
-              ) + (calculatePercentage(
+              ) +
+              (calculatePercentage(
                 previousAlertList.previousUnprocessedAlertsCount,
                 alertList.unprocessedAlertsCount
-              )  > 0 ? "%↑" : "%↓")
+              ) > 0
+                ? "%↑"
+                : "%↓")
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousUnprocessedAlertsCount,
@@ -711,10 +852,13 @@ function OrderList() {
               calculatePercentage(
                 previousAlertList.previousExpiredAlertsCount,
                 alertList.expiredAlertsCount
-              ) +  ( calculatePercentage(
+              ) +
+              (calculatePercentage(
                 previousAlertList.previousExpiredAlertsCount,
                 alertList.expiredAlertsCount
-              ) ? "%↑" : "%↓")
+              )
+                ? "%↑"
+                : "%↓")
             }
             percentagecolor={percentageStatusDisplay(
               previousAlertList.previousExpiredAlertsCount,
@@ -725,7 +869,7 @@ function OrderList() {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
-                        ispercentage="true"
+            ispercentage="true"
             title="Alerts Per Hour"
             amount={(
               alertList.totalAlertsCount / parseInt(totalCurrentHours)
@@ -744,7 +888,7 @@ function OrderList() {
             illustration="/static/img/stats/icon-4.svg"
           />
         </Grid>
-        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
           <Stats
             title="Pro +"
             ispercentage="false"
@@ -766,52 +910,53 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
-    .MuiPaper-root{
-      border: ${(props) => props.theme.name === 'DARK' ? '1px solid white;' :'unset'} 
+  .MuiPaper-root {
+    border: ${(props) =>
+      props.theme.name === "DARK" ? "1px solid white;" : "unset"};
+  }
+  .card-head {
+    color: #5a607f;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 28px;
+    font-weight: 900;
+  }
+  .MuiTypography-subtitle2 {
+    .percentage-text {
+      color: #7e84a3;
+      font-size: 12px;
+      font-weight: 400;
     }
-  .card-head{
-    color:#5A607F;
-    font-size:16px;
-    font-weight:400;
-    margin-bottom:10px;
   }
-  h3{
-    font-size:28px;
-    font-weight:900;
-  }
-  .MuiTypography-subtitle2{
-    .percentage-text{
-      color:#7E84A3;
-      font-size:12px;
-      font-weight:400;
-    }
-  }
-  &.pro-card{
-    .MuiPaper-root{
+  &.pro-card {
+    .MuiPaper-root {
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
-      border: unset !important; 
-      &:before{
+      border: unset !important;
+      &:before {
         content: "PRO+";
         font-size: 70px;
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
-        top:12px;
-        color:${(props) => props.theme.palette.proCard.beforeColor};
+        top: 12px;
+        color: ${(props) => props.theme.palette.proCard.beforeColor};
       }
-      .card-head{
-        color:#fff;
-        font-size:31px;
-        font-weight:700;
-        margin-bottom:10px;
+      .card-head {
+        color: #fff;
+        font-size: 31px;
+        font-weight: 700;
+        margin-bottom: 10px;
       }
-      h3{
-        font-size:19px;
+      h3 {
+        font-size: 19px;
       }
-      .MuiTypography-subtitle2{
-        span{
-          color:#A1A7C4;
+      .MuiTypography-subtitle2 {
+        span {
+          color: #a1a7c4;
         }
       }
     }
