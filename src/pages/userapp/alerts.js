@@ -393,7 +393,6 @@ function EnhancedTable() {
     <div>
       <MaterialTable
         icons={tableIcons}
-        title={false}
         columns={[
           {
             title: "TICKER",
@@ -482,9 +481,12 @@ function EnhancedTable() {
         ]}
         data={New_DATA}
         options={{
+          toolbar: false,
+          padding: "dense",
           filtering: true,
           search: false,
           pageSize: 10,
+          showTitle: false,
         }}
       />
       {alertList.loading && <LinearProgress />}
