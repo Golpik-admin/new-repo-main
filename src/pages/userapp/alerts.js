@@ -873,7 +873,7 @@ function OrderList() {
       <Divider my={6} />
 
       <Grid container spacing={6}>
-        <Grid item xs={12}>
+        <Grid item xs={12} className="mat-table">
           <EnhancedTable />
         </Grid>
       </Grid>

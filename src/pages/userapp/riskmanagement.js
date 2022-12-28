@@ -136,34 +136,50 @@ const EnhancedTableHead = (props) => {
         ))}
       </TableRow> */}
       <TableRow>
-        <TableCell padding="" className="filter-th">
-          <IconButton>
-            <AddOutlined />
-          </IconButton>
-        </TableCell>
-        <TableCell padding="" className="filter-th">
-          <IconButton>
-            <AddOutlined />
-          </IconButton>
-        </TableCell>
-        <TableCell padding="" className="filter-th">
-          <IconButton>
-            <AddOutlined />
-          </IconButton>
-        </TableCell>
-        <TableCell padding="" className="filter-th">
-          <IconButton>
-            <AddOutlined />
-          </IconButton>
-        </TableCell>
-        <TableCell padding="" className="filter-th">
-          <IconButton>
-            <SystemUpdateAltOutlined />
-          </IconButton>
-          <IconButton fontSize="small" className="del-btn">
-            <DeleteOutlineOutlined />
-          </IconButton>
-        </TableCell>
+          <TableCell
+            colSpan={5}
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          {/* <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <AddOutlined />
+            </IconButton>
+          </TableCell>
+          <TableCell
+            padding=""
+            className="filter-th"
+          >
+            <IconButton>
+              <SystemUpdateAltOutlined />
+            </IconButton>
+            <IconButton fontSize="small" className="del-btn">
+              <DeleteOutlineOutlined />
+            </IconButton>
+          </TableCell> */}
+          
       </TableRow>
     </TableHead>
   );
