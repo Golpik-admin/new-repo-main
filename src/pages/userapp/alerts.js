@@ -36,6 +36,8 @@ import {
   SyncAlt,
   ViewColumn,
 } from "@mui/icons-material";
+
+import SortIcon from "@mui/icons-material/Sort";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { fetchAlerts } from "../../redux/slices/alerts";
@@ -370,7 +372,7 @@ function EnhancedTable() {
       <ChevronLeft {...props} ref={ref} />
     )),
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <SortIcon {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => (
       <ArrowDownward {...props} ref={ref} />
     )),
@@ -391,11 +393,6 @@ function EnhancedTable() {
     time_Executed: o.time_Executed,
     alert_Name: o.alert_Name,
   }));
-  console.log(
-    Object.assign({}, [
-      ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-    ])
-  );
   return (
     <div>
       {alertList.loading && <LinearProgress />}
@@ -493,9 +490,12 @@ function EnhancedTable() {
           ]}
           data={New_DATA}
           options={{
+            toolbar: false,
+            padding:"dense",
             filtering: true,
             search: false,
             pageSize: 10,
+            showTitle: false,
           }}
         />
       
