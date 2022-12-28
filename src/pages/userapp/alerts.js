@@ -7,6 +7,7 @@ import {
   Divider as MuiDivider,
   Grid as MuiGrid,
   Paper as MuiPaper,
+  Popover as MuiPopover,
   Table as MuiTable,
   TableBody,
   TableCell,
@@ -42,6 +43,7 @@ import { fetchSettings } from "../../redux/slices/getSettings";
 
 import MaterialTable from 'material-table';
 import { Check, ChevronLeft, ChevronRight, Edit, Search } from "react-feather";
+import useTheme from "../../hooks/useTheme";
 
 
 /* Declearation */
@@ -394,12 +396,10 @@ data={[
 ]}        
 options={{
   filterCellStyle:{
-    background: 'theme.palette.filterTh.color',
-    '&:hover': {
-      backgroundColor: 'primary.main',
-      opacity: [0.9, 0.8, 0.7],
-    },
+    background: 'sfsd',
+    '&:hover': {},
   },
+
   filtering: true,
   search:false
 }}
@@ -812,6 +812,101 @@ const Grid = styled(MuiGrid)`
       .MuiTypography-subtitle2{
         span{
           color:#A1A7C4;
+        }
+      }
+    }
+  }
+  .mat-table{
+    th:first-child{
+      min-width:300px;
+    }
+    th{
+      text-align:left;
+      background: ${(props) => props.theme.palette.tableTh.background};
+      border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+      border-bottom: 0;
+      //padding: 6px;
+      line-height: 1.2;
+    }
+    tbody{
+      tr:first-child{
+        td{
+          text-align:left;
+          background: ${(props) => props.theme.palette.filterTh.background};
+          border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+          padding: 6px;
+          line-height: 1.2;
+          .MuiFormLabel-root{
+            & > .Mui-focused{
+              &:after{
+                display:none;
+              }
+            }
+          }
+          .MuiInput-root{
+            &:before{border-bottom: 0;}
+              &:after{
+                display:none;
+              }
+          }
+        }
+      }
+    }
+    th.table-th{
+    }
+    th.filter-th{
+      background: ${(props) => props.theme.palette.filterTh.background};
+      .filter-box{
+        display: flex;
+        justify-content: space-between;
+        button{
+          color: ${(props) => props.theme.palette.filterTh.color};
+          min-width:30px;
+        }
+        .MuiTableSortLabel-root{
+          transform: rotate(90deg);
+          svg{
+            color: ${(props) => props.theme.palette.filterTh.color};
+          }
+  
+        }
+      }
+    }
+  }
+`;
+
+const Popover = styled(MuiPopover)`
+  height: 300px;
+  display:none;
+  .MuiPaper-root {
+    padding: 10px;
+    border: 0;
+    background-color: ${(props) => props.theme.palette.tableTh.background};
+    .field {
+      .MuiInputBase-root {
+        border: 0;
+        background: #fff;
+        padding-left: 8px;
+        margin-bottom: 10px;
+      }
+      input {
+        border: 0;
+        border-radius: 4px;
+        padding-left: 0;
+      }
+    }
+    .poper-check {
+      // padding: 4px 10px 4px 10px;
+      // color: #a1a7c4;
+      // &.mui-checked {
+      //   color: red;
+      // }
+      svg {
+        // border: 2px solid #a1a7c4;
+        // border-radius: 4px;
+        // background: #1b202a;
+        // path {
+          //color: ${(props) => props.theme.palette.tableTh.background};
         }
       }
     }
