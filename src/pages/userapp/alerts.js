@@ -398,6 +398,7 @@ function EnhancedTable() {
     <div>
       <MaterialTable
         icons={tableIcons}
+        title={false}
         columns={[
           {
             title: "TICKER",
