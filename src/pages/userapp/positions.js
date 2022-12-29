@@ -375,14 +375,18 @@ function EnhancedTable() {
 
   const New_DATA = positionsList.positions.map((o) => ({
     ticker: o.ticker,
-    option_Type: o.option_Symbol,
-    order_Action: o.option_Type,
-    price: o.buy_Price_Executed,
-    status: o.quantity,
-    alert_Comment: o.capital_Committed,
-    time_Received: o.status,
-    time_Executed: o.buy_Time_Executed,
-    alert_Name: o.sell_Time_Executed,
+    option_Symbol: o.option_Symbol,
+    option_Type: o.option_Type,
+    buy_Price_Executed: o.buy_Price_Executed,
+    quantity: o.quantity,
+    buy_Order_Reason: o.buy_Order_Reason,
+    capital_Committed: o.capital_Committed,
+    status: o.status,
+    buy_Time_Executed: o.buy_Time_Executed,
+    sell_Time_Executed: o.sell_Time_Executed,
+    sell_Price_Executed: o.sell_Price_Executed,
+    pnL: o.pnL,
+    sell_Order_Reason: o.sell_Order_Reason,
   }));
 
   const handleSelectAllClick = (event) => {
@@ -424,84 +428,138 @@ function EnhancedTable() {
             title={false}
             columns={[
               {
-                title: "TICKER",
+                title: "ticker",
                 field: "ticker",
                 render: (rowData) => rowData.ticker,
                 lookup: [
                   ...new Set(positionsList.positions.map((x) => x.ticker)),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
+
               {
-                title: "OPTION TYPE",
+                title: "option_Symbol",
+                field: "option_Symbol",
+                render: (rowData) => rowData.option_Symbol,
+                lookup: [
+                  ...new Set(
+                    positionsList.positions.map((x) => x.option_Symbol)
+                  ),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
+              },
+
+              {
+                title: "option_Type",
                 field: "option_Type",
                 render: (rowData) => rowData.option_Type,
                 lookup: [
                   ...new Set(positionsList.positions.map((x) => x.option_Type)),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
+
               {
-                title: "ORDER ACTION",
-                field: "order_Action",
-                render: (rowData) => rowData.order_Action,
+                title: "buy_Price_Executed",
+                field: "buy_Price_Executed",
+                render: (rowData) => rowData.buy_Price_Executed,
                 lookup: [
                   ...new Set(
-                    positionsList.positions.map((x) => x.order_Action)
+                    positionsList.positions.map((x) => x.buy_Price_Executed)
                   ),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
+
               {
-                title: "PRICE NOW",
-                field: "price",
-                render: (rowData) => rowData.price,
+                title: "quantity",
+                field: "quantity",
+                render: (rowData) => rowData.quantity,
                 lookup: [
-                  ...new Set(positionsList.positions.map((x) => x.price)),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                  ...new Set(positionsList.positions.map((x) => x.quantity)),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
+
               {
-                title: "STATUS",
+                title: "buy_Order_Reason",
+                field: "buy_Order_Reason",
+                render: (rowData) => rowData.buy_Order_Reason,
+                lookup: [
+                  ...new Set(
+                    positionsList.positions.map((x) => x.buy_Order_Reason)
+                  ),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
+              },
+
+              {
+                title: "capital_Committed",
+                field: "capital_Committed",
+                render: (rowData) => rowData.capital_Committed,
+                lookup: [
+                  ...new Set(
+                    positionsList.positions.map((x) => x.capital_Committed)
+                  ),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
+              },
+
+              {
+                title: "status",
                 field: "status",
                 render: (rowData) => rowData.status,
                 lookup: [
                   ...new Set(positionsList.positions.map((x) => x.status)),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
+
               {
-                title: "ALERT COMMENT",
-                field: "alert_Comment",
-                render: (rowData) => rowData.alert_Comment,
+                title: "buy_Time_Executed",
+                field: "buy_Time_Executed",
+                render: (rowData) => rowData.buy_Time_Executed,
                 lookup: [
                   ...new Set(
-                    positionsList.positions.map((x) => x.alert_Comment)
+                    positionsList.positions.map((x) => x.buy_Time_Executed)
                   ),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
+
               {
-                title: "TIME RECEIVED",
-                field: "time_Received",
-                render: (rowData) => rowData.time_Received,
+                title: "sell_Time_Executed",
+                field: "sell_Time_Executed",
+                render: (rowData) => rowData.sell_Time_Executed,
                 lookup: [
                   ...new Set(
-                    positionsList.positions.map((x) => x.time_Received)
+                    positionsList.positions.map((x) => x.sell_Time_Executed)
                   ),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
+
               {
-                title: "TIME EXECUTED",
-                field: "time_Executed",
-                render: (rowData) => rowData.time_Executed,
+                title: "sell_Price_Executed",
+                field: "sell_Price_Executed",
+                render: (rowData) => rowData.sell_Price_Executed,
                 lookup: [
                   ...new Set(
-                    positionsList.positions.map((x) => x.time_Executed)
+                    positionsList.positions.map((x) => x.sell_Price_Executed)
                   ),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-              {
-                title: "ALERT NAME",
-                field: "alert_Name",
-                render: (rowData) => rowData.alert_Name,
-                lookup: [
-                  ...new Set(positionsList.positions.map((x) => x.alert_Name)),
-                ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
               },
             ]}
             data={New_DATA}
@@ -514,7 +572,7 @@ function EnhancedTable() {
               showTitle: false,
             }}
           />
-          <TableContainer>
+          {/* <TableContainer>
             <Table
               aria-labelledby="tableTitle"
               size={"medium"}
@@ -598,12 +656,6 @@ function EnhancedTable() {
                       </TableRow>
                     );
                   })}
-                {/* {emptyRows > 0 && (
-                  //  style={{ height: 53 * emptyRows }}
-                  <TableRow>
-                    <TableCell colSpan={12} />
-                  </TableRow>
-                )} */}
               </TableBody>
             </Table>
           </TableContainer>
@@ -615,7 +667,7 @@ function EnhancedTable() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          /> */}
         </Paper>
       ) : (
         <Paper>
