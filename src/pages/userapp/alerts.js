@@ -7,15 +7,6 @@ import {
   Divider as MuiDivider,
   Grid as MuiGrid,
   Paper as MuiPaper,
-  Popover as MuiPopover,
-  Table as MuiTable,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
   Toolbar,
   LinearProgress as MuiLinearProgress,
   RadioGroup,
@@ -24,73 +15,31 @@ import {
   TextField,
 } from "@mui/material";
 import {
-  Sort,
-  AddBox,
   ArrowDownward,
-  Clear,
-  DeleteOutline,
   FilterList,
   FirstPage,
   LastPage,
-  Remove,
-  SaveAlt,
-  SyncAlt,
-  ViewColumn,
 } from "@mui/icons-material";
 
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { fetchAlerts } from "../../redux/slices/alerts";
 import { previousFetchAlerts } from "../../redux/slices/alertsPreviousMonth";
-import Moment from "react-moment";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
-import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
 import { fetchSettings } from "../../redux/slices/getSettings";
 
 import MaterialTable from "material-table";
-import { Check, ChevronLeft, ChevronRight, Edit, Search } from "react-feather";
-import useTheme from "../../hooks/useTheme";
+import { ChevronLeft, ChevronRight } from "react-feather";
 
 /* Declearation */
 const Divider = styled(MuiDivider)(spacing);
 const Paper = styled(MuiPaper)(spacing);
-const Table = styled(MuiTable)`
-  th.table-th:first-child {
-    min-width: 300px;
-  }
-  th {
-    border-left: 4px solid ${(props) => props.theme.palette.background.paper};
-    border-bottom: 0;
-    padding: 6px;
-    line-height: 1.2;
-  }
-  th.table-th {
-    background: ${(props) => props.theme.palette.tableTh.background};
-  }
-  th.filter-th {
-    background: ${(props) => props.theme.palette.filterTh.background};
-    .filter-box {
-      display: flex;
-      justify-content: space-between;
-      button {
-        color: ${(props) => props.theme.palette.filterTh.color};
-        min-width: 30px;
-      }
-      .MuiTableSortLabel-root {
-        transform: rotate(90deg);
-        svg {
-          color: ${(props) => props.theme.palette.filterTh.color};
-        }
-      }
-    }
-  }
-`;
 
 const Box = styled.div`
   &.radio-parent {
@@ -141,97 +90,11 @@ const Box = styled.div`
   }
 `;
 
-const headCells = [
-  { id: "ticker", alignment: "left", label: "TICKER" },
-  { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "order_action", alignment: "left", label: "ORDER ACTION" },
-  {
-    id: "price_fired_alert",
-    alignment: "left",
-    label: "PRICE WHEN ALERT FIRED",
-  },
-  { id: "price_now", alignment: "left", label: "PRICE NOW" },
-  { id: "status", alignment: "left", label: "STATUS" },
-  { id: "alert_comment", alignment: "left", label: "ALERT COMMENT" },
-  { id: "time_received", alignment: "left", label: "TIME RECEIVED" },
-  { id: "time_executed", alignment: "left", label: "TIME EXECUTED" },
-  { id: "alert_Name", alignment: "left", label: "ALERT NAME" },
-];
 
 /* Functions  */
-function descendingComparator(a, b, orderBy) {
-  if (b["time_Received"] < a["time_Received"]) {
-    return -1;
-  }
-  if (b["time_Received"] > a["time_Received"]) {
-    return 1;
-  }
-  return 0;
-}
 
-function getComparator(order, orderBy) {
-  return order === "asc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
 
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => ({
-    el,
-    index,
-  }));
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a.el, b.el);
-    if (order !== 0) return order;
-    return a.index - b.index;
-  });
-  return stabilizedThis.map((element) => element.el);
-}
 
-const EnhancedTableHead = (props) => {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className="table-th"
-          >
-            {headCell.label}
-          </TableCell>
-        ))}
-      </TableRow>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className="filter-th"
-          >
-            <Box className="filter-box">
-              <FilterPop />
-              <TableSortLabel
-                active={true}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-                IconComponent={SyncAlt}
-              ></TableSortLabel>
-            </Box>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-};
 
 const EnhancedTableToolbar = () => {
   const getSettings = useSelector((state) => state.fetchSettingsList);
@@ -319,51 +182,20 @@ const EnhancedTableToolbar = () => {
   );
 };
 
-function EnhancedTable() {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("customer");
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+function Alerts() {
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = alertList.alerts.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
   const alertList = useSelector((state) => state.alertsList);
-  const LinearProgress = styled(MuiLinearProgress)(spacing);
 
   const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => (
-      <ChevronRight {...props} ref={ref} />
-    )),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    // Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    // Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    // Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    // Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    // DetailPanel: forwardRef((props, ref) => (
+    //   <ChevronRight {...props} ref={ref} />
+    // )),
+    // Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    // Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
     Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
     LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
@@ -371,15 +203,15 @@ function EnhancedTable() {
     PreviousPage: forwardRef((props, ref) => (
       <ChevronLeft {...props} ref={ref} />
     )),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Sort {...props} ref={ref} />),
+    // ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    // Search: forwardRef((props, ref) => <Sort {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => (
       <ArrowDownward {...props} ref={ref} />
     )),
-    ThirdStateCheck: forwardRef((props, ref) => (
-      <Remove {...props} ref={ref} />
-    )),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    // ThirdStateCheck: forwardRef((props, ref) => (
+    //   <Remove {...props} ref={ref} />
+    // )),
+    // ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
   };
 
   const New_DATA = alertList.alerts.map((o) => ({
@@ -393,208 +225,7 @@ function EnhancedTable() {
     time_Executed: o.time_Executed,
     alert_Name: o.alert_Name,
   }));
-  return (
-    <div>
-      {alertList.loading && <LinearProgress />}
-      <Paper
-        sx={{
-          px: 6,
-          py: 2,
-          minHeight: 450,
-        }}
-      >
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          sx={{ p: 0 }}
-          className="murtaza"
-        />
-        <MaterialTable
-          icons={tableIcons}
-          title={false}
-          columns={[
-            {
-              title: "TICKER",
-              field: "ticker",
-              render: (rowData) => rowData.ticker,
-              lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
-                (a, v) => ({ ...a, [v]: v }),
-                {}
-              ),
-            },
-            {
-              title: "OPTION TYPE",
-              field: "option_Type",
-              render: (rowData) => rowData.option_Type,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.option_Type)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "ORDER ACTION",
-              field: "order_Action",
-              render: (rowData) => rowData.order_Action,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.order_Action)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "PRICE NOW",
-              field: "price",
-              render: (rowData) => rowData.price,
-              lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
-                (a, v) => ({ ...a, [v]: v }),
-                {}
-              ),
-            },
-            {
-              title: "STATUS",
-              field: "status",
-              render: (rowData) => rowData.status,
-              lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
-                (a, v) => ({ ...a, [v]: v }),
-                {}
-              ),
-            },
-            {
-              title: "ALERT COMMENT",
-              field: "alert_Comment",
-              render: (rowData) => rowData.alert_Comment,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "TIME RECEIVED",
-              field: "time_Received",
-              render: (rowData) => rowData.time_Received,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.time_Received)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "TIME EXECUTED",
-              field: "time_Executed",
-              render: (rowData) => rowData.time_Executed,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.time_Executed)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "ALERT NAME",
-              field: "alert_Name",
-              render: (rowData) => rowData.alert_Name,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.alert_Name)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-          ]}
-          data={New_DATA}
-          options={{
-            toolbar: false,
-            padding:"dense",
-            filtering: true,
-            search: false,
-            pageSize: 10,
-            showTitle: false,
-          }}
-        />
-      
 
-        {/* <TableContainer>
-          <Table
-            aria-labelledby="tableTitle"
-            size={"medium"}
-            aria-label="enhanced table"
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={alertList.alerts.length}
-            />
-
-            {!alertList.loading && alertList.alerts.length && (
-              <TableBody>
-                {stableSort(alertList.alerts, getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    const isItemSelected = isSelected(row.id);
-                    return (
-                      <>
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={`${row.id}`}
-                          selected={isItemSelected}
-                        >
-                          <TableCell align="left">{row.ticker}</TableCell>
-                          <TableCell align="left">{row.option_Type}</TableCell>
-                          <TableCell align="left">
-                            {row.order_Action.replace(/_/g, " ")}
-                          </TableCell>
-                          <TableCell align="left">{"N/A"}</TableCell>
-                          <TableCell align="left">{row.price}</TableCell>
-                          <TableCell align="left">{row.status}</TableCell>
-                          <TableCell align="left">
-                            {row.alert_Comment}
-                          </TableCell>
-                          <TableCell align="left">
-                            {row.time_Received !== null ? (
-                              <Moment format="YYYY-MM-DD hh:mm:ss">
-                                {row.time_Received}
-                              </Moment>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
-                          <TableCell align="left">
-                            {row.time_Executed !== null ? (
-                              <Moment format="YYYY-MM-DD hh:mm:ss">
-                                {row.time_Executed}
-                              </Moment>
-                            ) : (
-                              ""
-                            )}
-                          </TableCell>
-                          <TableCell align="left">{row.alert_Name}</TableCell>
-                        </TableRow>
-                      </>
-                    );
-                  })}
-              </TableBody>
-            )}
-            {!alertList.loading && !alertList.alerts.length && (
-              <TableBody>
-                <TableRow>
-                  <TableBody>
-                    <TableCell colSpan={12}>{"Record not found"}</TableCell>
-                  </TableBody>
-                </TableRow>
-              </TableBody>
-            )}
-          </Table>
-          {!alertList.loading && alertList.alerts.length && (
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={alertList.alerts.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          )}
-        </TableContainer> */}
-      </Paper>
-    </div>
-  );
-}
-
-function OrderList() {
   function calculatePercentage(previous, current) {
     let prevCalProcessed = 0;
 
@@ -739,10 +370,7 @@ function OrderList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
-
-  // "% &#8593;";
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -849,7 +477,112 @@ function OrderList() {
 
       <Grid container spacing={6}>
         <Grid item xs={12} className="mat-table">
-          <EnhancedTable />
+      {/* {alertList.loading && <LinearProgress />} */}
+      <Paper
+        sx={{
+          px: 6,
+          py: 2,
+          minHeight: 450,
+        }}
+      >
+        <EnhancedTableToolbar
+          sx={{ p: 0 }}
+          className="murtaza"
+        />
+            <MaterialTable
+              isLoading={ alertList.loading }
+          icons={tableIcons}
+          title={false}
+          columns={[
+            {
+              title: "TICKER",
+              field: "ticker",
+              render: (rowData) => rowData.ticker,
+              lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
+                (a, v) => ({ ...a, [v]: v }),
+                {}
+              ),
+            },
+            {
+              title: "OPTION TYPE",
+              field: "option_Type",
+              render: (rowData) => rowData.option_Type,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.option_Type)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "ORDER ACTION",
+              field: "order_Action",
+              render: (rowData) => rowData.order_Action,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.order_Action)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "PRICE NOW",
+              field: "price",
+              render: (rowData) => rowData.price,
+              lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
+                (a, v) => ({ ...a, [v]: v }),
+                {}
+              ),
+            },
+            {
+              title: "STATUS",
+              field: "status",
+              render: (rowData) => rowData.status,
+              lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
+                (a, v) => ({ ...a, [v]: v }),
+                {}
+              ),
+            },
+            {
+              title: "ALERT COMMENT",
+              field: "alert_Comment",
+              render: (rowData) => rowData.alert_Comment,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "TIME RECEIVED",
+              field: "time_Received",
+              render: (rowData) => rowData.time_Received,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.time_Received)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "TIME EXECUTED",
+              field: "time_Executed",
+              render: (rowData) => rowData.time_Executed,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.time_Executed)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+            {
+              title: "ALERT NAME",
+              field: "alert_Name",
+              render: (rowData) => rowData.alert_Name,
+              lookup: [
+                ...new Set(alertList.alerts.map((x) => x.alert_Name)),
+              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+            },
+          ]}
+          data={New_DATA}
+          options={{
+            toolbar: false,
+            padding:"dense",
+            filtering: true,
+            search: false,
+            pageSize: 10,
+            showTitle: false,
+          }}
+        />
+      
+
+      </Paper>
         </Grid>
       </Grid>
     </React.Fragment>
@@ -975,42 +708,5 @@ const Grid = styled(MuiGrid)`
   }
 `;
 
-const Popover = styled(MuiPopover)`
-  height: 300px;
-  display:none;
-  .MuiPaper-root {
-    padding: 10px;
-    border: 0;
-    background-color: ${(props) => props.theme.palette.tableTh.background};
-    .field {
-      .MuiInputBase-root {
-        border: 0;
-        background: #fff;
-        padding-left: 8px;
-        margin-bottom: 10px;
-      }
-      input {
-        border: 0;
-        border-radius: 4px;
-        padding-left: 0;
-      }
-    }
-    .poper-check {
-      // padding: 4px 10px 4px 10px;
-      // color: #a1a7c4;
-      // &.mui-checked {
-      //   color: red;
-      // }
-      svg {
-        // border: 2px solid #a1a7c4;
-        // border-radius: 4px;
-        // background: #1b202a;
-        // path {
-          //color: ${(props) => props.theme.palette.tableTh.background};
-        }
-      }
-    }
-  }
-`;
 
-export default OrderList;
+export default Alerts;
