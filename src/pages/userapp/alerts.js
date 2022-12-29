@@ -90,11 +90,7 @@ const Box = styled.div`
   }
 `;
 
-
 /* Functions  */
-
-
-
 
 const EnhancedTableToolbar = () => {
   const getSettings = useSelector((state) => state.fetchSettingsList);
@@ -183,7 +179,6 @@ const EnhancedTableToolbar = () => {
 };
 
 function Alerts() {
-
   const alertList = useSelector((state) => state.alertsList);
 
   const tableIcons = {
@@ -485,11 +480,9 @@ function Alerts() {
               minHeight: 450,
             }}
           >
-            <EnhancedTableToolbar
-              sx={{ p: 0 }}
-            />
+            <EnhancedTableToolbar sx={{ p: 0 }} />
             <MaterialTable
-              isLoading={ alertList.loading }
+              isLoading={alertList.loading}
               icons={tableIcons}
               title={false}
               columns={[
@@ -497,10 +490,9 @@ function Alerts() {
                   title: "TICKER",
                   field: "ticker",
                   render: (rowData) => rowData.ticker,
-                  lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
-                    (a, v) => ({ ...a, [v]: v }),
-                    {}
-                  ),
+                  lookup: [...new Set(alertList.alerts.map((x) => x.ticker))]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "OPTION TYPE",
@@ -508,7 +500,9 @@ function Alerts() {
                   render: (rowData) => rowData.option_Type,
                   lookup: [
                     ...new Set(alertList.alerts.map((x) => x.option_Type)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "ORDER ACTION",
@@ -516,25 +510,25 @@ function Alerts() {
                   render: (rowData) => rowData.order_Action,
                   lookup: [
                     ...new Set(alertList.alerts.map((x) => x.order_Action)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "PRICE NOW",
                   field: "price",
                   render: (rowData) => rowData.price,
-                  lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
-                    (a, v) => ({ ...a, [v]: v }),
-                    {}
-                  ),
+                  lookup: [...new Set(alertList.alerts.map((x) => x.price))]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "STATUS",
                   field: "status",
                   render: (rowData) => rowData.status,
-                  lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
-                    (a, v) => ({ ...a, [v]: v }),
-                    {}
-                  ),
+                  lookup: [...new Set(alertList.alerts.map((x) => x.status))]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "ALERT COMMENT",
@@ -542,7 +536,9 @@ function Alerts() {
                   render: (rowData) => rowData.alert_Comment,
                   lookup: [
                     ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "TIME RECEIVED",
@@ -550,7 +546,9 @@ function Alerts() {
                   render: (rowData) => rowData.time_Received,
                   lookup: [
                     ...new Set(alertList.alerts.map((x) => x.time_Received)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "TIME EXECUTED",
@@ -558,7 +556,9 @@ function Alerts() {
                   render: (rowData) => rowData.time_Executed,
                   lookup: [
                     ...new Set(alertList.alerts.map((x) => x.time_Executed)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
                 {
                   title: "ALERT NAME",
@@ -566,13 +566,15 @@ function Alerts() {
                   render: (rowData) => rowData.alert_Name,
                   lookup: [
                     ...new Set(alertList.alerts.map((x) => x.alert_Name)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
                 },
               ]}
               data={New_DATA}
               options={{
                 toolbar: false,
-                padding:"dense",
+                padding: "dense",
                 filtering: true,
                 search: false,
                 pageSize: 10,
@@ -686,6 +688,5 @@ const Grid = styled(MuiGrid)`
     }
   }
 `;
-
 
 export default Alerts;
