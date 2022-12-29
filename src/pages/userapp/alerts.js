@@ -477,112 +477,109 @@ function Alerts() {
 
       <Grid container spacing={6}>
         <Grid item xs={12} className="mat-table">
-      {/* {alertList.loading && <LinearProgress />} */}
-      <Paper
-        sx={{
-          px: 6,
-          py: 2,
-          minHeight: 450,
-        }}
-      >
-        <EnhancedTableToolbar
-          sx={{ p: 0 }}
-          className="murtaza"
-        />
+          {/* {alertList.loading && <LinearProgress />} */}
+          <Paper
+            sx={{
+              px: 6,
+              py: 2,
+              minHeight: 450,
+            }}
+          >
+            <EnhancedTableToolbar
+              sx={{ p: 0 }}
+            />
             <MaterialTable
               isLoading={ alertList.loading }
-          icons={tableIcons}
-          title={false}
-          columns={[
-            {
-              title: "TICKER",
-              field: "ticker",
-              render: (rowData) => rowData.ticker,
-              lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
-                (a, v) => ({ ...a, [v]: v }),
-                {}
-              ),
-            },
-            {
-              title: "OPTION TYPE",
-              field: "option_Type",
-              render: (rowData) => rowData.option_Type,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.option_Type)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "ORDER ACTION",
-              field: "order_Action",
-              render: (rowData) => rowData.order_Action,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.order_Action)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "PRICE NOW",
-              field: "price",
-              render: (rowData) => rowData.price,
-              lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
-                (a, v) => ({ ...a, [v]: v }),
-                {}
-              ),
-            },
-            {
-              title: "STATUS",
-              field: "status",
-              render: (rowData) => rowData.status,
-              lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
-                (a, v) => ({ ...a, [v]: v }),
-                {}
-              ),
-            },
-            {
-              title: "ALERT COMMENT",
-              field: "alert_Comment",
-              render: (rowData) => rowData.alert_Comment,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "TIME RECEIVED",
-              field: "time_Received",
-              render: (rowData) => rowData.time_Received,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.time_Received)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "TIME EXECUTED",
-              field: "time_Executed",
-              render: (rowData) => rowData.time_Executed,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.time_Executed)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-            {
-              title: "ALERT NAME",
-              field: "alert_Name",
-              render: (rowData) => rowData.alert_Name,
-              lookup: [
-                ...new Set(alertList.alerts.map((x) => x.alert_Name)),
-              ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-            },
-          ]}
-          data={New_DATA}
-          options={{
-            toolbar: false,
-            padding:"dense",
-            filtering: true,
-            search: false,
-            pageSize: 10,
-            showTitle: false,
-          }}
-        />
-      
-
-      </Paper>
+              icons={tableIcons}
+              title={false}
+              columns={[
+                {
+                  title: "TICKER",
+                  field: "ticker",
+                  render: (rowData) => rowData.ticker,
+                  lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
+                    (a, v) => ({ ...a, [v]: v }),
+                    {}
+                  ),
+                },
+                {
+                  title: "OPTION TYPE",
+                  field: "option_Type",
+                  render: (rowData) => rowData.option_Type,
+                  lookup: [
+                    ...new Set(alertList.alerts.map((x) => x.option_Type)),
+                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+                {
+                  title: "ORDER ACTION",
+                  field: "order_Action",
+                  render: (rowData) => rowData.order_Action,
+                  lookup: [
+                    ...new Set(alertList.alerts.map((x) => x.order_Action)),
+                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+                {
+                  title: "PRICE NOW",
+                  field: "price",
+                  render: (rowData) => rowData.price,
+                  lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
+                    (a, v) => ({ ...a, [v]: v }),
+                    {}
+                  ),
+                },
+                {
+                  title: "STATUS",
+                  field: "status",
+                  render: (rowData) => rowData.status,
+                  lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
+                    (a, v) => ({ ...a, [v]: v }),
+                    {}
+                  ),
+                },
+                {
+                  title: "ALERT COMMENT",
+                  field: "alert_Comment",
+                  render: (rowData) => rowData.alert_Comment,
+                  lookup: [
+                    ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
+                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+                {
+                  title: "TIME RECEIVED",
+                  field: "time_Received",
+                  render: (rowData) => rowData.time_Received,
+                  lookup: [
+                    ...new Set(alertList.alerts.map((x) => x.time_Received)),
+                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+                {
+                  title: "TIME EXECUTED",
+                  field: "time_Executed",
+                  render: (rowData) => rowData.time_Executed,
+                  lookup: [
+                    ...new Set(alertList.alerts.map((x) => x.time_Executed)),
+                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+                {
+                  title: "ALERT NAME",
+                  field: "alert_Name",
+                  render: (rowData) => rowData.alert_Name,
+                  lookup: [
+                    ...new Set(alertList.alerts.map((x) => x.alert_Name)),
+                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+              ]}
+              data={New_DATA}
+              options={{
+                toolbar: false,
+                padding:"dense",
+                filtering: true,
+                search: false,
+                pageSize: 10,
+                showTitle: false,
+              }}
+            />
+          </Paper>
         </Grid>
       </Grid>
     </React.Fragment>
@@ -641,67 +638,49 @@ const Grid = styled(MuiGrid)`
       }
     }
   }
-  .mat-table{
-    th:first-child{
-      min-width:300px;
+  .mat-table {
+    th:first-child {
+      min-width: 300px;
     }
-    th{
-      text-align:left;
+    th {
+      text-align: left;
       background: ${(props) => props.theme.palette.tableTh.background};
       border-left: 4px solid ${(props) => props.theme.palette.background.paper};
       border-bottom: 0;
       //padding: 6px;
       line-height: 1.2;
     }
-    tbody{
-      tr:first-child{
-        td{
-          text-align:left;
+    tbody {
+      tr:first-child {
+        td {
+          text-align: left;
           background: ${(props) => props.theme.palette.filterTh.background};
-          border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+          border-left: 4px solid
+            ${(props) => props.theme.palette.background.paper};
           padding: 6px;
           line-height: 1.2;
-          .MuiFormLabel-root{
-            & > .Mui-focused{
-              &:after{
-                display:none;
+          .MuiFormLabel-root {
+            & > .Mui-focused {
+              &:after {
+                display: none;
               }
             }
           }
-          .MuiInput-root{
-            &:before{
+          .MuiInput-root {
+            &:before {
               border-bottom: 0;
             }
-            &:after{
-              display:none;
+            &:after {
+              display: none;
             }
-            .MuiSelect-select{
-            background-image: url('static/img/icns/filter-icn.png');
-            background-size: 16px;background-repeat: no-repeat;
-            background-position:left center;
-            padding-left: 30px;
+            .MuiSelect-select {
+              background-image: url("static/img/icns/filter-icn.png");
+              background-size: 16px;
+              background-repeat: no-repeat;
+              background-position: left center;
+              padding-left: 30px;
             }
           }
-        }
-      }
-    }
-    th.table-th{
-    }
-    th.filter-th{
-      background: ${(props) => props.theme.palette.filterTh.background};
-      .filter-box{
-        display: flex;
-        justify-content: space-between;
-        button{
-          color: ${(props) => props.theme.palette.filterTh.color};
-          min-width:30px;
-        }
-        .MuiTableSortLabel-root{
-          transform: rotate(90deg);
-          svg{
-            color: ${(props) => props.theme.palette.filterTh.color};
-          }
-  
         }
       }
     }
