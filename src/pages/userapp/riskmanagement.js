@@ -555,9 +555,9 @@ function OrderList() {
   function percentageStatusDisplay(previous, current) {
     var percentageColorProcessed;
     if (parseInt(current) < parseInt(previous)) {
-      percentageColorProcessed = red[500];
+      percentageColorProcessed = "#F0142F";
     } else {
-      percentageColorProcessed = green[500];
+      percentageColorProcessed = "#3DD598";
     }
 
     return percentageColorProcessed;
@@ -640,7 +640,7 @@ function OrderList() {
     <React.Fragment>
       <Helmet title="Orders" />
 
-      <Grid container spacing={6}>
+      {/* <Grid container spacing={6}>
         <Grid item xs={12} sm={6} md={4} lg>
           <Stats
             title="Total Positions Closed"
@@ -717,6 +717,105 @@ function OrderList() {
             percentagecolor={red[500]}
           />
         </Grid>
+      </Grid> */}
+
+      <Grid container spacing={6}>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            title="Total Positions Closed"
+            ispercentage="true"
+            amount={alertList.processedAlertsCount}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousProcessedAlertsCount,
+                alertList.processedAlertsCount
+              ) + "%↓"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousProcessedAlertsCount,
+              alertList.processedAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos1.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            title="Total Positions Risk-Managed"
+            ispercentage="true"
+            amount={alertList.unprocessedAlertsCount}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              ) +
+              (calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              ) > 0
+                ? "%↑"
+                : "%↓")
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousUnprocessedAlertsCount,
+              alertList.unprocessedAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos1.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            title="Today's P & L"
+            amount={alertList.expiredAlertsCount}
+            ispercentage="true"
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              ) +
+              (calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              )
+                ? "%↑"
+                : "%↓")
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousExpiredAlertsCount,
+              alertList.expiredAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos3.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            ispercentage="true"
+            title="P&L"
+            amount={(
+              alertList.totalAlertsCount / parseInt(totalCurrentHours)
+            ).toFixed(2)}
+            // chip="dasfvl"
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousTotalAlertsCount,
+                alertList.totalAlertsCount
+              ) + "%↑"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousTotalAlertsCount,
+              alertList.totalAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos4.svg"
+          />
+        </Grid>
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
+          <Stats
+            title="Pro +"
+            ispercentage="false"
+            amount="Subscription"
+            chip=""
+            percentagetext="Details"
+          />
+        </Grid>
       </Grid>
       <Divider my={6} />
 
@@ -730,17 +829,101 @@ function OrderList() {
 }
 
 const Grid = styled(MuiGrid)`
+  .MuiPaper-root {
+    border: ${(props) =>
+      props.theme.name === "DARK" ? "1px solid white;" : "unset"};
+  }
+  .card-head {
+    color: #5a607f;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 28px;
+    font-weight: 900;
+  }
+  .MuiTypography-subtitle2 {
+    .percentage-text {
+      color: #7e84a3;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
   &.pro-card {
     .MuiPaper-root {
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
+      border: unset !important;
       &:before {
         content: "PRO+";
         font-size: 70px;
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
+        top: 12px;
         color: ${(props) => props.theme.palette.proCard.beforeColor};
+      }
+      .card-head {
+        color: #fff;
+        font-size: 31px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      h3 {
+        font-size: 19px;
+      }
+      .MuiTypography-subtitle2 {
+        span {
+          color: #a1a7c4;
+        }
+      }
+    }
+  }
+  .mat-table {
+    th:first-child {
+      min-width: 300px;
+    }
+    th {
+      text-align: left;
+      background: ${(props) => props.theme.palette.tableTh.background};
+      border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+      border-bottom: 0;
+      //padding: 6px;
+      line-height: 1.2;
+    }
+    tbody {
+      tr:first-child {
+        td {
+          text-align: left;
+          background: ${(props) => props.theme.palette.filterTh.background};
+          border-left: 4px solid
+            ${(props) => props.theme.palette.background.paper};
+          padding: 6px;
+          line-height: 1.2;
+          .MuiFormLabel-root {
+            & > .Mui-focused {
+              &:after {
+                display: none;
+              }
+            }
+          }
+          .MuiInput-root {
+            &:before {
+              border-bottom: 0;
+            }
+            &:after {
+              display: none;
+            }
+            .MuiSelect-select {
+              background-image: url("static/img/icns/filter-icn.png");
+              background-size: 16px;
+              background-repeat: no-repeat;
+              background-position: left center;
+              padding-left: 30px;
+            }
+          }
+        }
       }
     }
   }
