@@ -490,9 +490,9 @@ function Alerts() {
                 {
                   title: "TICKER",
                   field: "ticker",
-                  // render: (rowData) => rowData.ticker,
                   render: (rowData) => {
                     const styles = { width: 40, borderRadius: "50%" };
+                    // eslint-disable-next-line jsx-a11y/alt-text
                     return <><img src={rowData.ticker_image_url} style={styles} /> <span>{rowData.ticker}</span></>;
                   },
                   lookup: [...new Set(alertList.alerts.map((x) => x.ticker))]
