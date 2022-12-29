@@ -219,6 +219,7 @@ function Alerts() {
     time_Received: o.time_Received,
     time_Executed: o.time_Executed,
     alert_Name: o.alert_Name,
+    ticker_image_url: '/static/img/stats/icon-1.svg',
   }));
 
   function calculatePercentage(previous, current) {
@@ -489,7 +490,11 @@ function Alerts() {
                 {
                   title: "TICKER",
                   field: "ticker",
-                  render: (rowData) => rowData.ticker,
+                  // render: (rowData) => rowData.ticker,
+                  render: (rowData) => {
+                    const styles = { width: 40, borderRadius: "50%" };
+                    return <><img src={rowData.ticker_image_url} style={styles} /> <span>{rowData.ticker}</span></>;
+                  },
                   lookup: [...new Set(alertList.alerts.map((x) => x.ticker))]
                     .filter(Boolean)
                     .reduce((a, v) => ({ ...a, [v]: v }), {}),
