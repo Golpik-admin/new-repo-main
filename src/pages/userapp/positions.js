@@ -5,18 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Divider as MuiDivider,
   Grid as MuiGrid,
-  IconButton,
   Paper as MuiPaper,
-  Table as MuiTable,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
   Toolbar,
-  LinearProgress as MuiLinearProgress,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -29,7 +19,6 @@ import {
   FirstPage,
   LastPage,
 } from "@mui/icons-material";
-import { SyncAlt, AddOutlined } from "@mui/icons-material";
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
@@ -38,14 +27,12 @@ import {
   fetchPositionsPrevious,
   fetchPNLPrevious,
 } from "../../redux/slices/positionsPreviousMonth";
-import Moment from "react-moment";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
-import FilterPop from "./Filter";
 
 import MaterialTable from "material-table";
 import { ChevronLeft, ChevronRight } from "react-feather";
@@ -53,157 +40,6 @@ import { ChevronLeft, ChevronRight } from "react-feather";
 const Divider = styled(MuiDivider)(spacing);
 
 const Paper = styled(MuiPaper)(spacing);
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => ({
-    el,
-    index,
-  }));
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a.el, b.el);
-    if (order !== 0) return order;
-    return a.index - b.index;
-  });
-  return stabilizedThis.map((element) => element.el);
-}
-
-const headCells = [
-  // { id: "id", alignment: "left", label: "ID" },
-  { id: "ticker", alignment: "left", label: "TICKER" },
-  { id: "option_Symbol", alignment: "left", label: "OPTION SYMBOL" },
-  { id: "option_type", alignment: "left", label: "OPTION TYPE" },
-  { id: "price_excuted", alignment: "left", label: "PRICE EXECUTED" },
-  {
-    id: "qty",
-    alignment: "left",
-    label: "QTY",
-  },
-  { id: "alert_description", alignment: "left", label: "ALERT DESCRIPTION" },
-  { id: "capital_commited", alignment: "left", label: "CAPITAL COMMITED" },
-  { id: "status", alignment: "left", label: "STATUS" },
-  { id: "time_bought", alignment: "left", label: "TIME BOUGHT" },
-  { id: "time_sold", alignment: "left", label: "TIME SOLD" },
-  { id: "price_now", alignment: "left", label: "PRICE NOW" },
-  { id: "p_l", alignment: "left", label: "P & L" },
-  { id: "description", alignment: "left", label: "Description" },
-];
-
-const EnhancedTableHead = (props) => {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            className="table-th"
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            {headCell.label}
-          </TableCell>
-        ))}
-      </TableRow>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className="filter-th"
-          >
-            <Box className="filter-box">
-              <FilterPop />
-              <TableSortLabel
-                active={true}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-                IconComponent={SyncAlt}
-              ></TableSortLabel>
-            </Box>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-};
-
-const Table = styled(MuiTable)`
-  // th.table-th:first-child {
-  //   min-width: 300px;
-  // }
-  th {
-    border-left: 4px solid ${(props) => props.theme.palette.background.paper};
-    border-bottom: 0;
-    padding: 6px 8px;
-    line-height: 1.2;
-  }
-  th.table-th {
-    background: ${(props) => props.theme.palette.tableTh.background};
-  }
-  th.filter-th {
-    background: ${(props) => props.theme.palette.filterTh.background};
-    .filter-box {
-      display: flex;
-      justify-content: space-between;
-      button {
-        color: ${(props) => props.theme.palette.filterTh.color};
-        min-width: 30px;
-      }
-      .MuiTableSortLabel-root {
-        transform: rotate(90deg);
-        svg {
-          color: ${(props) => props.theme.palette.filterTh.color};
-        }
-      }
-    }
-  }
-  .description-td {
-    padding: 0;
-    position: relative;
-    .description-box {
-      padding: 5px 40px 5px 5px;
-      button {
-        position: absolute;
-        border-radius: 0;
-        height: 100%;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background: ${(props) => props.theme.palette.filterTh.background};
-        color: ${(props) => props.theme.palette.filterTh.color};
-        svg {
-          font-size: 16px;
-          border-radius: 100%;
-          color: ${(props) => props.theme.palette.filterTh.background};
-          background: ${(props) => props.theme.palette.filterTh.color};
-        }
-      }
-    }
-  }
-`;
 
 const Box = styled.div`
   &.radio-parent {
@@ -254,7 +90,7 @@ const Box = styled.div`
   }
 `;
 
-const EnhancedTableToolbar = (props) => {
+const EnhancedTableToolbar = () => {
   // Here was 'let'
   const dispatch = useDispatch();
   const handleChange = (event) => {
@@ -331,19 +167,8 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-function EnhancedTable() {
+function Positions() {
   const positionsList = useSelector((state) => state.positionsList);
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("customer");
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
 
   const tableIcons = {
     // Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -389,344 +214,6 @@ function EnhancedTable() {
     sell_Order_Reason: o.sell_Order_Reason,
   }));
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = positionsList.positions.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const LinearProgress = styled(MuiLinearProgress)(spacing);
-  return (
-    <div>
-      {positionsList.loading && <LinearProgress />}
-      {!positionsList.loading && positionsList.positions.length ? (
-        <Paper
-          sx={{
-            padding: 8,
-            minHeight: 450,
-          }}
-        >
-          <EnhancedTableToolbar numSelected={selected.length} />
-
-          <MaterialTable
-            isLoading={positionsList.loading}
-            icons={tableIcons}
-            title={false}
-            columns={[
-              {
-                title: "TICKER",
-                field: "ticker",
-                render: (rowData) => rowData.ticker,
-                lookup: [
-                  ...new Set(positionsList.positions.map((x) => x.ticker)),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "OPTION SYMBOL",
-                field: "option_Symbol",
-                render: (rowData) => rowData.option_Symbol,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.option_Symbol)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "OPTION TYPE",
-                field: "option_Type",
-                render: (rowData) => rowData.option_Type,
-                lookup: [
-                  ...new Set(positionsList.positions.map((x) => x.option_Type)),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "PRICE EXECUTED",
-                field: "buy_Price_Executed",
-                render: (rowData) => rowData.buy_Price_Executed,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.buy_Price_Executed)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "QTY",
-                field: "quantity",
-                render: (rowData) => rowData.quantity,
-                lookup: [
-                  ...new Set(positionsList.positions.map((x) => x.quantity)),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "ALERT DESCRIPTION",
-                field: "buy_Order_Reason",
-                render: (rowData) => rowData.buy_Order_Reason,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.buy_Order_Reason)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "CAPITAL COMMITED",
-                field: "capital_Committed",
-                render: (rowData) => rowData.capital_Committed,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.capital_Committed)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "STATUS",
-                field: "status",
-                render: (rowData) => rowData.status,
-                lookup: [
-                  ...new Set(positionsList.positions.map((x) => x.status)),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "TIME BOUGHT",
-                field: "buy_Time_Executed",
-                render: (rowData) => rowData.buy_Time_Executed,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.buy_Time_Executed)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "TIME SOLD",
-                field: "sell_Time_Executed",
-                render: (rowData) => rowData.sell_Time_Executed,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.sell_Time_Executed)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-
-              {
-                title: "PRICE NOW",
-                field: "sell_Price_Executed",
-                render: (rowData) => rowData.sell_Price_Executed,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.sell_Price_Executed)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-              {
-                title: "P & L",
-                field: "pnL",
-                render: (rowData) => rowData.pnL,
-                lookup: [...new Set(positionsList.positions.map((x) => x.pnL))]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-              {
-                title: "Description",
-                field: "sell_Order_Reason",
-                render: (rowData) => rowData.sell_Order_Reason,
-                lookup: [
-                  ...new Set(
-                    positionsList.positions.map((x) => x.sell_Order_Reason)
-                  ),
-                ]
-                  .filter(Boolean)
-                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
-              },
-            ]}
-            data={New_DATA}
-            options={{
-              toolbar: false,
-              padding: "dense",
-              filtering: true,
-              search: false,
-              pageSize: 10,
-              showTitle: false,
-            }}
-          />
-          <TableContainer>
-            <Table
-              aria-labelledby="tableTitle"
-              size={"medium"}
-              aria-label="enhanced table"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={positionsList.positions.length}
-              />
-              <TableBody>
-                {stableSort(
-                  positionsList.positions,
-                  getComparator(order, orderBy)
-                )
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    const isItemSelected = isSelected(row.id);
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={`${row.id}`}
-                        selected={isItemSelected}
-                      >
-                        <TableCell align="left">{row.ticker}</TableCell>
-                        <TableCell align="left">{row.option_Symbol}</TableCell>
-                        <TableCell align="left">{row.option_Type}</TableCell>
-                        <TableCell align="left">
-                          {row.buy_Price_Executed}
-                        </TableCell>
-                        <TableCell align="left">{row.quantity}</TableCell>
-                        <TableCell align="left">
-                          {row.buy_Order_Reason}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.capital_Committed !== null
-                            ? parseFloat(row.capital_Committed).toFixed(2)
-                            : ""}
-                        </TableCell>
-                        <TableCell align="left">{row.status}</TableCell>
-                        <TableCell align="left">
-                          {row.buy_Time_Executed !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.buy_Time_Executed}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.sell_Time_Executed !== null ? (
-                            <Moment format="YYYY-MM-DD hh:mm:ss">
-                              {row.sell_Time_Executed}
-                            </Moment>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.sell_Price_Executed}
-                        </TableCell>
-                        <TableCell align="left">
-                          {row.pnL !== null
-                            ? parseFloat(row.pnL).toFixed(2)
-                            : ""}
-                        </TableCell>
-                        <TableCell align="left" className="description-td">
-                          <Box className="description-box">
-                            <span>{row.sell_Order_Reason}</span>
-                            <IconButton>
-                              <AddOutlined />
-                            </IconButton>
-                          </Box>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={positionsList.positions.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      ) : (
-        <Paper>
-          <EnhancedTableToolbar numSelected={selected.length} />
-          <TableContainer>
-            <Table
-              aria-labelledby="tableTitle"
-              size={"medium"}
-              aria-label="enhanced table"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={positionsList.positions.length}
-              />
-              <TableBody>
-                <TableCell colSpan={12}>{"Record not found"}</TableCell>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={positionsList.positions.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      )}
-    </div>
-  );
-}
-
-function OrderList() {
   function calculatePercentage(previous, current) {
     let prevCalProcessed = 0;
 
@@ -827,7 +314,6 @@ function OrderList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const positionsList = useSelector((state) => state.positionsList);
   const positionsListPrevious = useSelector(
     (state) => state.positionsListPrevious
   );
@@ -934,7 +420,189 @@ function OrderList() {
 
       <Grid container spacing={6}>
         <Grid item xs={12} className="mat-table">
-          <EnhancedTable />
+          <Paper
+            sx={{
+              padding: 8,
+              minHeight: 450,
+            }}
+          >
+            <EnhancedTableToolbar />
+
+            <MaterialTable
+              isLoading={positionsList.loading}
+              icons={tableIcons}
+              title={false}
+              columns={[
+                {
+                  title: "TICKER",
+                  field: "ticker",
+                  render: (rowData) => rowData.ticker,
+                  lookup: [
+                    ...new Set(positionsList.positions.map((x) => x.ticker)),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "OPTION SYMBOL",
+                  field: "option_Symbol",
+                  render: (rowData) => rowData.option_Symbol,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.option_Symbol)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "OPTION TYPE",
+                  field: "option_Type",
+                  render: (rowData) => rowData.option_Type,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.option_Type)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "PRICE EXECUTED",
+                  field: "buy_Price_Executed",
+                  render: (rowData) => rowData.buy_Price_Executed,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.buy_Price_Executed)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "QTY",
+                  field: "quantity",
+                  render: (rowData) => rowData.quantity,
+                  lookup: [
+                    ...new Set(positionsList.positions.map((x) => x.quantity)),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "ALERT DESCRIPTION",
+                  field: "buy_Order_Reason",
+                  render: (rowData) => rowData.buy_Order_Reason,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.buy_Order_Reason)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "CAPITAL COMMITED",
+                  field: "capital_Committed",
+                  render: (rowData) => rowData.capital_Committed,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.capital_Committed)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "STATUS",
+                  field: "status",
+                  render: (rowData) => rowData.status,
+                  lookup: [
+                    ...new Set(positionsList.positions.map((x) => x.status)),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "TIME BOUGHT",
+                  field: "buy_Time_Executed",
+                  render: (rowData) => rowData.buy_Time_Executed,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.buy_Time_Executed)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "TIME SOLD",
+                  field: "sell_Time_Executed",
+                  render: (rowData) => rowData.sell_Time_Executed,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.sell_Time_Executed)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+
+                {
+                  title: "PRICE NOW",
+                  field: "sell_Price_Executed",
+                  render: (rowData) => rowData.sell_Price_Executed,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.sell_Price_Executed)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+                {
+                  title: "P & L",
+                  field: "pnL",
+                  render: (rowData) => rowData.pnL,
+                  lookup: [
+                    ...new Set(positionsList.positions.map((x) => x.pnL)),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+                {
+                  title: "Description",
+                  field: "sell_Order_Reason",
+                  render: (rowData) => rowData.sell_Order_Reason,
+                  lookup: [
+                    ...new Set(
+                      positionsList.positions.map((x) => x.sell_Order_Reason)
+                    ),
+                  ]
+                    .filter(Boolean)
+                    .reduce((a, v) => ({ ...a, [v]: v }), {}),
+                },
+              ]}
+              data={New_DATA}
+              options={{
+                toolbar: false,
+                padding: "dense",
+                filtering: true,
+                search: false,
+                pageSize: 10,
+                showTitle: false,
+              }}
+            />
+          </Paper>
         </Grid>
       </Grid>
     </React.Fragment>
@@ -1042,4 +710,4 @@ const Grid = styled(MuiGrid)`
   }
 `;
 
-export default OrderList;
+export default Positions;
