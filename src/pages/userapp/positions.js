@@ -375,14 +375,14 @@ function EnhancedTable() {
 
   const New_DATA = positionsList.positions.map((o) => ({
     ticker: o.ticker,
-    option_Type: o.option_Type,
-    order_Action: o.order_Action,
-    price: o.price,
-    status: o.status,
-    alert_Comment: o.alert_Comment,
-    time_Received: o.time_Received,
-    time_Executed: o.time_Executed,
-    alert_Name: o.alert_Name,
+    option_Type: o.option_Symbol,
+    order_Action: o.option_Type,
+    price: o.buy_Price_Executed,
+    status: o.quantity,
+    alert_Comment: o.capital_Committed,
+    time_Received: o.status,
+    time_Executed: o.buy_Time_Executed,
+    alert_Name: o.sell_Time_Executed,
   }));
 
   const handleSelectAllClick = (event) => {
