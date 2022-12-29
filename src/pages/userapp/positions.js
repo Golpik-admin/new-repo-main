@@ -212,6 +212,7 @@ function Positions() {
     sell_Price_Executed: o.sell_Price_Executed,
     pnL: o.pnL,
     sell_Order_Reason: o.sell_Order_Reason,
+    ticker_image_url: "/static/img/avatars/user.png",
   }));
 
   function calculatePercentage(previous, current) {
@@ -436,7 +437,16 @@ function Positions() {
                 {
                   title: "TICKER",
                   field: "ticker",
-                  render: (rowData) => rowData.ticker,
+                  //render: (rowData) => rowData.ticker,
+                  render: (rowData) => {
+                    const styles = { width: 40, borderRadius: "50%" };
+                    return (
+                      <div className="img-wrap">
+                        <img src={rowData.ticker_image_url} style={styles} />{" "}
+                        <span>{rowData.ticker}</span>
+                      </div>
+                    );
+                  },
                   lookup: [
                     ...new Set(positionsList.positions.map((x) => x.ticker)),
                   ]
@@ -674,6 +684,13 @@ const Grid = styled(MuiGrid)`
       line-height: 1.2;
     }
     tbody {
+      .img-wrap {
+        display: flex;
+        align-items: center;
+        img {
+          padding-right: 10px;
+        }
+      }
       tr:first-child {
         td {
           text-align: left;

@@ -219,7 +219,7 @@ function Alerts() {
     time_Received: o.time_Received,
     time_Executed: o.time_Executed,
     alert_Name: o.alert_Name,
-    ticker_image_url: '/static/img/stats/icon-1.svg',
+    ticker_image_url: '/static/img/avatars/user.png',
   }));
 
   function calculatePercentage(previous, current) {
@@ -493,7 +493,7 @@ function Alerts() {
                   // render: (rowData) => rowData.ticker,
                   render: (rowData) => {
                     const styles = { width: 40, borderRadius: "50%" };
-                    return <><img src={rowData.ticker_image_url} style={styles} /> <span>{rowData.ticker}</span></>;
+                    return <div className="img-wrap"><img src={rowData.ticker_image_url} style={styles} /> <span>{rowData.ticker}</span></div>;
                   },
                   lookup: [...new Set(alertList.alerts.map((x) => x.ticker))]
                     .filter(Boolean)
@@ -658,6 +658,13 @@ const Grid = styled(MuiGrid)`
       line-height: 1.2;
     }
     tbody {
+      .img-wrap{
+        display:flex;
+        align-items:center;
+        img{
+          padding-right: 10px;
+        }
+      }
       tr:first-child {
         td {
           text-align: left;
@@ -689,6 +696,7 @@ const Grid = styled(MuiGrid)`
             }
           }
         }
+        
       }
     }
   }
