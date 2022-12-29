@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { forwardRef, useEffect } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,17 +29,10 @@ import {
   SystemUpdateAltOutlined,
   DeleteOutlineOutlined,
 } from "@mui/icons-material";
-
-import {
-  ArrowDownward,
-  FilterList,
-  FirstPage,
-  LastPage,
-} from "@mui/icons-material";
-
 import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
+import { useEffect } from "react";
 import { fetchRiskManagements } from "../../redux/slices/getRiskManagement";
 import Moment from "react-moment";
 
@@ -51,9 +44,6 @@ import "./cus-style.css";
 import moment from "moment-timezone";
 import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
-
-import MaterialTable from "material-table";
-import { ChevronLeft, ChevronRight } from "react-feather";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -447,48 +437,6 @@ function EnhancedTable() {
   console.log(riskManagementsList);
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
-  const alertList = useSelector((state) => state.alertsList);
-
-  const tableIcons = {
-    // Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    // Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    // Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    // Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    // DetailPanel: forwardRef((props, ref) => (
-    //   <ChevronRight {...props} ref={ref} />
-    // )),
-    // Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    // Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => (
-      <ChevronLeft {...props} ref={ref} />
-    )),
-    // ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    // Search: forwardRef((props, ref) => <Sort {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => (
-      <ArrowDownward {...props} ref={ref} />
-    )),
-    // ThirdStateCheck: forwardRef((props, ref) => (
-    //   <Remove {...props} ref={ref} />
-    // )),
-    // ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
-  };
-
-  const New_DATA = alertList.alerts.map((o) => ({
-    ticker: o.ticker,
-    option_Type: o.option_Type,
-    order_Action: o.order_Action,
-    price: o.price,
-    status: o.status,
-    alert_Comment: o.alert_Comment,
-    time_Received: o.time_Received,
-    time_Executed: o.time_Executed,
-    alert_Name: o.alert_Name,
-  }));
-
   return (
     <div>
       <Paper
@@ -498,98 +446,7 @@ function EnhancedTable() {
         }}
       >
         <EnhancedTableToolbar numSelected={selected.length} />
-        <MaterialTable
-              isLoading={ alertList.loading }
-              icons={tableIcons}
-              title={false}
-              columns={[
-                {
-                  title: "TICKER",
-                  field: "ticker",
-                  render: (rowData) => rowData.ticker,
-                  lookup: [...new Set(alertList.alerts.map((x) => x.ticker))].reduce(
-                    (a, v) => ({ ...a, [v]: v }),
-                    {}
-                  ),
-                },
-                {
-                  title: "OPTION TYPE",
-                  field: "option_Type",
-                  render: (rowData) => rowData.option_Type,
-                  lookup: [
-                    ...new Set(alertList.alerts.map((x) => x.option_Type)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-                },
-                {
-                  title: "ORDER ACTION",
-                  field: "order_Action",
-                  render: (rowData) => rowData.order_Action,
-                  lookup: [
-                    ...new Set(alertList.alerts.map((x) => x.order_Action)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-                },
-                {
-                  title: "PRICE NOW",
-                  field: "price",
-                  render: (rowData) => rowData.price,
-                  lookup: [...new Set(alertList.alerts.map((x) => x.price))].reduce(
-                    (a, v) => ({ ...a, [v]: v }),
-                    {}
-                  ),
-                },
-                {
-                  title: "STATUS",
-                  field: "status",
-                  render: (rowData) => rowData.status,
-                  lookup: [...new Set(alertList.alerts.map((x) => x.status))].reduce(
-                    (a, v) => ({ ...a, [v]: v }),
-                    {}
-                  ),
-                },
-                {
-                  title: "ALERT COMMENT",
-                  field: "alert_Comment",
-                  render: (rowData) => rowData.alert_Comment,
-                  lookup: [
-                    ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-                },
-                {
-                  title: "TIME RECEIVED",
-                  field: "time_Received",
-                  render: (rowData) => rowData.time_Received,
-                  lookup: [
-                    ...new Set(alertList.alerts.map((x) => x.time_Received)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-                },
-                {
-                  title: "TIME EXECUTED",
-                  field: "time_Executed",
-                  render: (rowData) => rowData.time_Executed,
-                  lookup: [
-                    ...new Set(alertList.alerts.map((x) => x.time_Executed)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-                },
-                {
-                  title: "ALERT NAME",
-                  field: "alert_Name",
-                  render: (rowData) => rowData.alert_Name,
-                  lookup: [
-                    ...new Set(alertList.alerts.map((x) => x.alert_Name)),
-                  ].reduce((a, v) => ({ ...a, [v]: v }), {}),
-                },
-              ]}
-              data={New_DATA}
-              options={{
-                toolbar: false,
-                padding:"dense",
-                filtering: true,
-                search: false,
-                pageSize: 10,
-                showTitle: false,
-              }}
-            />
-        {/* {riskManagementsList.loading && <LinearProgress />}
+        {riskManagementsList.loading && <LinearProgress />}
         {!riskManagementsList.loading &&
         riskManagementsList.tickersRiskManagement.length ? (
           <TableContainer>
@@ -665,7 +522,7 @@ function EnhancedTable() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
+          />
       </Paper>
     </div>
   );
@@ -882,7 +739,7 @@ function OrderList() {
       <Divider my={6} />
 
       <Grid container spacing={6}>
-        <Grid item xs={12} className="mat-table">
+        <Grid item xs={12}>
           <EnhancedTable />
         </Grid>
       </Grid>
