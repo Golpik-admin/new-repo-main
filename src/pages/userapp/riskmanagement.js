@@ -804,7 +804,7 @@ function OrderList() {
               previousAlertList.previousTotalAlertsCount,
               alertList.totalAlertsCount
             )}
-            illustration="/static/img/stats/icon-pos4.svg"
+            illustration="/static/img/stats/icon-pos3.svg"
           />
         </Grid>
         <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
