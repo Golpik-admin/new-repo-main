@@ -428,7 +428,7 @@ function EnhancedTable() {
             title={false}
             columns={[
               {
-                title: "ticker",
+                title: "TICKER",
                 field: "ticker",
                 render: (rowData) => rowData.ticker,
                 lookup: [
@@ -439,7 +439,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "option_Symbol",
+                title: "OPTION SYMBOL",
                 field: "option_Symbol",
                 render: (rowData) => rowData.option_Symbol,
                 lookup: [
@@ -452,7 +452,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "option_Type",
+                title: "OPTION TYPE",
                 field: "option_Type",
                 render: (rowData) => rowData.option_Type,
                 lookup: [
@@ -463,7 +463,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "buy_Price_Executed",
+                title: "PRICE EXECUTED",
                 field: "buy_Price_Executed",
                 render: (rowData) => rowData.buy_Price_Executed,
                 lookup: [
@@ -476,7 +476,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "quantity",
+                title: "QTY",
                 field: "quantity",
                 render: (rowData) => rowData.quantity,
                 lookup: [
@@ -487,7 +487,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "buy_Order_Reason",
+                title: "ALERT DESCRIPTION",
                 field: "buy_Order_Reason",
                 render: (rowData) => rowData.buy_Order_Reason,
                 lookup: [
@@ -500,7 +500,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "capital_Committed",
+                title: "CAPITAL COMMITED",
                 field: "capital_Committed",
                 render: (rowData) => rowData.capital_Committed,
                 lookup: [
@@ -513,7 +513,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "status",
+                title: "STATUS",
                 field: "status",
                 render: (rowData) => rowData.status,
                 lookup: [
@@ -524,7 +524,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "buy_Time_Executed",
+                title: "TIME BOUGHT",
                 field: "buy_Time_Executed",
                 render: (rowData) => rowData.buy_Time_Executed,
                 lookup: [
@@ -537,7 +537,7 @@ function EnhancedTable() {
               },
 
               {
-                title: "sell_Time_Executed",
+                title: "TIME SOLD",
                 field: "sell_Time_Executed",
                 render: (rowData) => rowData.sell_Time_Executed,
                 lookup: [
@@ -550,12 +550,32 @@ function EnhancedTable() {
               },
 
               {
-                title: "sell_Price_Executed",
+                title: "PRICE NOW",
                 field: "sell_Price_Executed",
                 render: (rowData) => rowData.sell_Price_Executed,
                 lookup: [
                   ...new Set(
                     positionsList.positions.map((x) => x.sell_Price_Executed)
+                  ),
+                ]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
+              },
+              {
+                title: "P & L",
+                field: "pnL",
+                render: (rowData) => rowData.pnL,
+                lookup: [...new Set(positionsList.positions.map((x) => x.pnL))]
+                  .filter(Boolean)
+                  .reduce((a, v) => ({ ...a, [v]: v }), {}),
+              },
+              {
+                title: "Description",
+                field: "sell_Order_Reason",
+                render: (rowData) => rowData.sell_Order_Reason,
+                lookup: [
+                  ...new Set(
+                    positionsList.positions.map((x) => x.sell_Order_Reason)
                   ),
                 ]
                   .filter(Boolean)
@@ -572,7 +592,7 @@ function EnhancedTable() {
               showTitle: false,
             }}
           />
-          {/* <TableContainer>
+          <TableContainer>
             <Table
               aria-labelledby="tableTitle"
               size={"medium"}
@@ -667,7 +687,7 @@ function EnhancedTable() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
+          />
         </Paper>
       ) : (
         <Paper>
