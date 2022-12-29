@@ -24,6 +24,7 @@ import {
   TextField,
 } from "@mui/material";
 import {
+  Sort,
   AddBox,
   ArrowDownward,
   Clear,
@@ -37,7 +38,6 @@ import {
   ViewColumn,
 } from "@mui/icons-material";
 
-import SortIcon from "@mui/icons-material/Sort";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { fetchAlerts } from "../../redux/slices/alerts";
@@ -372,7 +372,7 @@ function EnhancedTable() {
       <ChevronLeft {...props} ref={ref} />
     )),
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <SortIcon {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Sort {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => (
       <ArrowDownward {...props} ref={ref} />
     )),
@@ -936,10 +936,18 @@ const Grid = styled(MuiGrid)`
             }
           }
           .MuiInput-root{
-            &:before{border-bottom: 0;}
-              &:after{
-                display:none;
-              }
+            &:before{
+              border-bottom: 0;
+            }
+            &:after{
+              display:none;
+            }
+            .MuiSelect-select{
+            background-image: url('static/img/icns/filter-icn.png');
+            background-size: 16px;background-repeat: no-repeat;
+            background-position:left center;
+            padding-left: 30px;
+            }
           }
         }
       }
