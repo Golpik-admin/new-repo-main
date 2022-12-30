@@ -38,9 +38,8 @@ import useAuth from "../../hooks/useAuth";
 import MaterialTable from "material-table";
 import { ChevronLeft, ChevronRight, Edit } from "react-feather";
 
-const Divider = styled(MuiDivider)(spacing);
-
 function RiskManagement() {
+  const Divider = styled(MuiDivider)(spacing);
   const alertList = useSelector((state) => state.alertsList);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
 
