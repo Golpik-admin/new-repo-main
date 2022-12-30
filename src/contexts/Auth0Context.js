@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { Auth0Client } from "@auth0/auth0-spa-js";
 
 import { auth0Config } from "../config";
@@ -43,9 +43,11 @@ const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
+      setLoading(true);
       try {
         auth0Client = new Auth0Client({
           client_id: auth0Config.clientId || "",
@@ -60,17 +62,20 @@ function AuthProvider({ children }) {
         if (isAuthenticated) {
           const user = await auth0Client.getUser();
 
+          setLoading(false);
           dispatch({
             type: INITIALIZE,
             payload: { isAuthenticated, user: user || null },
           });
         } else {
+          setLoading(false);
           dispatch({
             type: INITIALIZE,
             payload: { isAuthenticated, user: null },
           });
         }
       } catch (err) {
+        setLoading(false);
         console.error(err);
         dispatch({
           type: INITIALIZE,
@@ -115,6 +120,8 @@ function AuthProvider({ children }) {
         signIn,
         signOut,
         resetPassword,
+        setLoading,
+        loading,
       }}
     >
       {children}
