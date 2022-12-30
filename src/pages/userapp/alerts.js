@@ -455,10 +455,6 @@ function Alerts() {
   );
 }
 
-
-
-
-
 const Box = styled.div`
   &.radio-parent {
     flex: 1 1 100%;
