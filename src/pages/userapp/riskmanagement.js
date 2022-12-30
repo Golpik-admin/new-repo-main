@@ -71,6 +71,7 @@ function RiskManagement() {
     search: false,
     pageSize: 10,
     showTitle: false,
+    actionsColumnIndex: -1,
   };
 
   const tableIcons = {
@@ -353,6 +354,14 @@ function RiskManagement() {
               columns={fields}
               data={collections}
               options={configuration}
+              // actions={[
+              //   {
+              //     icon: tableIcons.Add,
+              //     tooltip: "Add User",
+              //     isFreeAction: true,
+              //     onClick: (event) => alert("You want to add a new row"),
+              //   },
+              // ]}
               editable={{
                 // onBulkUpdate: (changes) => {
                 //   return new Promise((resolve, reject) => {
