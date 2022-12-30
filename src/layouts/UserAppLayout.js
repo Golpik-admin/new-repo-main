@@ -13,7 +13,6 @@ import dashboardItems from "../components/sidebar/UserAppDashboardSidebar";
 import Sidebar from "../components/sidebar/Sidebar";
 import Footer from "../components/Footer";
 import Settings from "../components/Settings";
-import UserDashboard from "../pages/dashboards/Default/index";
 
 const drawerWidth = 58;
 const drawerWidthXs = 258;

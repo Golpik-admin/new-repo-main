@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
-import { rgba, darken } from "polished";
+import { rgba } from "polished";
 
 import { Chip, Collapse, ListItemButton, ListItemText } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";

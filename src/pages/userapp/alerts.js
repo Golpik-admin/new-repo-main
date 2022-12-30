@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable prettier/prettier */
 import React, { forwardRef, useEffect } from "react";
 import styled from "@emotion/styled";
@@ -8,7 +9,6 @@ import {
   Grid as MuiGrid,
   Paper as MuiPaper,
   Toolbar,
-  LinearProgress as MuiLinearProgress,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -216,8 +216,8 @@ function Alerts() {
     price: o.price,
     status: o.status,
     alert_Comment: o.alert_Comment,
-    time_Received: o.time_Received,
-    time_Executed: o.time_Executed,
+    time_Received: o.time_Received ? moment(o.time_Received).format('lll') :'',
+    time_Executed: o.time_Executed ? moment(o.time_Executed).format('lll') :'',
     alert_Name: o.alert_Name,
     ticker_image_url: '/static/img/avatars/user.png',
   }));

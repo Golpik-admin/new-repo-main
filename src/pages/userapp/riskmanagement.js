@@ -26,15 +26,11 @@ import {
 import {
   SyncAlt,
   AddOutlined,
-  SystemUpdateAltOutlined,
-  DeleteOutlineOutlined,
 } from "@mui/icons-material";
-import { green, red } from "@mui/material/colors";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchRiskManagements } from "../../redux/slices/getRiskManagement";
-import Moment from "react-moment";
 
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
@@ -42,7 +38,6 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
-import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
 
 const Divider = styled(MuiDivider)(spacing);
@@ -108,7 +103,6 @@ const EnhancedTableHead = (props) => {
           >
             <Box className="filter-box">
               <div className="txt">{headCell.label}</div>
-              <FilterPop />
               {/* SyncAltTwoToneIcon  */}
               <TableSortLabel
                 active={true}
@@ -325,11 +319,9 @@ const Box = styled.div`
 
 const EnhancedTableToolbar = () => {
 
-  const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
-  const userId = "6372c6c0a8b2c2ec60b2da52";
 
-  const handleChange = (event) => {
+  const handleChange = () => {
     // dispatch(fetchRiskManagements({ status: event.target.value, count: null,userId:userId, }));
   };
   const today = moment().format("YYYY-MM-DD");
@@ -528,7 +520,7 @@ function EnhancedTable() {
   );
 }
 
-function OrderList() {
+function RiskManagement() {
   function calculatePercentage(previous, current) {
     let prevCalProcessed = 0;
 
@@ -569,14 +561,6 @@ function OrderList() {
     .format("YYYY-MM-DD");
   const currentMonthLastDay = moment(date).endOf("month").format("YYYY-MM-DD");
 
-  const previousMonthFirstDay = moment(date)
-    .subtract(1, "months")
-    .startOf("month")
-    .format("YYYY-MM-DD");
-  const previousMonthLastDay = moment(date)
-    .subtract(1, "months")
-    .endOf("month")
-    .format("YYYY-MM-DD");
 
   const totalCurrentHours = moment
     .duration(
@@ -627,6 +611,7 @@ function OrderList() {
       }
     };
     initialize();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const alertList = useSelector((state) => state.alertsList);
@@ -848,4 +833,4 @@ const Grid = styled(MuiGrid)`
   }
 `;
 
-export default OrderList;
+export default RiskManagement;

@@ -10,7 +10,6 @@ import AuthLayout from "./layouts/Auth";
 import DashboardLayout from "./layouts/AdminAppLayout";
 import FrontEndDashboardLayout from "./layouts/UserAppLayout";
 import DocLayout from "./layouts/Doc";
-import PresentationLayout from "./layouts/Presentation";
 
 // Guards
 import AuthGuard from "./components/guards/AuthGuard";
@@ -89,7 +88,6 @@ import UserRiskManagement from "./pages/userapp/riskmanagement";
 import UserIntegration from "./pages/userapp/integration";
 
 // Landing
-import Landing from "./pages/presentation/Landing";
 
 // Protected routes
 import ProtectedPage from "./pages/protected/ProtectedPage";
@@ -97,8 +95,6 @@ import GuestGuard from "./components/guards/GuestGuard";
 
 // Dashboard components
 const Default = async(() => import("./pages/dashboards/Default"));
-const Analytics = async(() => import("./pages/dashboards/Analytics"));
-const SaaS = async(() => import("./pages/dashboards/SaaS"));
 
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));

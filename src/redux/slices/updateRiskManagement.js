@@ -18,10 +18,6 @@ const initialState = {
 export const updateRiskManagements = createAsyncThunk(
   "riskManagements/updateRiskManagements",
   async (args = null) => {
-    const startDate =
-      args !== null && args.startDate !== undefined ? args.startDate : null;
-    const endDate =
-      args !== null && args.endDate !== undefined ? args.endDate : null;
     const response = await axios
       .get(`${apiEndpoint}SetRiskManagementByUserId`, {
         params: {

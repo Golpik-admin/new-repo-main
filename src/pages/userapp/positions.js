@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { forwardRef, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
