@@ -440,11 +440,10 @@ function Alerts() {
               minHeight: 450,
             }}
           >
-            <EnhancedTableToolbar sx={{ p: 0 }} />
+            <EnhancedTableToolbar sx={{ p: 0 }} userId={ userId } />
             <MaterialTable
               isLoading={alertList.loading}
               icons={tableIcons}
-              title={false}
               columns={fields}
               data={collections}
               options={configuration}
@@ -508,11 +507,11 @@ const Box = styled.div`
     }
   }
 `;
-const EnhancedTableToolbar = () => {
+const EnhancedTableToolbar = (props) => {
   const getSettings = useSelector((state) => state.fetchSettingsList);
   const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
-  const userId = "6372c6c0a8b2c2ec60b2da52";
+  const userId = props.userId;
   const today = moment().format("YYYY-MM-DD");
   /* Functions */
   const handleChange = (event) => {
