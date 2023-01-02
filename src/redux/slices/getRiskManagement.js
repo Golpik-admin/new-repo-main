@@ -8,7 +8,7 @@ const initialState = {
   riskManagements: [],
   loading: true,
   errors: null,
-  tickersRiskManagement: 0,
+  tickersRiskManagement: [],
   processedRiskManagementsCount: 0,
   unprocessedRiskManagementsCount: 0,
   expiredRiskManagementsCount: 0,

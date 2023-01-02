@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +28,7 @@ import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchRiskManagements } from "../../redux/slices/getRiskManagement";
-
+import { updateRiskManagements } from "../../redux/slices/updateRiskManagement";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
@@ -113,6 +113,10 @@ function RiskManagement() {
         Brokerage: o.Brokerage,
       }))
     : [];
+
+  const [data, setData] = useState([]);
+  // setData([collections]);
+  // console.log(data);
   const fields = [
     {
       title: "TICKER",
@@ -201,20 +205,6 @@ function RiskManagement() {
             .reduce((a, v) => ({ ...a, [v]: v }), {})
         : {},
     },
-    // {
-    //   title: "ACTIVE",
-    //   field: "Brokerage",
-    //   filtering: false,
-    //   // render: (rowData) => {
-    //   //   return (
-    //   //     <TableCell colSpan={5} className="filter-th">
-    //   //       <IconButton>
-    //   //         <AddOutlined />
-    //   //       </IconButton>
-    //   //     </TableCell>
-    //   //   );
-    //   // },
-    // },
   ];
 
   function calculatePercentage(previous, current) {
@@ -386,14 +376,6 @@ function RiskManagement() {
               columns={fields}
               data={collections}
               options={configuration}
-              // actions={[
-              //   {
-              //     icon: tableIcons.Add,
-              //     tooltip: "Add User",
-              //     isFreeAction: true,
-              //     onClick: (event) => alert("You want to add a new row"),
-              //   },
-              // ]}
               editable={{
                 // onBulkUpdate: (changes) => {
                 //   return new Promise((resolve, reject) => {
@@ -404,19 +386,28 @@ function RiskManagement() {
                 //     }, 1000);
                 //   });
                 // },
-                onRowAddCancelled: (rowData) =>
-                  console.log("Row adding cancelled"),
-                onRowUpdateCancelled: (rowData) =>
-                  console.log("Row editing cancelled"),
+                onRowAddCancelled: (rowData) => alert("Row adding cancelled"),
                 onRowAdd: (newData) => {
                   return new Promise((resolve, reject) => {
+                    console.log(newData);
+                    dispatch(
+                      updateRiskManagements({
+                        userId: userId,
+                        Symbol: newData.Symbol,
+                        ProfitTarget: newData.ProfitTarget,
+                        LossTarget: newData.LossTarget,
+                        Brokerage: newData.Brokerage,
+                      })
+                    );
                     setTimeout(() => {
-                      newData.id = "uuid-" + Math.random() * 10000000;
-                      // setData([...data, newData]);
                       resolve();
+                      // newData.id = "uuid-" + Math.random() * 10000000;
+                      // setData([...data, newData]);
                     }, 1000);
                   });
                 },
+                onRowUpdateCancelled: (rowData) =>
+                  alert("Row editing cancelled"),
                 onRowUpdate: (newData, oldData) => {
                   return new Promise((resolve, reject) => {
                     setTimeout(() => {

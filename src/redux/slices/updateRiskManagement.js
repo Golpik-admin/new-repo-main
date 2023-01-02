@@ -19,11 +19,15 @@ export const updateRiskManagements = createAsyncThunk(
   "riskManagements/updateRiskManagements",
   async (args = null) => {
     const response = await axios
-      .get(`${apiEndpoint}SetRiskManagementByUserId`, {
+      .post(`${apiEndpoint}SetRiskManagementByUserId`, {
         params: {
           //   status: args !== null && args.status !== "all" ? args.status : null,
           //   count: args !== null ? args.count : null,
           User_Id: args !== null ? args.userId : null,
+          Symbol: args !== null ? args.Symbol : null,
+          ProfitTarget: args !== null ? args.ProfitTarget : null,
+          LossTarget: args !== null ? args.LossTarget : null,
+          Brokerage: args !== null ? args.Brokerage : null,
         },
       })
       .then((response) => {
