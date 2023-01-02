@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SignUpComponent from "../../components/auth/SignUp";
 
-const steps = ["Select campaign settings", "Create an ad group"];
+const steps = ["Personal Details", "Payment Method"];
 
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);

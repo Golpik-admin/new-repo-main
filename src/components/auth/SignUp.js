@@ -98,6 +98,7 @@ function SignUp(props) {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 my={3}
+                variant="standard"
               />
               <TextField
                 type="text"
@@ -110,6 +111,7 @@ function SignUp(props) {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 my={3}
+                variant="standard"
               />
               <TextField
                 type="email"
@@ -122,6 +124,7 @@ function SignUp(props) {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 my={3}
+                variant="standard"
               />
               <TextField
                 type="password"
@@ -134,6 +137,7 @@ function SignUp(props) {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 my={3}
+                variant="standard"
               />
               <TextField
                 type="password"
@@ -148,6 +152,7 @@ function SignUp(props) {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 my={3}
+                variant="standard"
               />
             </>
           )}
