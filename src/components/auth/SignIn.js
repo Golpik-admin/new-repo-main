@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 //import { Link } from "react-router-dom";
 import { Link } from "@mui/material";
@@ -143,15 +143,9 @@ function SignIn() {
             >
               Login
             </Button>
-            <Button
-              component={Link}
-              to="/auth/reset-password"
-              variant="outlined"
-              className="signup-btn"
-              size="large"
-            >
+            <Link href="/auth/sign-up" underline="none">
               Sign up
-            </Button>
+            </Link>
           </Div>
         </form>
       )}

@@ -10,7 +10,7 @@ function HelpCenter() {
         <Grid item>
           <img
             style={{ height: `calc(100% - 72px)` }}
-            src={meme.url}
+            // src={meme.url}
             className="center w-full bg-cover object-cover"
             alt=""
           />

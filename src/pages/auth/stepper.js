@@ -7,11 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SignUpComponent from "../../components/auth/SignUp";
 
-const steps = [
-  "Select campaign settings",
-  "Create an ad group",
-  "Create an ad",
-];
+const steps = ["Select campaign settings", "Create an ad group"];
 
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -87,13 +83,18 @@ export default function HorizontalLinearStepper() {
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
+            {/* <Button onClick={handleReset}>Reset</Button> */}
           </Box>
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-          <SignUpComponent />
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            <SignUpComponent
+              handleNextChange={handleNext}
+              activeStep={activeStep}
+            ></SignUpComponent>
+          </Typography>
+
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
@@ -104,15 +105,15 @@ export default function HorizontalLinearStepper() {
               Back
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
-            {isStepOptional(activeStep) && (
+            {/* {isStepOptional(activeStep) && (
               <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
                 Skip
               </Button>
-            )}
+            )} */}
 
-            <Button onClick={handleNext}>
+            {/* <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
+            </Button> */}
           </Box>
         </React.Fragment>
       )}
