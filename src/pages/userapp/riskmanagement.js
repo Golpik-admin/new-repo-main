@@ -12,6 +12,7 @@ import {
   Radio,
   TextField,
   Paper,
+  Input,
 } from "@mui/material";
 import {
   FilterList,
@@ -70,8 +71,10 @@ function RiskManagement() {
     filtering: true,
     search: false,
     pageSize: 10,
+    paginationType: "stepped",
     showTitle: false,
     actionsColumnIndex: -1,
+    addRowPosition: "first",
   };
 
   const tableIcons = {
@@ -114,6 +117,13 @@ function RiskManagement() {
     {
       title: "TICKER",
       field: "Symbol",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.Symbol}
+        />
+      ),
       render: (rowData) => rowData.Symbol,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -128,6 +138,13 @@ function RiskManagement() {
     {
       title: "PROFIT TARGET",
       field: "ProfitTarget",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.ProfitTarget}
+        />
+      ),
       render: (rowData) => rowData.ProfitTarget,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -144,6 +161,14 @@ function RiskManagement() {
     {
       title: "LOSS / MINIMUM PROFIT",
       field: "LossTarget",
+      editComponent: (editProps) => (
+        // console.log(editProps)
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.LossTarget}
+        />
+      ),
       render: (rowData) => rowData.LossTarget,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -158,6 +183,13 @@ function RiskManagement() {
     {
       title: "ACTIVE POSITIONS",
       field: "Brokerage",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.Brokerage}
+        />
+      ),
       render: (rowData) => rowData.Brokerage,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -169,20 +201,20 @@ function RiskManagement() {
             .reduce((a, v) => ({ ...a, [v]: v }), {})
         : {},
     },
-    {
-      title: "ACTIVE",
-      field: "Brokerage",
-      filtering: false,
-      // render: (rowData) => {
-      //   return (
-      //     <TableCell colSpan={5} className="filter-th">
-      //       <IconButton>
-      //         <AddOutlined />
-      //       </IconButton>
-      //     </TableCell>
-      //   );
-      // },
-    },
+    // {
+    //   title: "ACTIVE",
+    //   field: "Brokerage",
+    //   filtering: false,
+    //   // render: (rowData) => {
+    //   //   return (
+    //   //     <TableCell colSpan={5} className="filter-th">
+    //   //       <IconButton>
+    //   //         <AddOutlined />
+    //   //       </IconButton>
+    //   //     </TableCell>
+    //   //   );
+    //   // },
+    // },
   ];
 
   function calculatePercentage(previous, current) {
