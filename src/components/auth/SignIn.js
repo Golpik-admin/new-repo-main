@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+import { Link } from "@mui/material";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
@@ -19,6 +20,33 @@ import useAuth from "../../hooks/useAuth";
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
+
+const Div = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &.forgot-pas-wrap {
+    padding: ${(props) => props.theme.spacing(7, 0, 10, 0)};
+  }
+  .MuiFormControlLabel-label {
+    font-size: 15px;
+    color: #43425d;
+  }
+  a {
+    color: #43425d;
+    font-size: 15px;
+  }
+  button {
+    width: 170px;
+    background: #2b75fd;
+    font-size: 18px;
+  }
+  .signup-btn {
+    width: 170px;
+    border-color: #1b202a;
+    font-size: 18px;
+  }
+`;
 
 function SignIn() {
   const navigate = useNavigate();
@@ -72,50 +100,59 @@ function SignIn() {
             </Alert>
           )}
           <TextField
-            type="email"
+            type="text"
             name="email"
-            label="Email Address"
-            value={values.email}
+            label="Username"
+            //value={values.email}
             error={Boolean(touched.email && errors.email)}
             fullWidth
-            helperText={touched.email && errors.email}
+            //helperText={touched.email && errors.email}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
+            variant="standard"
           />
           <TextField
             type="password"
             name="password"
             label="Password"
-            value={values.password}
+            //value={values.password}
             error={Boolean(touched.password && errors.password)}
             fullWidth
-            helperText={touched.password && errors.password}
+            //helperText={touched.password && errors.password}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
+            variant="standard"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-          >
-            Sign in
-          </Button>
-          <Button
-            component={Link}
-            to="/auth/reset-password"
-            fullWidth
-            color="primary"
-          >
-            Forgot password
-          </Button>
+          <Div className="forgot-pas-wrap">
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Link href="#" underline="none">
+              Forgot Password
+            </Link>
+          </Div>
+          <Div className="btn-wrap">
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting}
+              size="large"
+            >
+              Login
+            </Button>
+            <Button
+              component={Link}
+              to="/auth/reset-password"
+              variant="outlined"
+              className="signup-btn"
+              size="large"
+            >
+              Sign up
+            </Button>
+          </Div>
         </form>
       )}
     </Formik>

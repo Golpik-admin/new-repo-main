@@ -80,6 +80,7 @@ import Changelog from "./pages/docs/Changelog";
 
 // users routes
 import UsersAlerts from "./pages/userapp/alerts";
+import UsersAddAlerts from "./pages/userapp/addAlerts";
 import UserPositions from "./pages/userapp/positions";
 
 import UserSettings from "./pages/userapp/settings";
@@ -175,6 +176,16 @@ const routes = [
       {
         path: "",
         element: <UsersAlerts />,
+      },
+    ],
+  },
+  {
+    path: "addAlerts",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersAddAlerts />,
       },
     ],
   },
