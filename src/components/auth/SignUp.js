@@ -17,7 +17,7 @@ const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
 
-function SignUp() {
+function SignUp(props) {
   const navigate = useNavigate();
   const { signUp } = useAuth();
 
@@ -39,7 +39,7 @@ function SignUp() {
           .max(255)
           .required("Email is required"),
         password: Yup.string()
-          .min(12, "Must be at least 12 characters")
+          .min(8, "Must be at least 8 characters")
           .max(255)
           .required("Required"),
         confirmPassword: Yup.string().when("password", {
@@ -52,13 +52,15 @@ function SignUp() {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          signUp(
-            values.email,
-            values.password,
-            values.firstName,
-            values.lastName
-          );
-          navigate("/auth/sign-in");
+          props.handleNextChange();
+          // signUp(
+          //   values.email,
+          //   values.password,
+          //   values.firstName,
+          //   values.lastName
+          // );
+
+          // navigate("/auth/sign-in");
         } catch (error) {
           const message = error.message || "Something went wrong";
 
@@ -83,66 +85,78 @@ function SignUp() {
               {errors.submit}
             </Alert>
           )}
-          <TextField
-            type="text"
-            name="firstName"
-            label="First name"
-            value={values.firstName}
-            error={Boolean(touched.firstName && errors.firstName)}
-            fullWidth
-            helperText={touched.firstName && errors.firstName}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="text"
-            name="lastName"
-            label="Last name"
-            value={values.lastName}
-            error={Boolean(touched.lastName && errors.lastName)}
-            fullWidth
-            helperText={touched.lastName && errors.lastName}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="email"
-            name="email"
-            label="Email address"
-            value={values.email}
-            error={Boolean(touched.email && errors.email)}
-            fullWidth
-            helperText={touched.email && errors.email}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="password"
-            name="password"
-            label="Password"
-            value={values.password}
-            error={Boolean(touched.password && errors.password)}
-            fullWidth
-            helperText={touched.password && errors.password}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="password"
-            name="confirmPassword"
-            label="Confirm password"
-            value={values.confirmPassword}
-            error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-            fullWidth
-            helperText={touched.confirmPassword && errors.confirmPassword}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
+          {props.activeStep === 0 && (
+            <>
+              <TextField
+                type="text"
+                name="firstName"
+                label="First name"
+                value={values.firstName}
+                error={Boolean(touched.firstName && errors.firstName)}
+                fullWidth
+                helperText={touched.firstName && errors.firstName}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                my={3}
+                variant="standard"
+              />
+              <TextField
+                type="text"
+                name="lastName"
+                label="Last name"
+                value={values.lastName}
+                error={Boolean(touched.lastName && errors.lastName)}
+                fullWidth
+                helperText={touched.lastName && errors.lastName}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                my={3}
+                variant="standard"
+              />
+              <TextField
+                type="email"
+                name="email"
+                label="Email address"
+                value={values.email}
+                error={Boolean(touched.email && errors.email)}
+                fullWidth
+                helperText={touched.email && errors.email}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                my={3}
+                variant="standard"
+              />
+              <TextField
+                type="password"
+                name="password"
+                label="Password"
+                value={values.password}
+                error={Boolean(touched.password && errors.password)}
+                fullWidth
+                helperText={touched.password && errors.password}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                my={3}
+                variant="standard"
+              />
+              <TextField
+                type="password"
+                name="confirmPassword"
+                label="Confirm password"
+                value={values.confirmPassword}
+                error={Boolean(
+                  touched.confirmPassword && errors.confirmPassword
+                )}
+                fullWidth
+                helperText={touched.confirmPassword && errors.confirmPassword}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                my={3}
+                variant="standard"
+              />
+            </>
+          )}
+          {props.activeStep === 1 && <>Ymeeen</>}
           <Button
             type="submit"
             fullWidth

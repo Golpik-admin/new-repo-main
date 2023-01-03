@@ -5,7 +5,8 @@ import { Helmet } from "react-helmet-async";
 import { Paper, Typography } from "@mui/material";
 
 // import { ReactComponent as Logo } from "../../vendor/logo.svg";
-import SignUpComponent from "../../components/auth/SignUp";
+
+import Stepper from "../../pages/auth/stepper";
 
 // const Brand = styled(Logo)`
 //   fill: ${(props) => props.theme.palette.primary.main};
@@ -14,11 +15,11 @@ import SignUpComponent from "../../components/auth/SignUp";
 //   margin-bottom: 32px;
 // `;
 
-const Wrapper = styled(Paper)`
-  padding: ${(props) => props.theme.spacing(6)};
-
+const Wrapper = styled.div`
+  max-width: 400px;
+  margin: auto;
   ${(props) => props.theme.breakpoints.up("md")} {
-    padding: ${(props) => props.theme.spacing(10)};
+    padding: ${(props) => props.theme.spacing(1)};
   }
 `;
 
@@ -33,15 +34,7 @@ function SignUp() {
       </Typography>
       <Wrapper>
         <Helmet title="Sign Up" />
-
-        {/* <Typography component="h1" variant="h4" align="center" gutterBottom>
-          Get started
-        </Typography>
-        <Typography component="h2" variant="body1" align="center">
-          Start creating the best possible user experience for you customers
-        </Typography> */}
-
-        <SignUpComponent />
+        <Stepper />
       </Wrapper>
     </React.Fragment>
   );
