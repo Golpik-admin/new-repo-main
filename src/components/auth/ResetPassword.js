@@ -15,10 +15,7 @@ import useAuth from "../../hooks/useAuth";
 
 const Alert = styled(MuiAlert)(spacing);
 
-const TextField = styled(MuiTextField)`
-  .MuiInputBase-root:before {
-  border-bottom: 1px solid red;
-`;
+const TextField = styled(MuiTextField)(spacing);
 
 const Div = styled.div`
   display: flex;
