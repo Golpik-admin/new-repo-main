@@ -82,6 +82,7 @@ import Changelog from "./pages/docs/Changelog";
 import UsersAlerts from "./pages/userapp/alerts";
 import UsersAddAlerts from "./pages/userapp/addAlerts";
 import UserPositions from "./pages/userapp/positions";
+import UsersAddPositions from "./pages/userapp/addPositions";
 
 import UserSettings from "./pages/userapp/settings";
 import UserHelpCenter from "./pages/userapp/helpcenter";
@@ -186,6 +187,16 @@ const routes = [
       {
         path: "",
         element: <UsersAddAlerts />,
+      },
+    ],
+  },
+  {
+    path: "addPositions",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersAddPositions />,
       },
     ],
   },

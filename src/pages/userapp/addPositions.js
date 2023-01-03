@@ -23,7 +23,7 @@ function HelpCenter() {
             alt=""
           />
           <div align="center">
-            <Button variant="contained">ADD ALERTS</Button>
+            <Button variant="contained">ADD POSITIONS</Button>
           </div>
         </div>
       </Div>
