@@ -6,7 +6,7 @@
   "private": true,
   "license": "https://mui.com/store/license/",
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false craco start",
+    "start": "set \"GENERATE_SOURCEMAP=false\" && craco start",
     "build": "craco build",
     "eject": "craco eject",
     "lint": "eslint src --ext .js,.jsx --fix"
@@ -27,7 +27,7 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "1.22.4",
     "@craco/craco": "^7.0.0",
-    "@date-io/date-fns": "2.15.0",  
+    "@date-io/date-fns": "2.15.0",
     "@emotion/cache": "11.10.3",
     "@emotion/react": "11.10.4",
     "@emotion/server": "11.10.0",

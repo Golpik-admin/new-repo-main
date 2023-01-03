@@ -8,6 +8,9 @@ import {
   Alert as MuiAlert,
   Button,
   TextField as MuiTextField,
+  Link,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
@@ -16,6 +19,37 @@ import useAuth from "../../hooks/useAuth";
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
+
+const Div = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .MuiFormControl-root:first-of-type {
+    margin-right: 25px;
+  }
+  // &.forgot-pas-wrap {
+  //   padding: ${(props) => props.theme.spacing(7, 0, 10, 0)};
+  // }
+  // .MuiFormControlLabel-label {
+  //   font-size: 15px;
+  //   color: #43425d;
+  // }
+  // a {
+  //   color: #43425d;
+  //   font-size: 15px;
+  // }
+  button {
+    width: 170px;
+    font-size: 18px;
+    &.back-btn {
+      border-color: #1b202a;
+      color: #1b202a;
+    }
+    &.next-btn {
+      background: #2b75fd;
+    }
+  }
+`;
 
 function SignUp(props) {
   const navigate = useNavigate();
@@ -87,27 +121,42 @@ function SignUp(props) {
           )}
           {props.activeStep === 0 && (
             <>
+              <Div>
+                <TextField
+                  type="text"
+                  name="firstName"
+                  label="First name"
+                  value={values.firstName}
+                  error={Boolean(touched.firstName && errors.firstName)}
+                  fullWidth
+                  helperText={touched.firstName && errors.firstName}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  my={3}
+                  variant="standard"
+                />
+                <TextField
+                  type="text"
+                  name="lastName"
+                  label="Last name"
+                  value={values.lastName}
+                  error={Boolean(touched.lastName && errors.lastName)}
+                  fullWidth
+                  helperText={touched.lastName && errors.lastName}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  my={3}
+                  variant="standard"
+                />
+              </Div>
               <TextField
                 type="text"
-                name="firstName"
-                label="First name"
-                value={values.firstName}
-                error={Boolean(touched.firstName && errors.firstName)}
+                name="userName"
+                label="Username"
+                value={values.userName}
+                error={Boolean(touched.userName && errors.userName)}
                 fullWidth
-                helperText={touched.firstName && errors.firstName}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                my={3}
-                variant="standard"
-              />
-              <TextField
-                type="text"
-                name="lastName"
-                label="Last name"
-                value={values.lastName}
-                error={Boolean(touched.lastName && errors.lastName)}
-                fullWidth
-                helperText={touched.lastName && errors.lastName}
+                helperText={touched.userName && errors.userName}
                 onBlur={handleBlur}
                 onChange={handleChange}
                 my={3}
@@ -154,18 +203,46 @@ function SignUp(props) {
                 my={3}
                 variant="standard"
               />
+              <FormControlLabel
+                sx={{ pt: 5, pb: 10 }}
+                control={<Checkbox value="remember" color="primary" />}
+                label="I agree with terms and conditions"
+              />
             </>
           )}
           {props.activeStep === 1 && <>Ymeeen</>}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-          >
-            Sign up
-          </Button>
+          <Div className="btn-wrap">
+            <Button
+              type="submit"
+              variant="outlined"
+              disabled={isSubmitting}
+              size="large"
+              className="back-btn"
+            >
+              Back
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting}
+              size="large"
+              className="neck-btn"
+            >
+              Next
+            </Button>
+          </Div>
+          {/* <div align="right">
+            <Button
+              align="right"
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isSubmitting}
+              size="large"
+            >
+              Sign up
+            </Button>
+          </div> */}
         </form>
       )}
     </Formik>
