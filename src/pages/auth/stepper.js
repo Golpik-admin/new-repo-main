@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SignUpComponent from "../../components/auth/SignUp";
 
+import CustomizedSteppers from "../../pages/auth/stepperCustomized";
+
 const steps = ["Personal Details", "Payment Method"];
 
 export default function HorizontalLinearStepper() {
@@ -57,7 +59,7 @@ export default function HorizontalLinearStepper() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep}>
+      {/* <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -75,7 +77,8 @@ export default function HorizontalLinearStepper() {
             </Step>
           );
         })}
-      </Stepper>
+      </Stepper> */}
+      <CustomizedSteppers />
       {activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>

@@ -15,7 +15,22 @@ import useAuth from "../../hooks/useAuth";
 
 const Alert = styled(MuiAlert)(spacing);
 
-const TextField = styled(MuiTextField)(spacing);
+const TextField = styled(MuiTextField)`
+  .MuiInputBase-root:before {
+  border-bottom: 1px solid red;
+`;
+
+const Div = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 45px;
+  button {
+    width: 230px;
+    font-size: 18px;
+    background: #2b75fd;
+  }
+`;
 
 function ResetPassword() {
   const navigate = useNavigate();
@@ -72,16 +87,18 @@ function ResetPassword() {
             onBlur={handleBlur}
             onChange={handleChange}
             my={3}
+            variant="standard"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-          >
-            Reset password
-          </Button>
+          <Div>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isSubmitting}
+            >
+              Send request
+            </Button>
+          </Div>
         </form>
       )}
     </Formik>
