@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
@@ -114,7 +114,6 @@ function RiskManagement() {
       }))
     : [];
 
-  const [data, setData] = useState([]);
   // setData([collections]);
   // console.log(data);
   const fields = [
@@ -408,35 +407,35 @@ function RiskManagement() {
                 },
                 onRowUpdateCancelled: (rowData) =>
                   alert("Row editing cancelled"),
-                onRowUpdate: (newData, oldData) => {
-                  return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      // const dataUpdate = [...data];
-                      // // In dataUpdate, find target
-                      // const target = dataUpdate.find(
-                      //   (el) => el.id === oldData.tableData.id
-                      // );
-                      // const index = dataUpdate.indexOf(target);
-                      // dataUpdate[index] = newData;
-                      // setData([...dataUpdate]);
-                      resolve();
-                    }, 1000);
-                  });
-                },
-                onRowDelete: (oldData) => {
-                  return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      // const dataDelete = [...data];
-                      // const target = dataDelete.find(
-                      //   (el) => el.id === oldData.tableData.id
-                      // );
-                      // const index = dataDelete.indexOf(target);
-                      // dataDelete.splice(index, 1);
-                      // setData([...dataDelete]);
-                      resolve();
-                    }, 1000);
-                  });
-                },
+                // onRowUpdate: (newData, oldData) => {
+                //   return new Promise((resolve, reject) => {
+                //     setTimeout(() => {
+                //       // const dataUpdate = [...data];
+                //       // // In dataUpdate, find target
+                //       // const target = dataUpdate.find(
+                //       //   (el) => el.id === oldData.tableData.id
+                //       // );
+                //       // const index = dataUpdate.indexOf(target);
+                //       // dataUpdate[index] = newData;
+                //       // setData([...dataUpdate]);
+                //       resolve();
+                //     }, 1000);
+                //   });
+                // },
+                // onRowDelete: (oldData) => {
+                //   return new Promise((resolve, reject) => {
+                //     setTimeout(() => {
+                //       // const dataDelete = [...data];
+                //       // const target = dataDelete.find(
+                //       //   (el) => el.id === oldData.tableData.id
+                //       // );
+                //       // const index = dataDelete.indexOf(target);
+                //       // dataDelete.splice(index, 1);
+                //       // setData([...dataDelete]);
+                //       resolve();
+                //     }, 1000);
+                //   });
+                // },
               }}
             />
           </Paper>

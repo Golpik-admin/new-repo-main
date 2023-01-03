@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
-import { Avatar, Typography, Link } from "@mui/material";
+import { Typography, Link } from "@mui/material";
 
 // import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import SignInComponent from "../../components/auth/SignIn";
@@ -20,13 +20,6 @@ const Wrapper = styled.div`
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: ${(props) => props.theme.spacing(1)};
   }
-`;
-
-const BigAvatar = styled(Avatar)`
-  width: 92px;
-  height: 92px;
-  text-align: center;
-  margin: 0 auto ${(props) => props.theme.spacing(5)};
 `;
 
 const Div = styled.div`
