@@ -23,12 +23,13 @@ const CheckoutForm = () => {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url:
-          window.location.protocol +
-          "//" +
-          window.location.host +
-          "/auth/sign-in",
+        // return_url:
+        //   window.location.protocol +
+        //   "//" +
+        //   window.location.host +
+        //   "/auth/sign-in",
       },
+      redirect: "if_required",
     });
     console.log(result);
 
