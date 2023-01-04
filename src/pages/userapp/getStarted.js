@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@mui/material";
 
+import MobileStepper from "./mobileStepper";
+
 const Div = styled.div`
   display: flex;
   align-items: center;
@@ -17,14 +19,15 @@ function HelpCenter() {
 
       <Div>
         <div className="wrap">
-          <img
-            src="/static/img/add-alert-icn.png"
+          {/* <img
+            src="/static/img/avatars/user.png"
             className="center w-full bg-cover object-cover"
             alt=""
           />
           <div align="center">
-            <Button variant="contained">ADD ALERTS</Button>
-          </div>
+            <Button variant="contained">ADD POSITIONS</Button>
+          </div> */}
+          <MobileStepper />
         </div>
       </Div>
     </React.Fragment>
