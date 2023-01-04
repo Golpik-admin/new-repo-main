@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -25,24 +25,64 @@ const TextField = styled(MuiTextField)(spacing);
 const stripePromise = loadStripe(
   "pk_test_51MM69wGXz5lpWMAzcJNQoiJapngI1csaPZCy3jeF3aAl3BJaHlMEaX0shhDLqb6h9z8dQd6dVB1OAMugZ8LFD38a0093VFqXqR"
 );
-
 function SignUp(props) {
   const [clientSecret, setClientSecret] = useState("");
+  const [price, setPrice] = useState(0);
+  const [subscriptionType, setSubscriptionType] = useState(0);
+  const location = useLocation();
+
+  function currencyFormat(num) {
+    return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
 
   useEffect(() => {
+    async function verifyPriceId() {
+      const lastSegment = location.pathname.substring(
+        location.pathname.lastIndexOf("/") + 1
+      );
+      try {
+        await fetch(`https://api.stripe.com/v1/prices/${lastSegment}`, {
+          method: "get",
+          headers: {
+            Authorization:
+              "Bearer sk_test_51Ko46QD5TFKDpVFgNvqiftob3CuxQwkbJFFO7LOFEu0uYLYEPGQFmIIfs4svqyXx7IuUaGBayEowmBOv0IHlfoLZ00eacu4TyC",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error && data.error.code) {
+              console.log("fail");
+              return;
+            }
+            if (data.type === "recurring") {
+              setSubscriptionType(data.recurring.interval);
+            }
+            setPrice(currencyFormat(data.unit_amount / 100));
+          })
+          .catch((err) => {
+            console.log(err.error.error);
+          });
+      } catch (error) {
+        console.log("here", error);
+      }
+    }
+
+    verifyPriceId();
+
     // Create setupintent as soon as the page loads
-    fetch("https://api.stripe.com/v1/payment_intents?amount=100&currency=usd", {
-      method: "POST",
-      headers: {
-        Authorization:
-          "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setClientSecret(data.client_secret);
-      });
+    // fetch("https://api.stripe.com/v1/payment_intents?amount=100&currency=usd", {
+    //   method: "POST",
+    //   headers: {
+    //     Authorization:
+    //       "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     setClientSecret(data.client_secret);
+    //   });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const appearance = {
@@ -202,11 +242,11 @@ function SignUp(props) {
             )}
             {props.activeStep === 1 && (
               <>
-                {options.clientSecret != "" && (
-                  <Elements stripe={stripePromise} options={options}>
-                    <CheckoutForm />
-                  </Elements>
-                )}
+                {/* {options.clientSecret != "" && ( */}
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm price={price} />
+                </Elements>
+                {/* )} */}
               </>
             )}
           </form>

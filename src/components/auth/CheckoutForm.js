@@ -1,10 +1,10 @@
 import {
   useStripe,
   useElements,
-  PaymentElement,
+  // PaymentElement,
 } from "@stripe/react-stripe-js";
 
-const CheckoutForm = () => {
+const CheckoutForm = (props) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -45,9 +45,9 @@ const CheckoutForm = () => {
 
   return (
     <form>
-      <PaymentElement />
+      {/* <PaymentElement /> */}
       <button onClick={handleSubmit} disabled={!stripe}>
-        Submit
+        Pay {props.price}
       </button>
     </form>
   );

@@ -351,7 +351,7 @@ const routes = [
         element: <SignIn />,
       },
       {
-        path: "sign-up",
+        path: "sign-up/:id",
         element: <SignUp />,
       },
       {
