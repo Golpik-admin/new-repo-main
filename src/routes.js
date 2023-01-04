@@ -167,7 +167,8 @@ const routes = [
     children: [
       {
         path: "",
-        element: <Default />,
+        // element: <Default />,
+        element: <UsersGetStarted />,
       },
     ],
   },
