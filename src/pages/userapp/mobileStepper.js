@@ -1,12 +1,40 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
+import { Box, Link } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import styled from "@emotion/styled";
 import MobileStepper from "@mui/material/MobileStepper";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+
+const Div = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .MuiFormControl-root:first-of-type {
+    margin-right: 25px;
+  }
+  a {
+    width: 151px;
+    font-size: 14px;
+    height: 36px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.back-btn {
+      border: 1px solid #a1a7c4;
+      color: #7e84a3;
+      margin-right: 40px;
+    }
+    &.next-btn {
+      background: #2b75fd;
+      color: #fff;
+    }
+  }
+`;
 
 const steps = [
   {
@@ -41,10 +69,17 @@ export default function TextMobileStepper() {
   };
 
   return (
-    <Box sx={{ maxWidth: 700, flexGrow: 1, background: "#fff" }}>
+    <Box
+      sx={{
+        maxWidth: 700,
+        flexGrow: 1,
+        background: "#fff",
+        borderRadius: "4px",
+        p: 5,
+      }}
+    >
       <Box
         sx={{
-          height: 500,
           maxWidth: 700,
           width: "100%",
           p: 2,
@@ -56,38 +91,66 @@ export default function TextMobileStepper() {
           {steps[activeStep].label}
         </Typography>
         <img src={steps[activeStep].image} className="" alt="" />
-        <Typography sx={{ mt: 5 }}>{steps[activeStep].description}</Typography>
+        <Typography fontSize="16px" color="#A1A7C4" sx={{ mt: 5 }}>
+          {steps[activeStep].description}
+        </Typography>
+        <Box sx={{ my: 8 }}>
+          <Div className="btn-wrap">
+            {/* <Button type="submit" variant="outlined" className="back-btn">
+              SKIP
+            </Button> */}
+            {/* <Button type="submit" variant="contained" className="neck-btn">
+              GET STARTED
+            </Button> */}
+            <Link
+              href="alerts"
+              underline="none"
+              variant="outlined"
+              className="back-btn"
+            >
+              SKIP
+            </Link>
+            <Link
+              href="help-center"
+              underline="none"
+              variant="contained"
+              className="next-btn"
+            >
+              GET STARTED
+            </Link>
+          </Div>
+        </Box>
       </Box>
       <MobileStepper
-        sx={{ background: "#fff" }}
+        sx={{ background: "#fff", justifyContent: "center" }}
         variant="dots"
         steps={maxSteps}
         position="static"
         activeStep={activeStep}
-        nextButton={
-          <Button
-            size="small"
-            onClick={handleNext}
-            disabled={activeStep === maxSteps - 1}
-          >
-            Next
-            {theme.direction === "rtl" ? (
-              <KeyboardArrowLeft />
-            ) : (
-              <KeyboardArrowRight />
-            )}
-          </Button>
-        }
-        backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            {theme.direction === "rtl" ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )}
-            Back
-          </Button>
-        }
+        // nextButton={
+        //   <Button
+        //     size="small"
+        //     onClick={handleNext}
+        //     disabled={activeStep === maxSteps - 1}
+        //   >
+        //     Next
+        //     {theme.direction === "rtl" ? (
+        //       <KeyboardArrowLeft />
+        //     ) : (
+        //       <KeyboardArrowRight />
+        //     )}
+        //   </Button>
+        // }
+        // backButton={
+        //   <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+        //     {theme.direction === "rtl" ? (
+        //       <KeyboardArrowRight />
+        //     ) : (
+        //       <KeyboardArrowLeft />
+        //     )}
+        //     Back
+        //   </Button>
+        // }
       />
     </Box>
   );
