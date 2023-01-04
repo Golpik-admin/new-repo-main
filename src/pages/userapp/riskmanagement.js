@@ -12,6 +12,7 @@ import {
   Radio,
   TextField,
   Paper,
+  Input,
 } from "@mui/material";
 import {
   FilterList,
@@ -27,7 +28,7 @@ import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
 import { fetchRiskManagements } from "../../redux/slices/getRiskManagement";
-
+import { updateRiskManagements } from "../../redux/slices/updateRiskManagement";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
@@ -70,8 +71,10 @@ function RiskManagement() {
     filtering: true,
     search: false,
     pageSize: 10,
+    paginationType: "stepped",
     showTitle: false,
     actionsColumnIndex: -1,
+    addRowPosition: "first",
   };
 
   const tableIcons = {
@@ -110,10 +113,20 @@ function RiskManagement() {
         Brokerage: o.Brokerage,
       }))
     : [];
+
+  // setData([collections]);
+  // console.log(data);
   const fields = [
     {
       title: "TICKER",
       field: "Symbol",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.Symbol}
+        />
+      ),
       render: (rowData) => rowData.Symbol,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -128,6 +141,13 @@ function RiskManagement() {
     {
       title: "PROFIT TARGET",
       field: "ProfitTarget",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.ProfitTarget}
+        />
+      ),
       render: (rowData) => rowData.ProfitTarget,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -144,6 +164,14 @@ function RiskManagement() {
     {
       title: "LOSS / MINIMUM PROFIT",
       field: "LossTarget",
+      editComponent: (editProps) => (
+        // console.log(editProps)
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.LossTarget}
+        />
+      ),
       render: (rowData) => rowData.LossTarget,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -158,6 +186,13 @@ function RiskManagement() {
     {
       title: "ACTIVE POSITIONS",
       field: "Brokerage",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.Brokerage}
+        />
+      ),
       render: (rowData) => rowData.Brokerage,
       lookup: riskManagementsList.tickersRiskManagement
         ? [
@@ -168,20 +203,6 @@ function RiskManagement() {
             .filter(Boolean)
             .reduce((a, v) => ({ ...a, [v]: v }), {})
         : {},
-    },
-    {
-      title: "ACTIVE",
-      field: "Brokerage",
-      filtering: false,
-      // render: (rowData) => {
-      //   return (
-      //     <TableCell colSpan={5} className="filter-th">
-      //       <IconButton>
-      //         <AddOutlined />
-      //       </IconButton>
-      //     </TableCell>
-      //   );
-      // },
     },
   ];
 
@@ -354,14 +375,6 @@ function RiskManagement() {
               columns={fields}
               data={collections}
               options={configuration}
-              // actions={[
-              //   {
-              //     icon: tableIcons.Add,
-              //     tooltip: "Add User",
-              //     isFreeAction: true,
-              //     onClick: (event) => alert("You want to add a new row"),
-              //   },
-              // ]}
               editable={{
                 // onBulkUpdate: (changes) => {
                 //   return new Promise((resolve, reject) => {
@@ -372,48 +385,57 @@ function RiskManagement() {
                 //     }, 1000);
                 //   });
                 // },
-                onRowAddCancelled: (rowData) =>
-                  console.log("Row adding cancelled"),
-                onRowUpdateCancelled: (rowData) =>
-                  console.log("Row editing cancelled"),
+                onRowAddCancelled: (rowData) => alert("Row adding cancelled"),
                 onRowAdd: (newData) => {
                   return new Promise((resolve, reject) => {
+                    console.log(newData);
+                    dispatch(
+                      updateRiskManagements({
+                        userId: userId,
+                        Symbol: newData.Symbol,
+                        ProfitTarget: newData.ProfitTarget,
+                        LossTarget: newData.LossTarget,
+                        Brokerage: newData.Brokerage,
+                      })
+                    );
                     setTimeout(() => {
-                      newData.id = "uuid-" + Math.random() * 10000000;
+                      resolve();
+                      // newData.id = "uuid-" + Math.random() * 10000000;
                       // setData([...data, newData]);
-                      resolve();
                     }, 1000);
                   });
                 },
-                onRowUpdate: (newData, oldData) => {
-                  return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      // const dataUpdate = [...data];
-                      // // In dataUpdate, find target
-                      // const target = dataUpdate.find(
-                      //   (el) => el.id === oldData.tableData.id
-                      // );
-                      // const index = dataUpdate.indexOf(target);
-                      // dataUpdate[index] = newData;
-                      // setData([...dataUpdate]);
-                      resolve();
-                    }, 1000);
-                  });
-                },
-                onRowDelete: (oldData) => {
-                  return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      // const dataDelete = [...data];
-                      // const target = dataDelete.find(
-                      //   (el) => el.id === oldData.tableData.id
-                      // );
-                      // const index = dataDelete.indexOf(target);
-                      // dataDelete.splice(index, 1);
-                      // setData([...dataDelete]);
-                      resolve();
-                    }, 1000);
-                  });
-                },
+                onRowUpdateCancelled: (rowData) =>
+                  alert("Row editing cancelled"),
+                // onRowUpdate: (newData, oldData) => {
+                //   return new Promise((resolve, reject) => {
+                //     setTimeout(() => {
+                //       // const dataUpdate = [...data];
+                //       // // In dataUpdate, find target
+                //       // const target = dataUpdate.find(
+                //       //   (el) => el.id === oldData.tableData.id
+                //       // );
+                //       // const index = dataUpdate.indexOf(target);
+                //       // dataUpdate[index] = newData;
+                //       // setData([...dataUpdate]);
+                //       resolve();
+                //     }, 1000);
+                //   });
+                // },
+                // onRowDelete: (oldData) => {
+                //   return new Promise((resolve, reject) => {
+                //     setTimeout(() => {
+                //       // const dataDelete = [...data];
+                //       // const target = dataDelete.find(
+                //       //   (el) => el.id === oldData.tableData.id
+                //       // );
+                //       // const index = dataDelete.indexOf(target);
+                //       // dataDelete.splice(index, 1);
+                //       // setData([...dataDelete]);
+                //       resolve();
+                //     }, 1000);
+                //   });
+                // },
               }}
             />
           </Paper>
