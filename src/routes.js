@@ -82,6 +82,8 @@ import Changelog from "./pages/docs/Changelog";
 import UsersAlerts from "./pages/userapp/alerts";
 import UsersAddAlerts from "./pages/userapp/addAlerts";
 import UserPositions from "./pages/userapp/positions";
+import UsersAddPositions from "./pages/userapp/addPositions";
+import UsersGetStarted from "./pages/userapp/getStarted";
 
 import UserSettings from "./pages/userapp/settings";
 import UserHelpCenter from "./pages/userapp/helpcenter";
@@ -165,7 +167,8 @@ const routes = [
     children: [
       {
         path: "",
-        element: <Default />,
+        // element: <Default />,
+        element: <UsersGetStarted />,
       },
     ],
   },
@@ -186,6 +189,26 @@ const routes = [
       {
         path: "",
         element: <UsersAddAlerts />,
+      },
+    ],
+  },
+  {
+    path: "addPositions",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersAddPositions />,
+      },
+    ],
+  },
+  {
+    path: "getStarted",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersGetStarted />,
       },
     ],
   },
@@ -328,7 +351,7 @@ const routes = [
         element: <SignIn />,
       },
       {
-        path: "sign-up",
+        path: "sign-up/:id",
         element: <SignUp />,
       },
       {

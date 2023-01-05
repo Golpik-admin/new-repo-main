@@ -2,12 +2,10 @@ import { Button } from "@mui/material";
 import {
   useStripe,
   useElements,
-  PaymentElement,
   CardElement,
 } from "@stripe/react-stripe-js";
-import axios from "axios";
 
-const CheckoutForm = () => {
+const CheckoutForm = (props) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -44,7 +42,7 @@ const CheckoutForm = () => {
           console.log("CUSTOMER FETCHED");
           console.log(data);
           fetch(
-            `https://api.stripe.com/v1/subscriptions?customer=${data.id}&items[0][price]=price_1MMW6VGXz5lpWMAzeAd43OJW`,
+            `https://api.stripe.com/v1/subscriptions?customer=${data.id}&items[0][price]=${props.lastSegment}`,
             {
               method: "POST",
               headers: {
@@ -55,35 +53,8 @@ const CheckoutForm = () => {
           )
             .then((res) => res.json())
             .then((data) => {
-              // const status =
-              //   subscription["latest_invoice"]["payment_intent"]["status"];
-              // const client_secret =
-              //   subscription["latest_invoice"]["payment_intent"][
-              //     "client_secret"
-              //   ];
               console.log("SUBSCRIPTION FETCHED");
               console.log(data);
-              // console.log(status, client_secret);
-
-              // if (status === "requires_action") {
-              //   console.log("condition k andar");
-              //   console.log(status);
-              //   // stripe.confirmCardPayment(client_secret).then(function (result) {
-              //   //   if (result.error) {
-              //   //     console.log("There was an issue!");
-              //   //     console.log(result.error);
-              //   //     // Display error message in your UI.
-              //   //     // The card was declined (i.e. insufficient funds, card has expired, etc)
-              //   //   } else {
-              //   //     console.log("You got the money!");
-              //   //     // Show a success message to your customer
-              //   //   }
-              //   // });
-              // } else {
-              //   console.log("You got the money!");
-              //   // No additional information was needed
-              //   // Show a success message to your customer
-              // }
             });
         });
     }
@@ -93,7 +64,7 @@ const CheckoutForm = () => {
     <>
       <CardElement />
       <Button variant="contained" color="primary" onClick={handleSubmitSub}>
-        Subscription
+        Pay {props.price}
       </Button>
     </>
   );

@@ -18,12 +18,12 @@ function HelpCenter() {
       <Div>
         <div className="wrap">
           <img
-            src="/static/img/add-alert-icn.png"
+            src="/static/img/avatars/user.png"
             className="center w-full bg-cover object-cover"
             alt=""
           />
           <div align="center">
-            <Button variant="contained">ADD ALERTS</Button>
+            <Button variant="contained">ADD POSITIONS</Button>
           </div>
         </div>
       </Div>
