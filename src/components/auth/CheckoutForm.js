@@ -1,9 +1,5 @@
 import { Button } from "@mui/material";
-import {
-  useStripe,
-  useElements,
-  CardElement,
-} from "@stripe/react-stripe-js";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
 const CheckoutForm = (props) => {
   const stripe = useStripe();

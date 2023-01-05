@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
@@ -31,11 +31,12 @@ function SignUp(props) {
     return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
 
+  const lastSegment = location.pathname.substring(
+    location.pathname.lastIndexOf("/") + 1
+  );
+
   useEffect(() => {
     async function verifyPriceId() {
-      const lastSegment = location.pathname.substring(
-        location.pathname.lastIndexOf("/") + 1
-      );
       try {
         await fetch(`https://api.stripe.com/v1/prices/${lastSegment}`, {
           method: "get",
