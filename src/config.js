@@ -20,3 +20,6 @@ export const cognitoConfig = {
 };
 
 export const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+
+export const stripePublishKey = process.env.REACT_APP_API_STRIPE_PUBLISH_KEY;
+export const stripeSecretKey = process.env.REACT_APP_API_STRIPE_SECRET_KEY;

@@ -14,14 +14,13 @@ import { spacing } from "@mui/system";
 
 import useAuth from "../../hooks/useAuth";
 import CheckoutForm from "./CheckoutForm";
+import { stripePublishKey, stripeSecretKey } from "../../config";
 
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
 
-const stripePromise = loadStripe(
-  "pk_test_51MM69wGXz5lpWMAzcJNQoiJapngI1csaPZCy3jeF3aAl3BJaHlMEaX0shhDLqb6h9z8dQd6dVB1OAMugZ8LFD38a0093VFqXqR"
-);
+const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
   const [price, setPrice] = useState(0);
   const [subscriptionType, setSubscriptionType] = useState(0);
@@ -41,8 +40,7 @@ function SignUp(props) {
         await fetch(`https://api.stripe.com/v1/prices/${lastSegment}`, {
           method: "get",
           headers: {
-            Authorization:
-              "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
+            Authorization: `Bearer ${stripeSecretKey}`,
           },
         })
           .then((res) => res.json())

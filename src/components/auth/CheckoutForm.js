@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { stripeSecretKey } from "../../config";
 
 const CheckoutForm = (props) => {
   const stripe = useStripe();
@@ -28,8 +29,7 @@ const CheckoutForm = (props) => {
         {
           method: "POST",
           headers: {
-            Authorization:
-              "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
+            Authorization: `Bearer ${stripeSecretKey}`,
           },
         }
       )
@@ -42,8 +42,7 @@ const CheckoutForm = (props) => {
             {
               method: "POST",
               headers: {
-                Authorization:
-                  "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
+                Authorization: `Bearer ${stripeSecretKey}`,
               },
             }
           )

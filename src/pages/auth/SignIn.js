@@ -2,11 +2,10 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
-import { Typography, Link, Alert } from "@mui/material";
+import { Typography, Link } from "@mui/material";
 
 // import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import SignInComponent from "../../components/auth/SignIn";
-import { useParams } from "react-router-dom";
 
 // const Brand = styled(Logo)`
 //   fill: ${(props) => props.theme.palette.primary.main};
@@ -37,15 +36,8 @@ const Div = styled.div`
   }
 `;
 function SignIn() {
-  const { payment_intent } = useParams();
-  console.log({ payment_intent });
   return (
     <React.Fragment>
-      {useParams("payment_intent") != "" && (
-        <Alert severity="success">
-          Congratulations, <p>You have successfully registered.</p>
-        </Alert>
-      )}
       {/* <Brand /> */}
       <Typography
         component="h1"
