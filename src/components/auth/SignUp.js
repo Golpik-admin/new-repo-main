@@ -89,6 +89,7 @@ function SignUp(props) {
         initialValues={{
           firstName: "",
           lastName: "",
+          username: "",
           email: "",
           password: "",
           confirmPassword: "",
@@ -97,6 +98,7 @@ function SignUp(props) {
         validationSchema={Yup.object().shape({
           firstName: Yup.string().max(255).required("First name is required"),
           lastName: Yup.string().max(255).required("Last name is required"),
+          username: Yup.string().max(255).required("Username is required"),
           email: Yup.string()
             .email("Must be a valid email")
             .max(255)
@@ -171,6 +173,19 @@ function SignUp(props) {
                   error={Boolean(touched.lastName && errors.lastName)}
                   fullWidth
                   helperText={touched.lastName && errors.lastName}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  my={3}
+                  variant="standard"
+                />
+                <TextField
+                  type="text"
+                  name="username"
+                  label="Username"
+                  value={values.username}
+                  error={Boolean(touched.username && errors.username)}
+                  fullWidth
+                  helperText={touched.username && errors.username}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   my={3}
