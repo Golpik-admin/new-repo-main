@@ -1,55 +1,101 @@
+import { Button } from "@mui/material";
 import {
   useStripe,
   useElements,
   PaymentElement,
+  CardElement,
 } from "@stripe/react-stripe-js";
+import axios from "axios";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const handleSubmit = async (event) => {
-    // We don't want to let default form submission happen here,
-    // which would refresh the page.
-    event.preventDefault();
-
+  const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
-    const result = await stripe.confirmPayment({
-      //`Elements` instance that was used to create the Payment Element
-      elements,
-      confirmParams: {
-        // return_url:
-        //   window.location.protocol +
-        //   "//" +
-        //   window.location.host +
-        //   "/auth/sign-in",
+    const result = await stripe.createPaymentMethod({
+      type: "card",
+      card: elements.getElement(CardElement),
+      billing_details: {
+        email: "email@email.com",
       },
-      redirect: "if_required",
     });
-    console.log(result);
 
     if (result.error) {
-      // Show error to your customer (for example, payment details incomplete)
       console.log(result.error.message);
     } else {
-      // Your customer will be redirected to your `return_url`. For some payment
-      // methods like iDEAL, your customer will be redirected to an intermediate
-      // site first to authorize the payment, then redirected to the `return_url`.
+      fetch(
+        `https://api.stripe.com/v1/customers?email=email@email.com&payment_method=${result.paymentMethod.id}&invoice_settings[default_payment_method]=${result.paymentMethod.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization:
+              "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("CUSTOMER FETCHED");
+          console.log(data);
+          fetch(
+            `https://api.stripe.com/v1/subscriptions?customer=${data.id}&items[0][price]=price_1MMW6VGXz5lpWMAzeAd43OJW`,
+            {
+              method: "POST",
+              headers: {
+                Authorization:
+                  "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
+              },
+            }
+          )
+            .then((res) => res.json())
+            .then((data) => {
+              // const status =
+              //   subscription["latest_invoice"]["payment_intent"]["status"];
+              // const client_secret =
+              //   subscription["latest_invoice"]["payment_intent"][
+              //     "client_secret"
+              //   ];
+              console.log("SUBSCRIPTION FETCHED");
+              console.log(data);
+              // console.log(status, client_secret);
+
+              // if (status === "requires_action") {
+              //   console.log("condition k andar");
+              //   console.log(status);
+              //   // stripe.confirmCardPayment(client_secret).then(function (result) {
+              //   //   if (result.error) {
+              //   //     console.log("There was an issue!");
+              //   //     console.log(result.error);
+              //   //     // Display error message in your UI.
+              //   //     // The card was declined (i.e. insufficient funds, card has expired, etc)
+              //   //   } else {
+              //   //     console.log("You got the money!");
+              //   //     // Show a success message to your customer
+              //   //   }
+              //   // });
+              // } else {
+              //   console.log("You got the money!");
+              //   // No additional information was needed
+              //   // Show a success message to your customer
+              // }
+            });
+        });
     }
   };
 
   return (
-    <form>
-      <PaymentElement />
-      <button onClick={handleSubmit} disabled={!stripe}>
-        Submit
-      </button>
-    </form>
+    <>
+      <CardElement />
+      <Button variant="contained" color="primary" onClick={handleSubmitSub}>
+        Subscription
+      </Button>
+    </>
   );
 };
 

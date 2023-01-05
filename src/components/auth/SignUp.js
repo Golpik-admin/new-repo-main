@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
@@ -9,9 +9,6 @@ import {
   Alert as MuiAlert,
   Button,
   TextField as MuiTextField,
-  Link,
-  FormControlLabel,
-  Checkbox,
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
@@ -27,31 +24,6 @@ const stripePromise = loadStripe(
 );
 
 function SignUp(props) {
-  const [clientSecret, setClientSecret] = useState("");
-
-  useEffect(() => {
-    // Create setupintent as soon as the page loads
-    fetch("https://api.stripe.com/v1/payment_intents?amount=100&currency=usd", {
-      method: "POST",
-      headers: {
-        Authorization:
-          "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setClientSecret(data.client_secret);
-      });
-  }, []);
-
-  const appearance = {
-    theme: "stripe",
-  };
-  const options = {
-    clientSecret,
-    appearance,
-  };
   const navigate = useNavigate();
   const { signUp } = useAuth();
 
@@ -202,11 +174,9 @@ function SignUp(props) {
             )}
             {props.activeStep === 1 && (
               <>
-                {options.clientSecret != "" && (
-                  <Elements stripe={stripePromise} options={options}>
-                    <CheckoutForm />
-                  </Elements>
-                )}
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm />
+                </Elements>
               </>
             )}
           </form>
