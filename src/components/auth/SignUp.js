@@ -14,7 +14,11 @@ import { spacing } from "@mui/system";
 
 import useAuth from "../../hooks/useAuth";
 import CheckoutForm from "./CheckoutForm";
-import { stripePublishKey, stripeSecretKey } from "../../config";
+import {
+  stripePublishKey,
+  stripeSecretKey,
+  stripeapiEndpoint,
+} from "../../config";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -37,7 +41,7 @@ function SignUp(props) {
   useEffect(() => {
     async function verifyPriceId() {
       try {
-        await fetch(`https://api.stripe.com/v1/prices/${lastSegment}`, {
+        await fetch(`${stripeapiEndpoint}/prices/${lastSegment}`, {
           method: "get",
           headers: {
             Authorization: `Bearer ${stripeSecretKey}`,
@@ -65,7 +69,7 @@ function SignUp(props) {
     verifyPriceId();
 
     // Create setupintent as soon as the page loads
-    // fetch("https://api.stripe.com/v1/payment_intents?amount=100&currency=usd", {
+    // fetch("${stripeapiEndpoint}/payment_intents?amount=100&currency=usd", {
     //   method: "POST",
     //   headers: {
     //     Authorization:
