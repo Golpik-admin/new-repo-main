@@ -16,7 +16,7 @@ const CheckoutForm = (props) => {
       type: "card",
       card: elements.getElement(CardElement),
       billing_details: {
-        email: "email@email.com",
+        email: props.inputValues.email,
       },
     });
 
@@ -24,7 +24,7 @@ const CheckoutForm = (props) => {
       console.log(result.error.message);
     } else {
       fetch(
-        `https://api.stripe.com/v1/customers?email=email@email.com&payment_method=${result.paymentMethod.id}&invoice_settings[default_payment_method]=${result.paymentMethod.id}`,
+        `https://api.stripe.com/v1/customers?email=${props.inputValues.email}&payment_method=${result.paymentMethod.id}&invoice_settings[default_payment_method]=${result.paymentMethod.id}`,
         {
           method: "POST",
           headers: {

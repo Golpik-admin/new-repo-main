@@ -42,7 +42,7 @@ function SignUp(props) {
           method: "get",
           headers: {
             Authorization:
-              "Bearer sk_test_51Ko46QD5TFKDpVFgNvqiftob3CuxQwkbJFFO7LOFEu0uYLYEPGQFmIIfs4svqyXx7IuUaGBayEowmBOv0IHlfoLZ00eacu4TyC",
+              "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
           },
         })
           .then((res) => res.json())
@@ -233,7 +233,11 @@ function SignUp(props) {
             {props.activeStep === 1 && (
               <>
                 <Elements stripe={stripePromise}>
-                  <CheckoutForm lastSegment={lastSegment} price={price} />
+                  <CheckoutForm
+                    inputValues={values}
+                    lastSegment={lastSegment}
+                    price={price}
+                  />
                 </Elements>
               </>
             )}
