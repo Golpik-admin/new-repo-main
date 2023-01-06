@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
-import { Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 // import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import ResetPasswordComponent from "../../components/auth/ResetPassword";

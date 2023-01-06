@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
-import useAuth from "../../hooks/useAuth";
 import CheckoutForm from "./CheckoutForm";
 import {
   stripePublishKey,
@@ -22,8 +21,6 @@ import {
 } from "../../config";
 import { useDispatch } from "react-redux";
 import { setMesssage } from "../../redux/slices/messageSlice";
-import { useSelector } from "react-redux";
-
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
@@ -33,7 +30,7 @@ function SignUp(props) {
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [subscriptionType, setSubscriptionType] = useState(0);
+  const [setSubscriptionType] = useState(0);
   const location = useLocation();
 
   function currencyFormat(num) {
@@ -101,9 +98,6 @@ function SignUp(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const navigate = useNavigate();
-  const { signUp } = useAuth();
-  const messages = useSelector((state) => state.messageState);
   return (
     <>
       {isLoading && (
