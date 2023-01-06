@@ -61,7 +61,8 @@ function AuthProvider({ children }) {
 
         if (isAuthenticated) {
           const user = await auth0Client.getUser();
-
+          const getTokenSilently = await auth0Client.getTokenSilently();
+          user["token"] = getTokenSilently;
           setLoading(false);
           dispatch({
             type: INITIALIZE,
