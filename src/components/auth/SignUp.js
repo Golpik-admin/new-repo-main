@@ -101,9 +101,6 @@ function SignUp(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const navigate = useNavigate();
-  const { signUp } = useAuth();
-  const messages = useSelector((state) => state.messageState);
   return (
     <>
       {isLoading && (

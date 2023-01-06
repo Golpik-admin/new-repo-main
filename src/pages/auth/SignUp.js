@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
@@ -8,8 +8,6 @@ import { Alert, Button, Link, Typography } from "@mui/material";
 
 import Stepper from "../../pages/auth/stepper";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { setMesssage } from "../../redux/slices/messageSlice";
 
 // const Brand = styled(Logo)`
 //   fill: ${(props) => props.theme.palette.primary.main};
@@ -45,14 +43,14 @@ function SignUp() {
 
   return (
     <React.Fragment>
-      {messages.type != "" && messages.code != "" && (
+      {messages.type !== "" && messages.code !== "" && (
         <>
           <Alert severity={messages.type}>
             <span>{messages.message}</span>
           </Alert>
-          {messages.type != "" &&
-            messages.code != "" &&
-            messages.price == false && (
+          {messages.type !== "" &&
+            messages.code !== "" &&
+            messages.price === false && (
               <Button
                 type="submit"
                 fullWidth
