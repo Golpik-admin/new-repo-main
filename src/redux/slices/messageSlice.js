@@ -3,20 +3,23 @@ import { createSlice } from "@reduxjs/toolkit";
 export const messageSlice = createSlice({
   name: "messages",
   initialState: {
-    alert: {
-      type: "success",
-      message: "",
-      code: 200,
-    },
+    type: "",
+    message: "",
+    code: "",
+    price: false,
   },
   reducers: {
     setMesssage: (state, actions) => {
-      state.value += actions.payload;
+      console.log(actions);
+      state.type = actions.payload.type;
+      state.message = actions.payload.message;
+      state.code = actions.payload.code;
+      state.price = actions.payload.price;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = messageSlice.actions;
+export const { setMesssage } = messageSlice.actions;
 
 export default messageSlice.reducer;

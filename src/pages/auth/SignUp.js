@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
-import { Link, Typography } from "@mui/material";
+import { Alert, Button, Link, Typography } from "@mui/material";
 
 // import { ReactComponent as Logo } from "../../vendor/logo.svg";
 
@@ -41,48 +41,64 @@ const Div = styled.div`
 `;
 
 function SignUp() {
-  const messages = useSelector((state) => state.messageState.alerts);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // dispatch(setMesssage("This is  message", "error",200));
-    // console.log(messages);
-  }, []);
+  const messages = useSelector((state) => state.messageState);
 
   return (
     <React.Fragment>
+      {messages.type != "" && messages.code != "" && (
+        <>
+          <Alert severity={messages.type}>
+            <span>{messages.message}</span>
+          </Alert>
+          {messages.type != "" &&
+            messages.code != "" &&
+            messages.price == false && (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                href="https://optionize.webflow.io/pricing/price-plan"
+              >
+                Return to website
+              </Button>
+            )}
+        </>
+      )}
       {/* <Brand /> */}
-      <Typography
-        component="h1"
-        fontSize="39px"
-        variant="h1"
-        align="center"
-        gutterBottom
-      >
-        <em>
-          <strong>Optionize</strong>
-        </em>
-      </Typography>
-      <Typography
-        variant="body1"
-        align="center"
-        gutterBottom
-        sx={{ fontSize: 18, color: "rgba(77,79,92,0.5)", fontWeight: 300 }}
-      >
-        Please complete to create your account.
-      </Typography>
-      <Wrapper>
-        <Helmet title="Sign Up" />
-        <Stepper />
-      </Wrapper>
-      <Div className="footer-wrap">
-        <Link href="#" underline="none" paddingRight={2}>
-          Term of use.
-        </Link>
-        <Link href="#" underline="none">
-          Privacy Policy
-        </Link>
-      </Div>
+      <>
+        <Typography
+          component="h1"
+          fontSize="39px"
+          variant="h1"
+          align="center"
+          gutterBottom
+        >
+          <em>
+            <strong>Optionize</strong>
+          </em>
+        </Typography>
+        <Typography
+          variant="body1"
+          align="center"
+          gutterBottom
+          sx={{ fontSize: 18, color: "rgba(77,79,92,0.5)", fontWeight: 300 }}
+        >
+          Please complete to create your account.
+        </Typography>
+        <Wrapper>
+          <Helmet title="Sign Up" />
+          <Stepper />
+        </Wrapper>
+        <Div className="footer-wrap">
+          <Link href="#" underline="none" paddingRight={2}>
+            Term of use.
+          </Link>
+          <Link href="#" underline="none">
+            Privacy Policy
+          </Link>
+        </Div>
+      </>
     </React.Fragment>
   );
 }
