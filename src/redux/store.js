@@ -8,6 +8,7 @@ import getSettingsReducer from "../redux/slices/getSettings";
 import updateSettingsReducer from "../redux/slices/updateSettings";
 import getRiskManagement from "../redux/slices/getRiskManagement";
 import updateRiskManagement from "../redux/slices/updateRiskManagement";
+import messageSlice from "./slices/messageSlice";
 
 export const store = configureStore(
   {
@@ -21,6 +22,7 @@ export const store = configureStore(
       updateFetchedSettingsList: updateSettingsReducer,
       riskManagementsList: getRiskManagement,
       riskManagementsUpdateList: updateRiskManagement,
+      messageState: messageSlice,
     },
   },
   composeWithDevTools()

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
@@ -7,6 +7,9 @@ import { Link, Typography } from "@mui/material";
 // import { ReactComponent as Logo } from "../../vendor/logo.svg";
 
 import Stepper from "../../pages/auth/stepper";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setMesssage } from "../../redux/slices/messageSlice";
 
 // const Brand = styled(Logo)`
 //   fill: ${(props) => props.theme.palette.primary.main};
@@ -38,6 +41,14 @@ const Div = styled.div`
 `;
 
 function SignUp() {
+  const messages = useSelector((state) => state.messageState.alerts);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // dispatch(setMesssage("This is  message", "error",200));
+    // console.log(messages);
+  }, []);
+
   return (
     <React.Fragment>
       {/* <Brand /> */}
