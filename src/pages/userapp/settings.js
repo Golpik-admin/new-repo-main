@@ -73,17 +73,15 @@ function Settings() {
     console.log(user);
     try {
       await fetch(`${auth0Config.domain}/api/v2/users/${user.id}`, {
-        method: "GET",
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${user.token}`,
           "content-type": "application/json",
         },
-        // body: {
-        //   patch_users_by_id_body: {
-        //     name: "MARKING",
-        //     email: "markgraywells@gmail.com",
-        //   },
-        // },
+        body: JSON.stringify({
+          name: "MARK",
+          email: "markgraywells@gmail.com",
+        }),
       })
         .then((res) => res.json())
         .then((data) => {

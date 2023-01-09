@@ -111,7 +111,10 @@ function AuthProvider({ children }) {
 
   const signOut = () => {
     auth0Client?.logout();
-    dispatch({ type: SIGN_OUT });
+    dispatch({
+      type: SIGN_OUT,
+      payload: { isAuthenticated: false, user: null, token: null },
+    });
   };
 
   const resetPassword = (email) => {};
