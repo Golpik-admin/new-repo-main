@@ -10,6 +10,8 @@ import {
   Button,
   CircularProgress,
   TextField as MuiTextField,
+  Box as MuiBox,
+  Link,
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
@@ -27,6 +29,29 @@ import { useSelector } from "react-redux";
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
+
+const Box = styled(MuiBox)`
+  display: flex;
+  margin-top: 30px;
+  .nxt-btn {
+    width: 170px;
+    background: #2b75fd;
+    font-size: 18px;
+    height: 44px;
+  }
+  .back-btn {
+    width: 170px;
+    border: 1px solid #1b202a;
+    border-radius: 4px;
+    font-size: 18px;
+    height: 44px;
+    display: flex;
+    flex-grow: 0;
+    align-items: center;
+    justify-content: center;
+    color: #43425d;
+  }
+`;
 
 const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
@@ -260,15 +285,25 @@ function SignUp(props) {
                     my={3}
                     variant="standard"
                   />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                  >
-                    Next
-                  </Button>
+                  <Box justifyContent="space-between">
+                    <Link
+                      href="/auth/sign-up"
+                      underline="none"
+                      className="back-btn"
+                    >
+                      Back
+                    </Link>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className="nxt-btn"
+                      disabled={isSubmitting}
+                    >
+                      Next
+                    </Button>
+                  </Box>
                 </>
               )}
               {props.activeStep === 1 && (
