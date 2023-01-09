@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
-import useAuth from "../../hooks/useAuth";
 import CheckoutForm from "./CheckoutForm";
 import {
   stripePublishKey,
@@ -24,7 +23,6 @@ import {
 } from "../../config";
 import { useDispatch } from "react-redux";
 import { setMesssage } from "../../redux/slices/messageSlice";
-import { useSelector } from "react-redux";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -58,6 +56,7 @@ function SignUp(props) {
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [subscriptionType, setSubscriptionType] = useState(0);
   const location = useLocation();
 
