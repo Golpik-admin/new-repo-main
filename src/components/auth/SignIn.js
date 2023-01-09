@@ -46,7 +46,7 @@ const Div = styled.div`
     border: 1px solid #1b202a;
     border-radius: 4px;
     font-size: 18px;
-    height: 48px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,12 +140,7 @@ function SignIn() {
             </Link>
           </Div>
           <Div className="btn-wrap">
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={isSubmitting}
-              size="large"
-            >
+            <Button type="submit" variant="contained" disabled={isSubmitting}>
               Login
             </Button>
             <Link href="/auth/sign-up" underline="none" className="signup-btn">
