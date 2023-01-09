@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -10,10 +10,11 @@ import {
   Button,
   CircularProgress,
   TextField as MuiTextField,
+  Box as MuiBox,
+  Link,
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
-import useAuth from "../../hooks/useAuth";
 import CheckoutForm from "./CheckoutForm";
 import {
   stripePublishKey,
@@ -22,17 +23,40 @@ import {
 } from "../../config";
 import { useDispatch } from "react-redux";
 import { setMesssage } from "../../redux/slices/messageSlice";
-import { useSelector } from "react-redux";
 
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
+
+const Box = styled(MuiBox)`
+  display: flex;
+  margin-top: 40px;
+  .nxt-btn {
+    width: 170px;
+    background: #2b75fd;
+    font-size: 18px;
+    height: 44px;
+  }
+  .back-btn {
+    width: 170px;
+    border: 1px solid #1b202a;
+    border-radius: 4px;
+    font-size: 18px;
+    height: 44px;
+    display: flex;
+    flex-grow: 0;
+    align-items: center;
+    justify-content: center;
+    color: #43425d;
+  }
+`;
 
 const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [subscriptionType, setSubscriptionType] = useState(0);
   const location = useLocation();
 
@@ -189,9 +213,12 @@ function SignUp(props) {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     my={3}
+                    sx={{ width: "46%", mr: "8%" }}
                     variant="standard"
+                    className="f-name"
                   />
                   <TextField
+                    sx={{ width: "46%" }}
                     type="text"
                     name="lastName"
                     label="Last name"
@@ -203,6 +230,7 @@ function SignUp(props) {
                     onChange={handleChange}
                     my={3}
                     variant="standard"
+                    className="l-name"
                   />
                   <TextField
                     type="text"
@@ -260,15 +288,21 @@ function SignUp(props) {
                     my={3}
                     variant="standard"
                   />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                  >
-                    Next
-                  </Button>
+                  <Box justifyContent="space-between">
+                    <Link href="#" underline="none" className="back-btn">
+                      Back
+                    </Link>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className="nxt-btn"
+                      disabled={isSubmitting}
+                    >
+                      Next
+                    </Button>
+                  </Box>
                 </>
               )}
               {props.activeStep === 1 && (

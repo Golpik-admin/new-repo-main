@@ -1,4 +1,12 @@
-import { Button, CircularProgress } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  TextField,
+  Autocomplete,
+  Box as MuiBox,
+  Link,
+} from "@mui/material";
+import styled from "@emotion/styled";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useState } from "react";
@@ -11,6 +19,42 @@ const CheckoutForm = (props) => {
   const dispatch = useDispatch();
   const stripe = useStripe();
   const elements = useElements();
+
+  const Box = styled(MuiBox)`
+    .stripe-cus {
+      padding: 10px 0 5px;
+      //border-radius: 4px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+      margin: 10px 0;
+      .CardField-child{
+        background:#000;
+      }
+      .InputContainer {
+        .InputElement {
+          backgroung
+          border-bottom: 1px solid #000;
+        }
+      }
+    }
+    .pay-btn {
+      width: 170px;
+      background: #2b75fd;
+      font-size: 18px;
+      height:44px;
+    }
+    .back-btn {
+      width: 170px;
+      border: 1px solid #1b202a;
+      border-radius: 4px;
+      font-size: 18px;
+      height: 44px;
+      display: flex;
+      flex-grow: 0;
+      align-items: center;
+      justify-content: center;
+      color: #43425d;
+    }
+  `;
 
   const handleSubmitSub = async (event) => {
     setIsLoading(true);
@@ -137,12 +181,50 @@ const CheckoutForm = (props) => {
           <CircularProgress color="secondary" />
         </div>
       )}
-      <CardElement />
-      <Button variant="contained" color="primary" onClick={handleSubmitSub}>
-        Pay {props.price ?? "0.00"}
-      </Button>
+      <Box>
+        <Autocomplete
+          fullWidth
+          id="combo-box-demo"
+          options={["Monthly", "Yearly"]}
+          renderInput={(params) => (
+            <TextField {...params} label="Pro+ " variant="standard" />
+          )}
+        />
+        <TextField
+          type="text"
+          name="username"
+          label="Full Name"
+          value={props.inputValues.firstName + " " + props.inputValues.lastName}
+          //error={Boolean(touched.username && errors.username)}
+          fullWidth
+          //helperText={touched.username && errors.username}
+          //onBlur={handleBlur}
+          //onChange={handleChange}
+          sx={{ my: "15px" }}
+          variant="standard"
+        />
+        <CardElement className="stripe-cus" />
+        <Box mt={12} display="flex" justifyContent="space-between">
+          <Link href="#" underline="none" className="back-btn">
+            Back
+          </Link>
+          <Button
+            variant="contained"
+            className="pay-btn"
+            onClick={handleSubmitSub}
+          >
+            Pay {props.price ?? "0.00"}
+          </Button>
+        </Box>
+      </Box>
     </>
   );
 };
 
+// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
+const top100Films = [
+  { label: "The Shawshank Redemption", year: 1994 },
+  { label: "The Godfather", year: 1972 },
+  { label: "The Godfather: Part II", year: 1974 },
+];
 export default CheckoutForm;
