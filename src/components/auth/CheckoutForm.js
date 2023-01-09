@@ -3,7 +3,7 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { stripeapiEndpoint, stripeSecretKey } from "../../config";
+import { auth0Config, stripeapiEndpoint, stripeSecretKey } from "../../config";
 import { setMesssage } from "../../redux/slices/messageSlice";
 
 const CheckoutForm = (props) => {
@@ -90,7 +90,7 @@ const CheckoutForm = (props) => {
 
                 var config = {
                   method: "post",
-                  url: "https://dev-c37ss4t71trscecz.us.auth0.com/dbconnections/signup",
+                  url: `${auth0Config.domain}/dbconnections/signup`,
                   headers: {
                     "Content-Type": "application/json",
                   },
@@ -99,7 +99,6 @@ const CheckoutForm = (props) => {
 
                 axios(config)
                   .then(function (response) {
-                    console.log("furqan");
                     dispatch(
                       setMesssage({
                         message: "Registered Successfully",

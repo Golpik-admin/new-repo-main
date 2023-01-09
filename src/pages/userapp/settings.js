@@ -25,7 +25,7 @@ import useAuth from "../../hooks/useAuth";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { apiEndpoint } from "../../config";
+import { auth0Config } from "../../config";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -70,19 +70,20 @@ function Settings() {
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
   const updateUserHandler = async () => {
-    console.log(user.user.token);
+    console.log(user);
     try {
-      await fetch(`https://login.auth0.com/api/v2/users/${user.id}`, {
-        method: "PATCH",
+      await fetch(`${auth0Config.domain}/api/v2/users/${user.id}`, {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${user.user.token}`,
+          Authorization: `Bearer ${user.token}`,
+          "content-type": "application/json",
         },
-        body: {
-          patch_users_by_id_body: {
-            name: "MARKING",
-            email: "markgraywells@gmail.com",
-          },
-        },
+        // body: {
+        //   patch_users_by_id_body: {
+        //     name: "MARKING",
+        //     email: "markgraywells@gmail.com",
+        //   },
+        // },
       })
         .then((res) => res.json())
         .then((data) => {

@@ -13,16 +13,18 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  token: null,
 };
 
 const reducer = (state, action) => {
   if (action.type === INITIALIZE) {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, token } = action.payload;
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
       user,
+      token,
     };
   }
   if (action.type === SIGN_IN) {
@@ -61,18 +63,24 @@ function AuthProvider({ children }) {
 
         if (isAuthenticated) {
           const user = await auth0Client.getUser();
-          const getTokenSilently = await auth0Client.getTokenSilently();
-          user["token"] = getTokenSilently;
+          const getTokenSilently = await auth0Client.getTokenSilently({
+            detailedResponse: true,
+          });
+          console.log(getTokenSilently);
           setLoading(false);
           dispatch({
             type: INITIALIZE,
-            payload: { isAuthenticated, user: user || null },
+            payload: {
+              isAuthenticated,
+              user: user || null,
+              token: getTokenSilently.id_token || null,
+            },
           });
         } else {
           setLoading(false);
           dispatch({
             type: INITIALIZE,
-            payload: { isAuthenticated, user: null },
+            payload: { isAuthenticated, user: null, token: null },
           });
         }
       } catch (err) {
@@ -80,7 +88,7 @@ function AuthProvider({ children }) {
         console.error(err);
         dispatch({
           type: INITIALIZE,
-          payload: { isAuthenticated: false, user: null },
+          payload: { isAuthenticated: false, user: null, token: null },
         });
       }
     };
@@ -94,7 +102,10 @@ function AuthProvider({ children }) {
 
     if (isAuthenticated) {
       const user = await auth0Client?.getUser();
-      dispatch({ type: SIGN_IN, payload: { user: user || null } });
+      dispatch({
+        type: SIGN_IN,
+        payload: { user: user || null },
+      });
     }
   };
 
@@ -116,6 +127,7 @@ function AuthProvider({ children }) {
           avatar: state?.user?.picture,
           email: state?.user?.email,
           displayName: state?.user?.nickname,
+          token: state?.token,
           role: "user",
         },
         signIn,
