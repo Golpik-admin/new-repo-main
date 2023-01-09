@@ -32,7 +32,7 @@ const TextField = styled(MuiTextField)(spacing);
 
 const Box = styled(MuiBox)`
   display: flex;
-  margin-top: 30px;
+  margin-top: 40px;
   .nxt-btn {
     width: 170px;
     background: #2b75fd;
@@ -214,9 +214,12 @@ function SignUp(props) {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     my={3}
+                    sx={{ width: "46%", mr: "8%" }}
                     variant="standard"
+                    className="f-name"
                   />
                   <TextField
+                    sx={{ width: "46%" }}
                     type="text"
                     name="lastName"
                     label="Last name"
@@ -228,6 +231,7 @@ function SignUp(props) {
                     onChange={handleChange}
                     my={3}
                     variant="standard"
+                    className="l-name"
                   />
                   <TextField
                     type="text"
@@ -286,11 +290,7 @@ function SignUp(props) {
                     variant="standard"
                   />
                   <Box justifyContent="space-between">
-                    <Link
-                      href="/auth/sign-up"
-                      underline="none"
-                      className="back-btn"
-                    >
+                    <Link href="#" underline="none" className="back-btn">
                       Back
                     </Link>
                     <Button

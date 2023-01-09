@@ -205,8 +205,8 @@ const CheckoutForm = (props) => {
           variant="standard"
         />
         <CardElement className="stripe-cus" />
-        <Box my={10} display="flex" justifyContent="space-between">
-          <Link href="/auth/sign-up" underline="none" className="back-btn">
+        <Box mt={12} display="flex" justifyContent="space-between">
+          <Link href="#" underline="none" className="back-btn">
             Back
           </Link>
           <Button
