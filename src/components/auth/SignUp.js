@@ -55,6 +55,8 @@ const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
+
+  const [priceMetaData, setPriceMetaData] = useState();
   const [productMetaData, setProductMetaData] = useState();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -96,6 +98,15 @@ function SignUp(props) {
             }
             if (data.recurring !== null) {
               setIsLoading(false);
+              setPriceMetaData({
+                billing_scheme: data.billing_scheme,
+                created: data.created,
+                currency: data.currency,
+                id: data.id,
+                product: data.product,
+                recurring: data.recurring,
+                unit_amount: data.unit_amount,
+              });
               setPrice(currencyFormat(data.unit_amount / 100));
               fetch(`${stripeapiEndpoint}/products/${data.product}`, {
                 method: "POST",
@@ -106,7 +117,16 @@ function SignUp(props) {
                 .then((res) => res.json())
                 .then((product) => {
                   console.log(product);
-                  setProductMetaData(product.metadata);
+                  setProductMetaData({
+                    created: product.created,
+                    default_price: product.default_price,
+                    description: product.description,
+                    id: product.id,
+                    metadata: product.metadata,
+                    name: product.name,
+                    type: product.type,
+                    updated: product.updated,
+                  });
                   dispatch(
                     setMesssage({
                       type: "",
@@ -346,6 +366,7 @@ function SignUp(props) {
                       inputValues={values}
                       lastSegment={lastSegment}
                       price={price}
+                      priceMetaData={priceMetaData}
                       productMetaData={productMetaData}
                     />
                   </Elements>

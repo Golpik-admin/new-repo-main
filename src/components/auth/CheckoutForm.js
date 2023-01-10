@@ -126,7 +126,8 @@ const CheckoutForm = (props) => {
                   connection: "Username-Password-Authentication",
                   user_metadata: {
                     stripe: JSON.stringify(final.plan),
-                    product: "",
+                    priceMetaData: JSON.stringify(props.priceMetaData),
+                    productMetaData: JSON.stringify(props.productMetaData),
                   },
                   app_metadata: {
                     plan: "full",
