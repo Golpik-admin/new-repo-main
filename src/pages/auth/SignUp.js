@@ -29,10 +29,10 @@ const Div = styled.div`
   justify-content: center;
   align-items: center;
   padding: ${(props) => props.theme.spacing(5, 0)};
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  // position: absolute;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
   a {
     color: #1b202a;
   }
@@ -84,6 +84,28 @@ function SignUp() {
         >
           Please complete to create your account.
         </Typography>
+        {messages.product != null &&
+          messages.price &&
+          messages.recurringInterval != null &&
+          messages.recurringIntervalCount != null && (
+            <Typography
+              variant="body1"
+              align="center"
+              gutterBottom
+              sx={{
+                fontSize: 18,
+                color: "rgba(77,79,92,0.5)",
+                fontWeight: 300,
+              }}
+            >
+              {JSON.stringify(messages.product.description)} | {messages.price}{" "}
+              |{" "}
+              {messages.recurringIntervalCount > 1
+                ? messages.recurringIntervalCount + " TIMES"
+                : messages.recurringIntervalCount + " TIME"}{" "}
+              {messages.recurringInterval.toUpperCase()}
+            </Typography>
+          )}
         <Wrapper>
           <Helmet title="Sign Up" />
           <Stepper />

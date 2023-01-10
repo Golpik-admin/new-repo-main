@@ -55,9 +55,10 @@ const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
+  const [productMetaData, setProductMetaData] = useState();
+
   const [isLoading, setIsLoading] = useState(true);
   // eslint-disable-next-line no-unused-vars
-  const [subscriptionType, setSubscriptionType] = useState(0);
   const location = useLocation();
 
   function currencyFormat(num) {
@@ -79,8 +80,8 @@ function SignUp(props) {
         })
           .then((res) => res.json())
           .then((data) => {
+            console.log(data);
             if (data.error && data.error.code) {
-              console.log(data);
               setIsLoading(true);
               dispatch(
                 setMesssage({
@@ -93,11 +94,44 @@ function SignUp(props) {
               console.log("fail");
               return;
             }
-            if (data.type === "recurring") {
-              setSubscriptionType(data.recurring.interval);
+            if (data.recurring !== null) {
+              setIsLoading(false);
+              setPrice(currencyFormat(data.unit_amount / 100));
+              fetch(`${stripeapiEndpoint}/products/${data.product}`, {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${stripeSecretKey}`,
+                },
+              })
+                .then((res) => res.json())
+                .then((product) => {
+                  console.log(product);
+                  setProductMetaData(product.metadata);
+                  dispatch(
+                    setMesssage({
+                      type: "",
+                      message: "",
+                      code: "",
+                      price: currencyFormat(data.unit_amount / 100),
+                      product: product,
+                      recurringInterval: data.recurring.interval,
+                      recurringIntervalCount: data.recurring.interval_count,
+                    })
+                  );
+                });
+            } else {
+              setIsLoading(true);
+              dispatch(
+                setMesssage({
+                  message: "Price type is not recurring",
+                  type: "error",
+                  code: 404,
+                  price: false,
+                })
+              );
+              console.log("fail");
+              return;
             }
-            setIsLoading(false);
-            setPrice(currencyFormat(data.unit_amount / 100));
           })
           .catch((err) => {
             console.log(err.error.error);
@@ -289,15 +323,15 @@ function SignUp(props) {
                     variant="standard"
                   />
                   <Box justifyContent="space-between">
-                    <Link href="#" underline="none" className="back-btn">
+                    {/* <Link href="#" underline="none" className="back-btn">
                       Back
-                    </Link>
+                    </Link> */}
                     <Button
                       type="submit"
                       fullWidth
                       variant="contained"
                       color="primary"
-                      className="nxt-btn"
+                      // className="nxt-btn"
                       disabled={isSubmitting}
                     >
                       Next
@@ -312,6 +346,7 @@ function SignUp(props) {
                       inputValues={values}
                       lastSegment={lastSegment}
                       price={price}
+                      productMetaData={productMetaData}
                     />
                   </Elements>
                 </>

@@ -7,6 +7,9 @@ export const messageSlice = createSlice({
     message: "",
     code: "",
     price: false,
+    product: null,
+    recurringInterval: null,
+    recurringIntervalCount: null,
   },
   reducers: {
     setMesssage: (state, actions) => {
@@ -14,7 +17,18 @@ export const messageSlice = createSlice({
       state.type = actions.payload.type;
       state.message = actions.payload.message;
       state.code = actions.payload.code;
-      state.price = actions.payload.price;
+      if (!actions.payload.price || actions.payload.price) {
+        state.price = actions.payload.price;
+      }
+      if (actions.payload.product) {
+        state.product = actions.payload.product;
+      }
+      if (actions.payload.recurringInterval) {
+        state.recurringInterval = actions.payload.recurringInterval;
+      }
+      if (actions.payload.recurringIntervalCount) {
+        state.recurringIntervalCount = actions.payload.recurringIntervalCount;
+      }
     },
   },
 });

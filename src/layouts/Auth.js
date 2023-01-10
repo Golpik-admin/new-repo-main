@@ -13,7 +13,7 @@ const Root = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  min-height: 100%;
+  min-height: 100vh;
   flex-direction: column;
   background: url("/static/img/screenshots/auth-bg.png");
   background-size: 50% 100%;
@@ -25,7 +25,7 @@ const Div = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const Auth = ({ children }) => {

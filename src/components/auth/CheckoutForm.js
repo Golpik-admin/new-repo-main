@@ -79,7 +79,7 @@ const CheckoutForm = (props) => {
           message: result.error.message,
           type: "error",
           code: 404,
-          price: true,
+          // price: true,
         })
       );
       setIsLoading(false);
@@ -102,7 +102,7 @@ const CheckoutForm = (props) => {
                 message: data.error.message,
                 type: "error",
                 code: 402,
-                price: true,
+                // price: true,
               })
             );
             setIsLoading(false);
@@ -126,6 +126,7 @@ const CheckoutForm = (props) => {
                   connection: "Username-Password-Authentication",
                   user_metadata: {
                     stripe: JSON.stringify(final.plan),
+                    product: "",
                   },
                   app_metadata: {
                     plan: "full",
@@ -148,7 +149,7 @@ const CheckoutForm = (props) => {
                         message: "Registered Successfully",
                         type: "success",
                         code: 200,
-                        price: true,
+                        // price: true,
                       })
                     );
                     setIsLoading(false);
@@ -162,7 +163,7 @@ const CheckoutForm = (props) => {
                           ". Contact your administrator please.",
                         type: "error",
                         code: error.response.data.statusCode,
-                        price: true,
+                        // price: true,
                       })
                     );
                     setIsLoading(false);
@@ -181,8 +182,17 @@ const CheckoutForm = (props) => {
           <CircularProgress color="secondary" />
         </div>
       )}
+      <div
+        style={{
+          margin: "30px 0",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+          padding: "10px 0 5px",
+        }}
+      >
+        <CardElement className="stripe-cus" />
+      </div>
       <Box>
-        <Autocomplete
+        {/* <Autocomplete
           fullWidth
           id="combo-box-demo"
           options={["Monthly", "Yearly"]}
@@ -202,17 +212,12 @@ const CheckoutForm = (props) => {
           //onChange={handleChange}
           sx={{ my: "15px" }}
           variant="standard"
-        />
-        <CardElement className="stripe-cus" />
+        /> */}
         <Box mt={12} display="flex" justifyContent="space-between">
-          <Link href="#" underline="none" className="back-btn">
+          {/* <Link href="#" underline="none" className="back-btn">
             Back
-          </Link>
-          <Button
-            variant="contained"
-            className="pay-btn"
-            onClick={handleSubmitSub}
-          >
+          </Link> */}
+          <Button variant="contained" onClick={handleSubmitSub} fullWidth>
             Pay {props.price ?? "0.00"}
           </Button>
         </Box>
