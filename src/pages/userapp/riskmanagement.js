@@ -370,7 +370,6 @@ function RiskManagement() {
           >
             <EnhancedTableToolbar sx={{ p: 0 }} userId={userId} />
             <MaterialTable
-            manualPagination
               isLoading={riskManagementsList.loading}
               icons={tableIcons}
               columns={fields}

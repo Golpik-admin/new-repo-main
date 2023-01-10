@@ -171,6 +171,18 @@ const EnhancedTableToolbar = () => {
 function Positions() {
   const positionsList = useSelector((state) => state.positionsList);
 
+  const configuration = {
+    toolbar: false,
+    padding: "dense",
+    filtering: true,
+    search: false,
+    pageSize: 10,
+    paginationType: "stepped",
+    showTitle: false,
+    actionsColumnIndex: -1,
+    addRowPosition: "first",
+  };
+
   const tableIcons = {
     // Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     // Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -434,6 +446,7 @@ function Positions() {
               isLoading={positionsList.loading}
               icons={tableIcons}
               title={false}
+              options={configuration}
               columns={[
                 {
                   title: "TICKER",
@@ -604,14 +617,6 @@ function Positions() {
                 },
               ]}
               data={New_DATA}
-              options={{
-                toolbar: false,
-                padding: "dense",
-                filtering: true,
-                search: false,
-                pageSize: 10,
-                showTitle: false,
-              }}
             />
           </Paper>
         </Grid>
