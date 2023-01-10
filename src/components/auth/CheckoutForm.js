@@ -155,8 +155,14 @@ const CheckoutForm = (props) => {
                     );
                     setIsLoading(false);
                     console.log(JSON.stringify(response.data));
+                    if (response.code !== "invalid_signup") {
+                      setTimeout(() => {
+                        window.location.replace("/auth/sign-in");
+                      }, 5000);
+                    }
                   })
                   .catch(function (error) {
+                    console.log(error);
                     dispatch(
                       setMesssage({
                         message:
