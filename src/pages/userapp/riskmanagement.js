@@ -370,6 +370,7 @@ function RiskManagement() {
           >
             <EnhancedTableToolbar sx={{ p: 0 }} userId={userId} />
             <MaterialTable
+            manualPagination
               isLoading={riskManagementsList.loading}
               icons={tableIcons}
               columns={fields}
@@ -651,6 +652,15 @@ const Grid = styled(MuiGrid)`
           }
         }
       }
+    }
+  }
+  .MuiTablePagination-toolbar{
+    .MuiButtonBase-root{
+      color:#7E84A3;
+    }
+    .MuiButton-containedSizeSmall{
+      color:#fff;
+      background:#2B75FD;
     }
   }
 `;

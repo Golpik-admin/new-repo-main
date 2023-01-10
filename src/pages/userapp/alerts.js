@@ -76,6 +76,8 @@ function Alerts() {
     filtering: true,
     search: false,
     pageSize: 10,
+    paginationType: "stepped",
+    actionsColumnIndex: -2,
     showTitle: false,
   }
 
@@ -694,6 +696,15 @@ const Grid = styled(MuiGrid)`
         }
         
       }
+    }
+  }
+  .MuiTablePagination-toolbar{
+    .MuiButtonBase-root{
+      color:#7E84A3;
+    }
+    .MuiButton-containedSizeSmall{
+      color:#fff;
+      background:#2B75FD;
     }
   }
 `;

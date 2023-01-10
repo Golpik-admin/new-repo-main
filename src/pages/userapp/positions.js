@@ -674,14 +674,14 @@ const Grid = styled(MuiGrid)`
   }
   .mat-table {
     th:first-child {
-      min-width: 300px;
+      //min-width: 300px;
     }
     th {
       text-align: left;
       background: ${(props) => props.theme.palette.tableTh.background};
       border-left: 4px solid ${(props) => props.theme.palette.background.paper};
       border-bottom: 0;
-      //padding: 6px;
+      padding: 6px;
       line-height: 1.2;
     }
     tbody {
@@ -724,6 +724,15 @@ const Grid = styled(MuiGrid)`
           }
         }
       }
+    }
+  }
+  .MuiTablePagination-toolbar {
+    .MuiButtonBase-root {
+      color: #7e84a3;
+    }
+    .MuiButton-containedSizeSmall {
+      color: #fff;
+      background: #2b75fd;
     }
   }
 `;

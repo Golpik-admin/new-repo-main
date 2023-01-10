@@ -31,10 +31,7 @@ function App({ emotionCache = clientSideEmotionCache }) {
   return (
     <CacheProvider value={emotionCache}>
       <HelmetProvider>
-        <Helmet
-          titleTemplate="Consilience Trading"
-          defaultTitle="Consilience Trading Dashboard"
-        />
+        <Helmet titleTemplate="Optionize" defaultTitle="Optionize Dashboard" />
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MuiThemeProvider theme={createTheme(theme)}>
