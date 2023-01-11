@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Power } from "react-feather";
 import { useNavigate } from "react-router-dom";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
@@ -16,7 +15,6 @@ import {
 } from "@mui/material";
 
 import useAuth from "../../hooks/useAuth";
-import { CenterFocusStrong } from "@mui/icons-material";
 
 const IconButton = styled(MuiIconButton)`
   &:hover {
@@ -121,13 +119,6 @@ export default NavbarUserDropdown;
 
 const FooterText = styled(Typography)`
   color: ${(props) => props.theme.sidebar.footer.color};
-`;
-
-const FooterSubText = styled(Typography)`
-  color: ${(props) => props.theme.sidebar.footer.color};
-  font-size: 0.7rem;
-  display: block;
-  padding: 1px;
 `;
 
 const FooterBadge = styled(Badge)`

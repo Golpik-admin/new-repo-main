@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { Auth0Client } from "@auth0/auth0-spa-js";
 
 import { auth0Config } from "../config";
@@ -43,24 +43,18 @@ const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
+      setLoading(true);
       try {
         auth0Client = new Auth0Client({
           client_id: auth0Config.clientId || "",
           domain: auth0Config.domain || "",
           redirect_uri: window.location.origin,
         });
-        const getTokenSilently = auth0Client.getTokenSilently({
-          detailedResponse: true,
-        });
-        localStorage.setItem(
-          "Authorization",
-          (await getTokenSilently).access_token
-        );
-        // localStorage.getItem("Authorization");
-        // console.log(localStorage.getItem("Authorization"));
+
         await auth0Client.checkSession();
 
         const isAuthenticated = await auth0Client.isAuthenticated();
@@ -68,17 +62,20 @@ function AuthProvider({ children }) {
         if (isAuthenticated) {
           const user = await auth0Client.getUser();
 
+          setLoading(false);
           dispatch({
             type: INITIALIZE,
             payload: { isAuthenticated, user: user || null },
           });
         } else {
+          setLoading(false);
           dispatch({
             type: INITIALIZE,
             payload: { isAuthenticated, user: null },
           });
         }
       } catch (err) {
+        setLoading(false);
         console.error(err);
         dispatch({
           type: INITIALIZE,
@@ -86,9 +83,8 @@ function AuthProvider({ children }) {
         });
       }
     };
-    if (localStorage.getItem("Authorization") === null) {
-      initialize();
-    }
+
+    initialize();
   }, []);
 
   const signIn = async () => {
@@ -124,6 +120,8 @@ function AuthProvider({ children }) {
         signIn,
         signOut,
         resetPassword,
+        setLoading,
+        loading,
       }}
     >
       {children}

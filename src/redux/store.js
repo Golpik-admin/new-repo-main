@@ -6,6 +6,8 @@ import positionsApiReducer from "../redux/slices/possitions";
 import positionsPreviousApiReducer from "../redux/slices/positionsPreviousMonth";
 import getSettingsReducer from "../redux/slices/getSettings";
 import updateSettingsReducer from "../redux/slices/updateSettings";
+import getRiskManagement from "../redux/slices/getRiskManagement";
+import updateRiskManagement from "../redux/slices/updateRiskManagement";
 
 export const store = configureStore(
   {
@@ -17,6 +19,8 @@ export const store = configureStore(
       positionsListPrevious: positionsPreviousApiReducer,
       fetchSettingsList: getSettingsReducer,
       updateFetchedSettingsList: updateSettingsReducer,
+      riskManagementsList: getRiskManagement,
+      riskManagementsUpdateList: updateRiskManagement,
     },
   },
   composeWithDevTools()

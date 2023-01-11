@@ -4,13 +4,11 @@ import { css } from "@emotion/react";
 import { Link } from "react-router-dom";
 
 import { green, grey, indigo } from "@mui/material/colors";
-import { Palette as PaletteIcon } from "@mui/icons-material";
 import {
   Alert,
   Box,
   Button,
   Drawer,
-  Fab as MuiFab,
   Grid,
   ListItemButton,
   Typography,
@@ -78,13 +76,6 @@ const DemoButtonInner = styled.div`
 
 const DemoTitle = styled(Typography)`
   text-align: center;
-`;
-
-const Fab = styled(MuiFab)`
-  position: fixed;
-  right: ${(props) => props.theme.spacing(8)};
-  bottom: ${(props) => props.theme.spacing(8)};
-  z-index: 1;
 `;
 
 const Wrapper = styled.div`

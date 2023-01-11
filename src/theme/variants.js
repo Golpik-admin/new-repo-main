@@ -1,5 +1,5 @@
 import merge from "deepmerge";
-import { green, grey, indigo, red } from "@mui/material/colors";
+import { green, grey, indigo } from "@mui/material/colors";
 import { THEMES } from "../constants";
 
 const customBlue = {
@@ -24,7 +24,7 @@ const defaultVariant = {
   palette: {
     mode: "light",
     primary: {
-      main: customBlue[2],
+      main: "#0058FF",
       contrastText: "#FFF",
     },
     secondary: {

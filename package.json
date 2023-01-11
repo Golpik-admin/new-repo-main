@@ -1,12 +1,12 @@
 {
-  "name": "mira",
+  "name": "consilience_trading",
   "version": "4.2.0",
-  "description": "Mira Pro - React Material Admin Dashboard Template",
+  "description": "This is Trading Dashboard",
   "author": "Bootlab <support@bootlab.io>",
   "private": true,
   "license": "https://mui.com/store/license/",
   "scripts": {
-    "start": "craco start",
+    "start": "set \"GENERATE_SOURCEMAP=false\" && craco start",
     "build": "craco build",
     "eject": "craco eject",
     "lint": "eslint src --ext .js,.jsx --fix"
@@ -47,6 +47,8 @@
     "@mui/x-date-pickers-pro": "^5.0.9",
     "@redux-devtools/extension": "3.2.3",
     "@reduxjs/toolkit": "1.8.5",
+    "@stripe/react-stripe-js": "^1.16.1",
+    "@stripe/stripe-js": "^1.46.0",
     "amazon-cognito-identity-js": "5.2.10",
     "apexcharts": "3.35.5",
     "axios": "^0.27.2",
@@ -67,6 +69,7 @@
     "jsonwebtoken": "8.5.1",
     "jss": "10.9.2",
     "jwt-decode": "3.1.2",
+    "material-table": "^2.0.3",
     "moment-timezone": "^0.5.39",
     "polished": "4.2.2",
     "process": "0.11.10",

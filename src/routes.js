@@ -10,7 +10,6 @@ import AuthLayout from "./layouts/Auth";
 import DashboardLayout from "./layouts/AdminAppLayout";
 import FrontEndDashboardLayout from "./layouts/UserAppLayout";
 import DocLayout from "./layouts/Doc";
-import PresentationLayout from "./layouts/Presentation";
 
 // Guards
 import AuthGuard from "./components/guards/AuthGuard";
@@ -81,7 +80,10 @@ import Changelog from "./pages/docs/Changelog";
 
 // users routes
 import UsersAlerts from "./pages/userapp/alerts";
+import UsersAddAlerts from "./pages/userapp/addAlerts";
 import UserPositions from "./pages/userapp/positions";
+import UsersAddPositions from "./pages/userapp/addPositions";
+import UsersGetStarted from "./pages/userapp/getStarted";
 
 import UserSettings from "./pages/userapp/settings";
 import UserHelpCenter from "./pages/userapp/helpcenter";
@@ -89,15 +91,13 @@ import UserRiskManagement from "./pages/userapp/riskmanagement";
 import UserIntegration from "./pages/userapp/integration";
 
 // Landing
-import Landing from "./pages/presentation/Landing";
 
 // Protected routes
 import ProtectedPage from "./pages/protected/ProtectedPage";
+import GuestGuard from "./components/guards/GuestGuard";
 
 // Dashboard components
 const Default = async(() => import("./pages/dashboards/Default"));
-const Analytics = async(() => import("./pages/dashboards/Analytics"));
-const SaaS = async(() => import("./pages/dashboards/SaaS"));
 
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));
@@ -124,7 +124,11 @@ const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
 const routes = [
   {
     path: "/",
-    element: <AuthLayout />,
+    element: (
+      <GuestGuard>
+        <AuthLayout />
+      </GuestGuard>
+    ),
     children: [
       {
         path: "",
@@ -155,11 +159,16 @@ const routes = [
   // },
   {
     path: "dashboard",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
-        element: <Default />,
+        // element: <Default />,
+        element: <UsersGetStarted />,
       },
     ],
   },
@@ -170,6 +179,36 @@ const routes = [
       {
         path: "",
         element: <UsersAlerts />,
+      },
+    ],
+  },
+  {
+    path: "addAlerts",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersAddAlerts />,
+      },
+    ],
+  },
+  {
+    path: "addPositions",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersAddPositions />,
+      },
+    ],
+  },
+  {
+    path: "getStarted",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UsersGetStarted />,
       },
     ],
   },
@@ -312,7 +351,7 @@ const routes = [
         element: <SignIn />,
       },
       {
-        path: "sign-up",
+        path: "sign-up/:id",
         element: <SignUp />,
       },
       {

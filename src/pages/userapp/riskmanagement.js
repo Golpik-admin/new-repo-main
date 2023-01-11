@@ -1,287 +1,449 @@
 /* eslint-disable prettier/prettier */
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Divider as MuiDivider,
   Grid as MuiGrid,
-  Paper as MuiPaper,
-  Table as MuiTable,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
   Toolbar,
-  LinearProgress as MuiLinearProgress,
   RadioGroup,
   FormControlLabel,
   Radio,
   TextField,
-  IconButton,
+  Paper,
+  Input,
 } from "@mui/material";
-import { SyncAlt, AddOutlined, SystemUpdateAltOutlined, DeleteOutlineOutlined } from "@mui/icons-material";
-import { green, red } from "@mui/material/colors";
+import {
+  FilterList,
+  FirstPage,
+  LastPage,
+  ArrowDownward,
+  DeleteOutline,
+  Clear,
+  AddBox,
+  Check,
+} from "@mui/icons-material";
 import Stats from "./Stats";
 import { spacing } from "@mui/system";
 import { useEffect } from "react";
-import { fetchAlerts } from "../../redux/slices/alerts";
-import {
-  previousFetchAlerts,
-} from "../../redux/slices/alertsPreviousMonth";
-import Moment from "react-moment";
-
+import { fetchRiskManagements } from "../../redux/slices/getRiskManagement";
+import { updateRiskManagements } from "../../redux/slices/updateRiskManagement";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import "./cus-style.css";
 import moment from "moment-timezone";
-import FilterPop from "./Filter";
 import useAuth from "../../hooks/useAuth";
-import { fetchSettings } from "../../redux/slices/getSettings";
+import MaterialTable from "material-table";
+import { ChevronLeft, ChevronRight, Edit } from "react-feather";
 
-const Divider = styled(MuiDivider)(spacing);
+function RiskManagement() {
+  const Divider = styled(MuiDivider)(spacing);
+  const alertList = useSelector((state) => state.alertsList);
+  const previousAlertList = useSelector((state) => state.previousAlertsList);
 
+  const riskManagementsList = useSelector((state) => state.riskManagementsList);
 
-const Paper = styled(MuiPaper)(spacing);
+  const dispatch = useDispatch();
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+  const { user } = useAuth();
+  const userId = "6372c6c0a8b2c2ec60b2da52";
 
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+  let date = new Date();
+  const currentMonthFirstDay = moment(date)
+    .startOf("month")
+    .format("YYYY-MM-DD");
+  const currentMonthLastDay = moment(date).endOf("month").format("YYYY-MM-DD");
 
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => ({
-    el,
-    index,
-  }));
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a.el, b.el);
-    if (order !== 0) return order;
-    return a.index - b.index;
-  });
-  return stabilizedThis.map((element) => element.el);
-}
+  const totalCurrentHours = moment
+    .duration(
+      moment(currentMonthLastDay, "YYYY/MM/DD").diff(
+        moment(currentMonthFirstDay, "YYYY/MM/DD")
+      )
+    )
+    .asHours();
 
-const headCells = [
-  { id: "ticker", alignment: "left", label: "TICKER" },
-  { id: "option_type", alignment: "left", label: "PROFIT TARGET" },
-  { id: "order_action", alignment: "left", label: "LOSS / MINIMUM PROFIT" },
-  {
-    id: "price_fired_alert",
-    alignment: "left",
-    label: "ACTIVE POSITIONS",
-  },
-  { id: "price_now", alignment: "left", label: "ACTIVE" },
-];
-
-const EnhancedTableHead = (props) => {
-  const {
-    order,
-    orderBy,
-    onRequestSort,
-  } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+  const configuration = {
+    toolbar: true,
+    padding: "dense",
+    filtering: true,
+    search: false,
+    pageSize: 10,
+    paginationType: "stepped",
+    showTitle: false,
+    actionsColumnIndex: -1,
+    addRowPosition: "first",
   };
+
+  const tableIcons = {
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    // DetailPanel: forwardRef((props, ref) => (
+    //   <ChevronRight {...props} ref={ref} />
+    // )),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    // Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    PreviousPage: forwardRef((props, ref) => (
+      <ChevronLeft {...props} ref={ref} />
+    )),
+    // ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    // Search: forwardRef((props, ref) => <Sort {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => (
+      <ArrowDownward {...props} ref={ref} />
+    )),
+    // ThirdStateCheck: forwardRef((props, ref) => (
+    //   <Remove {...props} ref={ref} />
+    // )),
+    // ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+  };
+
+  const collections = riskManagementsList.tickersRiskManagement
+    ? riskManagementsList.tickersRiskManagement.map((o) => ({
+        Symbol: o.Symbol,
+        ProfitTarget: o.ProfitTarget,
+        LossTarget: o.LossTarget,
+        Brokerage: o.Brokerage,
+      }))
+    : [];
+
+  // setData([collections]);
+  // console.log(data);
+  const fields = [
+    {
+      title: "TICKER",
+      field: "Symbol",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.Symbol}
+        />
+      ),
+      render: (rowData) => rowData.Symbol,
+      lookup: riskManagementsList.tickersRiskManagement
+        ? [
+            ...new Set(
+              riskManagementsList.tickersRiskManagement.map((x) => x.Symbol)
+            ),
+          ]
+            .filter(Boolean)
+            .reduce((a, v) => ({ ...a, [v]: v }), {})
+        : {},
+    },
+    {
+      title: "PROFIT TARGET",
+      field: "ProfitTarget",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.ProfitTarget}
+        />
+      ),
+      render: (rowData) => rowData.ProfitTarget,
+      lookup: riskManagementsList.tickersRiskManagement
+        ? [
+            ...new Set(
+              riskManagementsList.tickersRiskManagement.map(
+                (x) => x.ProfitTarget
+              )
+            ),
+          ]
+            .filter(Boolean)
+            .reduce((a, v) => ({ ...a, [v]: v }), {})
+        : {},
+    },
+    {
+      title: "LOSS / MINIMUM PROFIT",
+      field: "LossTarget",
+      editComponent: (editProps) => (
+        // console.log(editProps)
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.LossTarget}
+        />
+      ),
+      render: (rowData) => rowData.LossTarget,
+      lookup: riskManagementsList.tickersRiskManagement
+        ? [
+            ...new Set(
+              riskManagementsList.tickersRiskManagement.map((x) => x.LossTarget)
+            ),
+          ]
+            .filter(Boolean)
+            .reduce((a, v) => ({ ...a, [v]: v }), {})
+        : {},
+    },
+    {
+      title: "ACTIVE POSITIONS",
+      field: "Brokerage",
+      editComponent: (editProps) => (
+        <Input
+          autoFocus={true}
+          onChange={(e) => editProps.onChange(e.target.value)}
+          value={editProps.rowData.Brokerage}
+        />
+      ),
+      render: (rowData) => rowData.Brokerage,
+      lookup: riskManagementsList.tickersRiskManagement
+        ? [
+            ...new Set(
+              riskManagementsList.tickersRiskManagement.map((x) => x.Brokerage)
+            ),
+          ]
+            .filter(Boolean)
+            .reduce((a, v) => ({ ...a, [v]: v }), {})
+        : {},
+    },
+  ];
+
+  function calculatePercentage(previous, current) {
+    let prevCalProcessed = 0;
+
+    if (parseInt(current) < parseInt(previous) && parseInt(previous) > 0) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(previous)) *
+        100
+      ).toFixed(2);
+    } else if (
+      parseInt(current) > parseInt(previous) &&
+      parseInt(current) > 0
+    ) {
+      prevCalProcessed = (
+        ((parseInt(current) - parseInt(previous)) / parseInt(current)) *
+        100
+      ).toFixed(2);
+    }
+
+    return prevCalProcessed;
+  }
+
+  function percentageStatusDisplay(previous, current) {
+    var percentageColorProcessed;
+    if (parseInt(current) < parseInt(previous)) {
+      percentageColorProcessed = "#F0142F";
+    } else {
+      percentageColorProcessed = "#3DD598";
+    }
+
+    return percentageColorProcessed;
+  }
+
+  useEffect(() => {
+    const initialize = async () => {
+      try {
+        const isAuthenticated = await user;
+        if (isAuthenticated) {
+          dispatch(fetchRiskManagements({ userId: userId }));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // "% &#8593;";
+
   return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className="table-th"
-          >
-            <Box 
-            className="filter-box"
-            >
-              <div className="txt">{headCell.label}</div>
-              <FilterPop />
-              {/* SyncAltTwoToneIcon  */}
-              <TableSortLabel
-                active={true}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-                IconComponent={SyncAlt}
-              >
-              </TableSortLabel>
-            </Box>
-          </TableCell>
-        ))}
-      </TableRow>
-      {/* <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignment}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            className="filter-th"
-          >
-            <IconButton>
-              <AddCircle />
-            </IconButton>
-          </TableCell>
-        ))}
-      </TableRow> */}
-      <TableRow>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <AddOutlined />
-            </IconButton>
-          </TableCell>
-          <TableCell
-            padding=""
-            className="filter-th"
-          >
-            <IconButton>
-              <SystemUpdateAltOutlined />
-            </IconButton>
-            <IconButton fontSize="small" className="del-btn">
-              <DeleteOutlineOutlined />
-            </IconButton>
-          </TableCell>
-          
-      </TableRow>
+    <React.Fragment>
+      <Helmet title="Orders" />
 
-    </TableHead>
+      <Grid container spacing={6}>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            title="Total Positions Closed"
+            ispercentage="true"
+            amount={alertList.processedAlertsCount}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousProcessedAlertsCount,
+                alertList.processedAlertsCount
+              ) + "%↓"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousProcessedAlertsCount,
+              alertList.processedAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos1.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            title="Total Positions Risk-Managed"
+            ispercentage="true"
+            amount={alertList.unprocessedAlertsCount}
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              ) +
+              (calculatePercentage(
+                previousAlertList.previousUnprocessedAlertsCount,
+                alertList.unprocessedAlertsCount
+              ) > 0
+                ? "%↑"
+                : "%↓")
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousUnprocessedAlertsCount,
+              alertList.unprocessedAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos1.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            title="Today's P & L"
+            amount={alertList.expiredAlertsCount}
+            ispercentage="true"
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              ) +
+              (calculatePercentage(
+                previousAlertList.previousExpiredAlertsCount,
+                alertList.expiredAlertsCount
+              )
+                ? "%↑"
+                : "%↓")
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousExpiredAlertsCount,
+              alertList.expiredAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos3.svg"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg>
+          <Stats
+            ispercentage="true"
+            title="P&L"
+            amount={(
+              alertList.totalAlertsCount / parseInt(totalCurrentHours)
+            ).toFixed(2)}
+            // chip="dasfvl"
+            percentagetext={
+              calculatePercentage(
+                previousAlertList.previousTotalAlertsCount,
+                alertList.totalAlertsCount
+              ) + "%↑"
+            }
+            percentagecolor={percentageStatusDisplay(
+              previousAlertList.previousTotalAlertsCount,
+              alertList.totalAlertsCount
+            )}
+            illustration="/static/img/stats/icon-pos3.svg"
+          />
+        </Grid>
+        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2}>
+          <Stats
+            title="Pro +"
+            ispercentage="false"
+            amount="Subscription"
+            chip=""
+            percentagetext="Details"
+          />
+        </Grid>
+      </Grid>
+      <Divider my={6} />
+
+      <Grid container spacing={6}>
+        <Grid item xs={12} className="mat-table">
+          <Paper
+            sx={{
+              px: 6,
+              py: 2,
+              minHeight: 450,
+            }}
+          >
+            <EnhancedTableToolbar sx={{ p: 0 }} userId={userId} />
+            <MaterialTable
+              isLoading={riskManagementsList.loading}
+              icons={tableIcons}
+              columns={fields}
+              data={collections}
+              options={configuration}
+              editable={{
+                // onBulkUpdate: (changes) => {
+                //   return new Promise((resolve, reject) => {
+                //     setTimeout(() => {
+                //       // let copyData = [...data];
+                //       // setData(getNewDataBulkEdit(changes, copyData));
+                //       resolve();
+                //     }, 1000);
+                //   });
+                // },
+                onRowAddCancelled: (rowData) => alert("Row adding cancelled"),
+                onRowAdd: (newData) => {
+                  return new Promise((resolve, reject) => {
+                    console.log(newData);
+                    dispatch(
+                      updateRiskManagements({
+                        userId: userId,
+                        Symbol: newData.Symbol,
+                        ProfitTarget: newData.ProfitTarget,
+                        LossTarget: newData.LossTarget,
+                        Brokerage: newData.Brokerage,
+                      })
+                    );
+                    setTimeout(() => {
+                      resolve();
+                      // newData.id = "uuid-" + Math.random() * 10000000;
+                      // setData([...data, newData]);
+                    }, 1000);
+                  });
+                },
+                onRowUpdateCancelled: (rowData) =>
+                  alert("Row editing cancelled"),
+                // onRowUpdate: (newData, oldData) => {
+                //   return new Promise((resolve, reject) => {
+                //     setTimeout(() => {
+                //       // const dataUpdate = [...data];
+                //       // // In dataUpdate, find target
+                //       // const target = dataUpdate.find(
+                //       //   (el) => el.id === oldData.tableData.id
+                //       // );
+                //       // const index = dataUpdate.indexOf(target);
+                //       // dataUpdate[index] = newData;
+                //       // setData([...dataUpdate]);
+                //       resolve();
+                //     }, 1000);
+                //   });
+                // },
+                // onRowDelete: (oldData) => {
+                //   return new Promise((resolve, reject) => {
+                //     setTimeout(() => {
+                //       // const dataDelete = [...data];
+                //       // const target = dataDelete.find(
+                //       //   (el) => el.id === oldData.tableData.id
+                //       // );
+                //       // const index = dataDelete.indexOf(target);
+                //       // dataDelete.splice(index, 1);
+                //       // setData([...dataDelete]);
+                //       resolve();
+                //     }, 1000);
+                //   });
+                // },
+              }}
+            />
+          </Paper>
+        </Grid>
+      </Grid>
+    </React.Fragment>
   );
-};
-
-// const Table = styled(MuiTable)`
-//   th.table-th:first-child{
-//     min-width:300px;
-//   }
-//   th{
-//     border-left: 4px solid ${(props) => props.theme.palette.background.paper};
-//     border-bottom: 0;
-//     padding: 6px;
-//     line-height: 1.2;
-//   }
-//   th.table-th{
-//     background: ${(props) => props.theme.palette.tableTh.background};
-//   }
-//   th.filter-th{
-//     background: ${(props) => props.theme.palette.filterTh.background};
-//     .filter-box{
-//       display: flex;
-//       justify-content: space-between;
-//       button{
-//         color: ${(props) => props.theme.palette.filterTh.color};
-//         min-width:30px;
-//       }
-//       .MuiTableSortLabel-root{
-//         transform: rotate(90deg);
-//         svg{
-//           color: ${(props) => props.theme.palette.filterTh.color};
-//         }
-
-//       }
-//     }
-//   }
-// `;
-
-
-const Table = styled(MuiTable)`
-  th{
-    border-left: 4px solid ${(props) => props.theme.palette.background.paper};
-    border-bottom: 0;
-    padding: 6px;
-    line-height: 1.2;
-   }
-  th.table-th{
-    background: ${(props) => props.theme.palette.tableTh.background};
-    padding: 10px;
-    text-align:left;
-    .filter-box{
-      display: flex;
-      flex: 0 0 100%;
-      justify-content: space-between;
-      align-items: center;
-      .txt{
-        flex-grow: 1;
-      }
-      button{
-        justify-content: center;
-        min-width: auto;
-        color: ${(props) => props.theme.palette.filterTh.color}
-      }
-    }
-    .MuiTableSortLabel-root{
-      transform: rotate(90deg);
-      svg{
-        color: ${(props) => props.theme.palette.filterTh.color};
-      }
-    }
-  }
-  th.filter-th{
-    border-bottom: 1px solid;
-    padding: 10px;
-    text-align:center;
-    button{
-      background:${(props) => props.theme.palette.filterTh.color};
-      color:#fff;
-      padding: 5px;
-      svg{
-        font-size: 1.3rem;
-      }
-    }
-    .del-btn{
-      background: #A1A7C4;
-      margin-left: 12px;
-      padding: 3.5px;
-      svg{
-        font-size: 1.5rem;
-      }
-    }
-
-  }
-`;
+}
 
 const Box = styled.div`
   &.radio-parent {
@@ -307,7 +469,7 @@ const Box = styled.div`
           padding: 18px 18px;
           margin: 1px;
           background: ${(props) => props.theme.palette.toolbarbtn.background};
-          border:  ${(props) => props.theme.palette.toolbarbtn.border};
+          border: ${(props) => props.theme.palette.toolbarbtn.border};
           &.Mui-checked {
             background: ${(props) => props.theme.sidebar.background};
             + .MuiTypography-root {
@@ -332,17 +494,24 @@ const Box = styled.div`
   }
 `;
 
-const EnhancedTableToolbar = () => {
-  const getSettings = useSelector((state) => state.fetchSettingsList);
-
+const EnhancedTableToolbar = (props) => {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState([null, null]);
-  const userId = '6372c6c0a8b2c2ec60b2da52';
-  
-  const handleChange = (event) => {
-    dispatch(fetchAlerts({ status: event.target.value, count: null,userId:userId, }));
-  };
+  const userId = props.userId;
   const today = moment().format("YYYY-MM-DD");
+  const handleChange = () => {
+    // dispatch(fetchRiskManagements({ status: event.target.value, count: null,userId:userId, }));
+  };
+  const onChangeDate = (newValue) => {
+    let startDate =
+      newValue[0] !== null ? moment(newValue[0].$d).format("YYYY-MM-DD") : null;
+    let endDate =
+      newValue[1] !== null ? moment(newValue[1].$d).format("YYYY-MM-DD") : null;
+    if (startDate !== null && endDate !== null) {
+      dispatch(fetchRiskManagements({ userId: userId }));
+    }
+    setValue(newValue);
+  };
   return (
     <Toolbar>
       <Box className="radio-parent">
@@ -350,31 +519,16 @@ const EnhancedTableToolbar = () => {
           aria-label="Filters"
           name="alertFilters"
           onChange={handleChange}
-          defaultValue="all"
+          defaultValue="All"
         >
-          <FormControlLabel value="all" control={<Radio />} label="All" />
+          <FormControlLabel value="All" control={<Radio />} label="All" />
+          <FormControlLabel value="Open" control={<Radio />} label="Open" />
+          <FormControlLabel value="Closed" control={<Radio />} label="Closed" />
           <FormControlLabel
-            value="Processed"
+            value="Risk-Managed"
             control={<Radio />}
-            label="Processed"
+            label="Risk-Managed"
           />
-          <FormControlLabel
-            value="Unprocessed"
-            control={<Radio />}
-            label="Un Processed"
-          />
-          <FormControlLabel
-            value="Expired"
-            control={<Radio />}
-            label="Expired"
-          />
-        {getSettings.TestMode &&           
-          <FormControlLabel
-            value="Test"
-            control={<Radio />}
-            label="Test"
-          />
-        }
         </RadioGroup>
       </Box>
       <StyledEngineProvider injectFirst>
@@ -385,22 +539,7 @@ const EnhancedTableToolbar = () => {
           <DateRangePicker
             className="picker-range"
             value={value}
-            onChange={(newValue) => {
-              let startDate =
-                newValue[0] !== null
-                  ? moment(newValue[0].$d).format("YYYY-MM-DD")
-                  : null;
-              let endDate =
-                newValue[1] !== null
-                  ? moment(newValue[1].$d).format("YYYY-MM-DD")
-                  : null;
-              if (startDate !== null && endDate !== null) {
-                dispatch(
-                  fetchAlerts({ startDate: startDate, endDate: endDate })
-                );
-              }
-              setValue(newValue);
-            }}
+            onChange={onChangeDate}
             renderInput={(startProps, endProps) => (
               <React.Fragment>
                 <TextField className="date-1" {...startProps} />
@@ -415,381 +554,105 @@ const EnhancedTableToolbar = () => {
   );
 };
 
-function EnhancedTable() {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("customer");
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = alertList.alerts.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const alertList = useSelector((state) => state.alertsList);
-  const LinearProgress = styled(MuiLinearProgress)(spacing);
-
-
-
-  return (
-    <div>
-      <Paper
-        sx={{
-          px:6,
-          minHeight: 450,
-        }}
-      >
-        <EnhancedTableToolbar numSelected={selected.length} />
-        {alertList.loading && <LinearProgress />}
-        {!alertList.loading && alertList.alerts.length ? (
-          <TableContainer>
-            <Table
-              aria-labelledby="tableTitle"
-              size={"medium"}
-              aria-label="enhanced table"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={alertList.alerts.length}
-              />
-              <TableBody>
-                {stableSort(alertList.alerts, getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    const isItemSelected = isSelected(row.id);
-                    // -${index}
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={`${row.id}`}
-                        selected={isItemSelected}
-                      >
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left">
-                          {/* {row.order_Action.replace(/_/g, " ")} */}
-                        </TableCell>
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"></TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : (
-          <TableContainer>
-            <Table
-              aria-labelledby="tableTitle"
-              size={"medium"}
-              aria-label="enhanced table"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={alertList.alerts.length}
-              />
-              <TableBody>
-                <TableCell colSpan={12}>{"Record not found"}</TableCell>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={alertList.alerts.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </div>
-  );
-}
-
-function OrderList() {
-  function calculatePercentage(previous, current) {
-    let prevCalProcessed = 0;
-
-    if (parseInt(current) < parseInt(previous) && parseInt(previous) > 0) {
-      prevCalProcessed = (
-        ((parseInt(current) - parseInt(previous)) / parseInt(previous)) *
-        100
-      ).toFixed(2);
-    } else if (
-      parseInt(current) > parseInt(previous) &&
-      parseInt(current) > 0
-    ) {
-      prevCalProcessed = (
-        ((parseInt(current) - parseInt(previous)) / parseInt(current)) *
-        100
-      ).toFixed(2);
-    }
-
-    return prevCalProcessed;
-  }
-
-  function percentageStatusDisplay(previous, current) {
-    var percentageColorProcessed;
-    if (parseInt(current) < parseInt(previous)) {
-      percentageColorProcessed = red[500];
-    } else {
-      percentageColorProcessed = green[500];
-    }
-
-    return percentageColorProcessed;
-  }
-
-  const dispatch = useDispatch();
-
-  let date = new Date();
-  const currentMonthFirstDay = moment(date)
-    .startOf("month")
-    .format("YYYY-MM-DD");
-  const currentMonthLastDay = moment(date).endOf("month").format("YYYY-MM-DD");
-
-  const previousMonthFirstDay = moment(date)
-    .subtract(1, "months")
-    .startOf("month")
-    .format("YYYY-MM-DD");
-  const previousMonthLastDay = moment(date)
-    .subtract(1, "months")
-    .endOf("month")
-    .format("YYYY-MM-DD");
-
-  const totalCurrentHours = moment
-    .duration(
-      moment(currentMonthLastDay, "YYYY/MM/DD").diff(
-        moment(currentMonthFirstDay, "YYYY/MM/DD")
-      )
-    )
-    .asHours();
-
-    const { user } = useAuth();
-    const userId = '6372c6c0a8b2c2ec60b2da52';  
-    useEffect(() => {
-      const initialize = async () => {
-        try {
-          const isAuthenticated = await user;
-          if (isAuthenticated) {
-
-            dispatch(fetchSettings({ User_Id: user.id }));
-            dispatch(fetchAlerts({ userId: userId }));
-      
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
-
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
-
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-          }
-        } catch (err) {
-          console.error(err);
-        }
-    
-
-      }
-      initialize();
-    }, [currentMonthFirstDay, currentMonthLastDay, dispatch, previousMonthFirstDay, previousMonthLastDay, user, user.id, userId]);
-
-  const alertList = useSelector((state) => state.alertsList);
-  const previousAlertList = useSelector((state) => state.previousAlertsList);
-
-  // "% &#8593;";
-
-  return (
-    <React.Fragment>
-      <Helmet title="Orders" />
-
-      <Grid container spacing={6}>
-        <Grid item xs={12} sm={6} md={4} lg>
-          <Stats
-            title="Total Alerts Processed"
-            amount={alertList.processedAlertsCount}
-            percentagetext={
-              calculatePercentage(
-                previousAlertList.previousProcessedAlertsCount,
-                alertList.processedAlertsCount
-              ) + "%"
-            }
-            percentagecolor={percentageStatusDisplay(
-              previousAlertList.previousProcessedAlertsCount,
-              alertList.processedAlertsCount
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg>
-          <Stats
-            title="Total Alerts Unprocessed"
-            amount={alertList.unprocessedAlertsCount}
-            percentagetext={
-              calculatePercentage(
-                previousAlertList.previousUnprocessedAlertsCount,
-                alertList.unprocessedAlertsCount
-              ) + "%"
-            }
-            percentagecolor={percentageStatusDisplay(
-              previousAlertList.previousUnprocessedAlertsCount,
-              alertList.unprocessedAlertsCount
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg>
-          <Stats
-            title="Total Alerts Expired"
-            amount={alertList.expiredAlertsCount}
-            percentagetext={
-              calculatePercentage(
-                previousAlertList.previousExpiredAlertsCount,
-                alertList.expiredAlertsCount
-              ) + "%"
-            }
-            percentagecolor={percentageStatusDisplay(
-              previousAlertList.previousExpiredAlertsCount,
-              alertList.expiredAlertsCount
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg>
-          <Stats
-            title="Alerts Per Hour"
-            amount={(
-              alertList.totalAlertsCount / parseInt(totalCurrentHours)
-            ).toFixed(2)}
-            // chip="Yearly"
-            percentagetext={
-              calculatePercentage(
-                previousAlertList.previousTotalAlertsCount,
-                alertList.totalAlertsCount
-              ) + "%"
-            }
-            percentagecolor={percentageStatusDisplay(
-              previousAlertList.previousTotalAlertsCount,
-              alertList.totalAlertsCount
-            )}
-          />
-        </Grid>
-        <Grid className="pro-card" item xs={12} sm={6} md={4} lg={2} >
-          <Stats
-            title="Pro +"
-            amount="Subscription"
-            chip=""
-            percentagetext="Details"
-            percentagecolor={red[500]}
-          />
-        </Grid>
-      </Grid>
-      <Divider my={6} />
-
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <EnhancedTable />
-        </Grid>
-      </Grid>
-    </React.Fragment>
-  );
-}
-
 const Grid = styled(MuiGrid)`
-  &.pro-card{
-    .MuiPaper-root{
+  .MuiPaper-root {
+    border: ${(props) =>
+      props.theme.name === "DARK" ? "1px solid white;" : "unset"};
+  }
+  .card-head {
+    color: #5a607f;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 28px;
+    font-weight: 900;
+  }
+  .MuiTypography-subtitle2 {
+    .percentage-text {
+      color: #7e84a3;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+  &.pro-card {
+    .MuiPaper-root {
       color: ${(props) => props.theme.palette.proCard.color};
       background-color: ${(props) => props.theme.palette.proCard.background};
-      &:before{
+      border: unset !important;
+      &:before {
         content: "PRO+";
         font-size: 70px;
         position: absolute;
         padding: 0 0 0 12px;
         font-weight: 700;
-        color:${(props) => props.theme.palette.proCard.beforeColor};
+        top: 12px;
+        color: ${(props) => props.theme.palette.proCard.beforeColor};
+      }
+      .card-head {
+        color: #fff;
+        font-size: 31px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      h3 {
+        font-size: 19px;
+      }
+      .MuiTypography-subtitle2 {
+        span {
+          color: #a1a7c4;
+        }
+      }
+    }
+  }
+  .mat-table {
+    th:first-child {
+      min-width: 300px;
+    }
+    th {
+      text-align: left;
+      background: ${(props) => props.theme.palette.tableTh.background};
+      border-left: 4px solid ${(props) => props.theme.palette.background.paper};
+      border-bottom: 0;
+      //padding: 6px;
+      line-height: 1.2;
+    }
+    tbody {
+      tr:first-child {
+        td {
+          text-align: left;
+          background: ${(props) => props.theme.palette.filterTh.background};
+          border-left: 4px solid
+            ${(props) => props.theme.palette.background.paper};
+          padding: 6px;
+          line-height: 1.2;
+          .MuiFormLabel-root {
+            & > .Mui-focused {
+              &:after {
+                display: none;
+              }
+            }
+          }
+          .MuiInput-root {
+            &:before {
+              border-bottom: 0;
+            }
+            &:after {
+              display: none;
+            }
+            .MuiSelect-select {
+              background-image: url("static/img/icns/filter-icn.png");
+              background-size: 16px;
+              background-repeat: no-repeat;
+              background-position: left center;
+              padding-left: 30px;
+            }
+          }
+        }
       }
     }
   }
 `;
 
-export default OrderList;
+export default RiskManagement;

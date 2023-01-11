@@ -1,12 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React from "react";
 import styled from "@emotion/styled";
-import { Badge, Grid, Avatar, Typography, IconButton } from "@mui/material";
+import { Grid, Typography, IconButton } from "@mui/material";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { css } from "@emotion/react";
-import { green, grey, indigo } from "@mui/material/colors";
-import useAuth from "../../hooks/useAuth";
 import { THEMES } from "../../constants";
 import useTheme from "../../hooks/useTheme";
 
@@ -22,28 +19,6 @@ const Footer = styled.div`
   justify-content: end;
 `;
 
-const FooterText = styled(Typography)`
-  color: ${(props) => props.theme.sidebar.footer.color};
-`;
-
-const FooterSubText = styled(Typography)`
-  color: ${(props) => props.theme.sidebar.footer.color};
-  font-size: 0.7rem;
-  display: block;
-  padding: 1px;
-`;
-
-const FooterBadge = styled(Badge)`
-  margin-right: ${(props) => props.theme.spacing(1)};
-  span {
-    background-color: ${(props) =>
-      props.theme.sidebar.footer.online.background};
-    border: 1.5px solid ${(props) => props.theme.palette.common.white};
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-  }
-`;
 
 const Box = styled.div`
   &.logo{
@@ -65,44 +40,6 @@ const Box = styled.div`
     }
   }
 `;
-
-const DemoButton = styled.div`
-  cursor: pointer;
-  background: ${(props) => props.theme.palette.background.paper};
-  height: 80px;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.825rem;
-  position: relative;
-  border: 1px solid
-    ${(props) =>
-      !props.active
-        ? props.theme.palette.action.selected
-        : props.theme.palette.action.active};
-`;
-
-const DemoButtonInner = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px ${(props) => props.theme.palette.action.selected};
-  position: relative;
-
-  ${(props) =>
-    props.selectedTheme === THEMES.DARK &&
-    css`
-      background: #23303f;
-    `}
-  ${(props) =>
-    props.selectedTheme === THEMES.LIGHT &&
-    css`
-      background: ${grey[100]};
-    `}
-`;
-
 
 function Demo({ title, themeVariant }) {
   const { theme, setTheme } = useTheme();
