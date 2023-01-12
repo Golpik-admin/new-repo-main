@@ -52,7 +52,7 @@ export default function HorizontalLinearStepper() {
           );
         })}
       </Stepper> */}
-      <CustomizedSteppers />
+      {/* <CustomizedSteppers /> */}
       {activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>

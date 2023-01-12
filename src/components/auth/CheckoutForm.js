@@ -57,6 +57,10 @@ const CheckoutForm = (props) => {
   `;
 
   const handleSubmitSub = async (event) => {
+    if (props.inputValues.email === "") {
+      props.handleSubmit();
+      return false;
+    }
     setIsLoading(true);
     if (!stripe || !elements) {
       setIsLoading(false);

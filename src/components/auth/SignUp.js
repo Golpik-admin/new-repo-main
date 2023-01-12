@@ -363,6 +363,7 @@ function SignUp(props) {
                 <>
                   <Elements stripe={stripePromise}>
                     <CheckoutForm
+                      handleSubmit={handleSubmit}
                       inputValues={values}
                       lastSegment={lastSegment}
                       price={price}
