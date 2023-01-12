@@ -254,7 +254,7 @@ function SignUp(props) {
                   {errors.submit}
                 </Alert>
               )}
-              {props.activeStep === 0 && (
+              {true && (
                 <>
                   <TextField
                     type="text"
@@ -342,10 +342,10 @@ function SignUp(props) {
                     my={3}
                     variant="standard"
                   />
-                  <Box justifyContent="space-between">
-                    {/* <Link href="#" underline="none" className="back-btn">
+                  {/* <Box justifyContent="space-between">
+                    <Link href="#" underline="none" className="back-btn">
                       Back
-                    </Link> */}
+                    </Link>
                     <Button
                       type="submit"
                       fullWidth
@@ -356,10 +356,10 @@ function SignUp(props) {
                     >
                       Next
                     </Button>
-                  </Box>
+                  </Box> */}
                 </>
               )}
-              {props.activeStep === 1 && (
+              {true && (
                 <>
                   <Elements stripe={stripePromise}>
                     <CheckoutForm

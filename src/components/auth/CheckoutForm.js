@@ -196,7 +196,10 @@ const CheckoutForm = (props) => {
           padding: "10px 0 5px",
         }}
       >
-        <CardElement className="stripe-cus" />
+        <CardElement
+          className="stripe-cus"
+          options={{ hidePostalCode: true }}
+        />
       </div>
       <Box>
         {/* <Autocomplete
