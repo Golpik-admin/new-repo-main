@@ -80,7 +80,6 @@ const CheckoutForm = (props) => {
         })
       );
       setIsLoading(false);
-      console.log(result.error.message);
     } else {
       fetch(
         `${stripeapiEndpoint}/customers?email=${props.inputValues.email}&payment_method=${result.paymentMethod.id}&invoice_settings[default_payment_method]=${result.paymentMethod.id}`,
@@ -151,7 +150,6 @@ const CheckoutForm = (props) => {
                       })
                     );
                     setIsLoading(false);
-                    console.log(JSON.stringify(response.data));
                     if (response.code !== "invalid_signup") {
                       setTimeout(() => {
                         window.location.replace("/auth/sign-in");
@@ -159,7 +157,6 @@ const CheckoutForm = (props) => {
                     }
                   })
                   .catch(function (error) {
-                    console.log(error);
                     dispatch(
                       setMesssage({
                         message:
@@ -171,7 +168,6 @@ const CheckoutForm = (props) => {
                       })
                     );
                     setIsLoading(false);
-                    console.log(error.response.data.description);
                   });
               });
           }
@@ -199,33 +195,10 @@ const CheckoutForm = (props) => {
         />
       </div>
       <Box>
-        {/* <Autocomplete
-          fullWidth
-          id="combo-box-demo"
-          options={["Monthly", "Yearly"]}
-          renderInput={(params) => (
-            <TextField {...params} label="Pro+ " variant="standard" />
-          )}
-        />
-        <TextField
-          type="text"
-          name="username"
-          label="Full Name"
-          value={props.inputValues.firstName + " " + props.inputValues.lastName}
-          //error={Boolean(touched.username && errors.username)}
-          fullWidth
-          //helperText={touched.username && errors.username}
-          //onBlur={handleBlur}
-          //onChange={handleChange}
-          sx={{ my: "15px" }}
-          variant="standard"
-        /> */}
+        {props.children}
         <Box mt={12} display="flex" justifyContent="space-between">
-          {/* <Link href="#" underline="none" className="back-btn">
-            Back
-          </Link> */}
           <Button variant="contained" onClick={handleSubmitSub} fullWidth>
-            Pay {props.price ?? "0.00"}
+            Signup
           </Button>
         </Box>
       </Box>

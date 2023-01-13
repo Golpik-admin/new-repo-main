@@ -67,6 +67,7 @@ function AuthProvider({ children }) {
           const getTokenSilently = await auth0Client.getTokenSilently({
             detailedResponse: true,
           });
+          localStorage.setItem("access_token", getTokenSilently.access_token);
           setLoading(false);
           dispatch({
             type: INITIALIZE,
@@ -159,9 +160,7 @@ function AuthProvider({ children }) {
   };
 
   const getUserInfo = async () => {
-    const getTokenSilently = await auth0Client.getTokenSilently({
-      detailedResponse: true,
-    });
+    const getTokenSilently = localStorage.getItem("access_token");
     return new Promise(async function (resolve, reject) {
       var qs = require("qs");
       var data = qs.stringify({});
@@ -170,7 +169,7 @@ function AuthProvider({ children }) {
         url: `${auth0Config.domain}/userinfo`,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${getTokenSilently.access_token}`,
+          Authorization: `Bearer ${getTokenSilently}`,
         },
         data: data,
       };

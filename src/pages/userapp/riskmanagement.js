@@ -114,8 +114,6 @@ function RiskManagement() {
       }))
     : [];
 
-  // setData([collections]);
-  // console.log(data);
   const fields = [
     {
       title: "TICKER",
@@ -165,7 +163,6 @@ function RiskManagement() {
       title: "LOSS / MINIMUM PROFIT",
       field: "LossTarget",
       editComponent: (editProps) => (
-        // console.log(editProps)
         <Input
           autoFocus={true}
           onChange={(e) => editProps.onChange(e.target.value)}
@@ -388,7 +385,6 @@ function RiskManagement() {
                 onRowAddCancelled: (rowData) => alert("Row adding cancelled"),
                 onRowAdd: (newData) => {
                   return new Promise((resolve, reject) => {
-                    console.log(newData);
                     dispatch(
                       updateRiskManagements({
                         userId: userId,

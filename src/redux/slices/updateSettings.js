@@ -45,7 +45,6 @@ export const updateFetchedSettings = createAsyncThunk(
         }
       )
       .then((response) => {
-        // console.log(response);
         return response.data;
       })
       .catch(function (error) {
