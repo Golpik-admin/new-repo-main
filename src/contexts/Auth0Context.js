@@ -67,7 +67,6 @@ function AuthProvider({ children }) {
           const getTokenSilently = await auth0Client.getTokenSilently({
             detailedResponse: true,
           });
-          console.log(getTokenSilently.access_token);
           setLoading(false);
           dispatch({
             type: INITIALIZE,
@@ -165,7 +164,6 @@ function AuthProvider({ children }) {
       detailedResponse: true,
     });
     return new Promise(async function (resolve, reject) {
-      console.log();
       var qs = require("qs");
       var data = qs.stringify({});
       var config = {
@@ -188,8 +186,10 @@ function AuthProvider({ children }) {
     });
   };
 
-  const signOut = () => {
-    auth0Client?.logout();
+  const signOut = (localOnly = false) => {
+    auth0Client?.logout({
+      localOnly: localOnly,
+    });
     dispatch({
       type: SIGN_OUT,
       payload: { isAuthenticated: false, user: null, token: null },

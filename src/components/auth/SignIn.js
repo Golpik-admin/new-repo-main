@@ -81,17 +81,16 @@ function SignIn() {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          const respons = await signIn(values.email, values.password);
-          console.log(respons, isAuthenticated, user.id);
+          await signIn(values.email, values.password);
           await getApiToken()
             .then(async (token) => {
               await getUserInfo().then(async (_user) => {
                 const userId1 = _user.sub;
                 await getUserMeta(token, userId1).then((response) => {
-                  if (JSON.parse(response.user_metadata.stripe)) {
+                  if (!JSON.parse(response.user_metadata.stripe)) {
                     navigate("/dashboard");
                   } else {
-                    signOut();
+                    signOut(true);
                     // console.log("logout");
                   }
                 });
