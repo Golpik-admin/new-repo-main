@@ -117,7 +117,7 @@ function Alerts() {
     time_Received: o.time_Received ? moment(o.time_Received).format('lll') :'',
     time_Executed: o.time_Executed ? moment(o.time_Executed).format('lll') :'',
     alert_Name: o.alert_Name,
-    ticker_image_url: '/static/img/avatars/user.png',
+    ticker_image_url: o.ticker_Url,//'/static/img/avatars/user.png',
   }));
   const fields = [
     {
