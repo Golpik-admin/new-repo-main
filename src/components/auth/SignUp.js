@@ -7,7 +7,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Alert as MuiAlert,
-  Card,
+  Card as MuiCard,
   CardActionArea,
   CardContent,
   CardMedia,
@@ -30,6 +30,20 @@ import { useSelector } from "react-redux";
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
+
+const Card = styled(MuiCard)`
+  margin-top: 40px;
+  .heading {
+    background: #a52c65;
+    text-align: center;
+    padding: 10px 0;
+    color: #fff;
+  }
+  .price {
+    color: #7e84a3;
+    font-size: 28px;
+  }
+`;
 
 const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
@@ -306,8 +320,23 @@ function SignUp(props) {
                     variant="standard"
                   />
 
-                  <Card>
-                    <CardActionArea>
+                  <Card variant="outlined">
+                    {/* <CardActionArea> */}
+                    <Typography gutterBottom variant="h3" className="heading">
+                      {messages?.product?.name}
+                    </Typography>
+                    <CardContent>
+                      <Typography
+                        align="center"
+                        gutterBottom
+                        variant="h6"
+                        component="div"
+                      >
+                        <span className="price">{messages?.price} /</span>
+                        {messages?.recurringInterval === "month"
+                          ? " Monthly"
+                          : " Annually"}{" "}
+                      </Typography>
                       <Elements stripe={stripePromise}>
                         <CheckoutForm
                           handleSubmit={handleSubmit}
@@ -316,23 +345,10 @@ function SignUp(props) {
                           price={price}
                           priceMetaData={priceMetaData}
                           productMetaData={productMetaData}
-                        >
-                          <CardContent>
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="div"
-                            >
-                              {messages?.product?.name} |
-                              {messages?.recurringInterval === "month"
-                                ? " Monthly"
-                                : " Annually"}{" "}
-                              | {messages?.price}
-                            </Typography>
-                          </CardContent>
-                        </CheckoutForm>
+                        ></CheckoutForm>
                       </Elements>
-                    </CardActionArea>
+                    </CardContent>
+                    {/* </CardActionArea> */}
                   </Card>
                 </>
               )}
