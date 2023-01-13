@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -7,15 +7,16 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Alert as MuiAlert,
-  Button,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
   CircularProgress,
   TextField as MuiTextField,
-  Box as MuiBox,
-  Link,
+  Typography,
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
-import useAuth from "../../hooks/useAuth";
 import CheckoutForm from "./CheckoutForm";
 import {
   stripePublishKey,
@@ -30,35 +31,17 @@ const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
 
-const Box = styled(MuiBox)`
-  display: flex;
-  margin-top: 40px;
-  .nxt-btn {
-    width: 170px;
-    background: #2b75fd;
-    font-size: 18px;
-    height: 44px;
-  }
-  .back-btn {
-    width: 170px;
-    border: 1px solid #1b202a;
-    border-radius: 4px;
-    font-size: 18px;
-    height: 44px;
-    display: flex;
-    flex-grow: 0;
-    align-items: center;
-    justify-content: center;
-    color: #43425d;
-  }
-`;
-
 const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
+  const messages = useSelector((state) => state.messageState);
+
+  const [priceMetaData, setPriceMetaData] = useState();
+  const [productMetaData, setProductMetaData] = useState();
+
   const [isLoading, setIsLoading] = useState(true);
-  const [subscriptionType, setSubscriptionType] = useState(0);
+  // eslint-disable-next-line no-unused-vars
   const location = useLocation();
 
   function currencyFormat(num) {
@@ -81,7 +64,6 @@ function SignUp(props) {
           .then((res) => res.json())
           .then((data) => {
             if (data.error && data.error.code) {
-              console.log(data);
               setIsLoading(true);
               dispatch(
                 setMesssage({
@@ -91,14 +73,62 @@ function SignUp(props) {
                   price: false,
                 })
               );
-              console.log("fail");
               return;
             }
-            if (data.type === "recurring") {
-              setSubscriptionType(data.recurring.interval);
+            if (data.recurring !== null) {
+              setIsLoading(false);
+              setPriceMetaData({
+                billing_scheme: data.billing_scheme,
+                created: data.created,
+                currency: data.currency,
+                id: data.id,
+                product: data.product,
+                recurring: data.recurring,
+                unit_amount: data.unit_amount,
+              });
+              setPrice(currencyFormat(data.unit_amount / 100));
+              fetch(`${stripeapiEndpoint}/products/${data.product}`, {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${stripeSecretKey}`,
+                },
+              })
+                .then((res) => res.json())
+                .then((product) => {
+                  setProductMetaData({
+                    created: product.created,
+                    default_price: product.default_price,
+                    description: product.description,
+                    id: product.id,
+                    metadata: product.metadata,
+                    name: product.name,
+                    type: product.type,
+                    updated: product.updated,
+                  });
+                  dispatch(
+                    setMesssage({
+                      type: "",
+                      message: "",
+                      code: "",
+                      price: currencyFormat(data.unit_amount / 100),
+                      product: product,
+                      recurringInterval: data.recurring.interval,
+                      recurringIntervalCount: data.recurring.interval_count,
+                    })
+                  );
+                });
+            } else {
+              setIsLoading(true);
+              dispatch(
+                setMesssage({
+                  message: "Price type is not recurring",
+                  type: "error",
+                  code: 404,
+                  price: false,
+                })
+              );
+              return;
             }
-            setIsLoading(false);
-            setPrice(currencyFormat(data.unit_amount / 100));
           })
           .catch((err) => {
             console.log(err.error.error);
@@ -109,20 +139,6 @@ function SignUp(props) {
     }
 
     verifyPriceId();
-
-    // Create setupintent as soon as the page loads
-    // fetch("${stripeapiEndpoint}/payment_intents?amount=100&currency=usd", {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization:
-    //       "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     setClientSecret(data.client_secret);
-    //   });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -201,7 +217,7 @@ function SignUp(props) {
                   {errors.submit}
                 </Alert>
               )}
-              {props.activeStep === 0 && (
+              {true && (
                 <>
                   <TextField
                     type="text"
@@ -289,32 +305,35 @@ function SignUp(props) {
                     my={3}
                     variant="standard"
                   />
-                  <Box justifyContent="space-between">
-                    <Link href="#" underline="none" className="back-btn">
-                      Back
-                    </Link>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className="nxt-btn"
-                      disabled={isSubmitting}
-                    >
-                      Next
-                    </Button>
-                  </Box>
-                </>
-              )}
-              {props.activeStep === 1 && (
-                <>
-                  <Elements stripe={stripePromise}>
-                    <CheckoutForm
-                      inputValues={values}
-                      lastSegment={lastSegment}
-                      price={price}
-                    />
-                  </Elements>
+
+                  <Card>
+                    <CardActionArea>
+                      <Elements stripe={stripePromise}>
+                        <CheckoutForm
+                          handleSubmit={handleSubmit}
+                          inputValues={values}
+                          lastSegment={lastSegment}
+                          price={price}
+                          priceMetaData={priceMetaData}
+                          productMetaData={productMetaData}
+                        >
+                          <CardContent>
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="div"
+                            >
+                              {messages?.product?.name} |
+                              {messages?.recurringInterval === "month"
+                                ? " Monthly"
+                                : " Annually"}{" "}
+                              | {messages?.price}
+                            </Typography>
+                          </CardContent>
+                        </CheckoutForm>
+                      </Elements>
+                    </CardActionArea>
+                  </Card>
                 </>
               )}
             </form>

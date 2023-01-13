@@ -1,17 +1,10 @@
-import {
-  Button,
-  CircularProgress,
-  TextField,
-  Autocomplete,
-  Box as MuiBox,
-  Link,
-} from "@mui/material";
+import { Button, CircularProgress, Box as MuiBox } from "@mui/material";
 import styled from "@emotion/styled";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { stripeapiEndpoint, stripeSecretKey } from "../../config";
+import { auth0Config, stripeapiEndpoint, stripeSecretKey } from "../../config";
 import { setMesssage } from "../../redux/slices/messageSlice";
 
 const CheckoutForm = (props) => {
@@ -57,6 +50,10 @@ const CheckoutForm = (props) => {
   `;
 
   const handleSubmitSub = async (event) => {
+    if (props.inputValues.email === "") {
+      props.handleSubmit();
+      return false;
+    }
     setIsLoading(true);
     if (!stripe || !elements) {
       setIsLoading(false);
@@ -79,11 +76,10 @@ const CheckoutForm = (props) => {
           message: result.error.message,
           type: "error",
           code: 404,
-          price: true,
+          // price: true,
         })
       );
       setIsLoading(false);
-      console.log(result.error.message);
     } else {
       fetch(
         `${stripeapiEndpoint}/customers?email=${props.inputValues.email}&payment_method=${result.paymentMethod.id}&invoice_settings[default_payment_method]=${result.paymentMethod.id}`,
@@ -102,7 +98,7 @@ const CheckoutForm = (props) => {
                 message: data.error.message,
                 type: "error",
                 code: 402,
-                price: true,
+                // price: true,
               })
             );
             setIsLoading(false);
@@ -126,6 +122,8 @@ const CheckoutForm = (props) => {
                   connection: "Username-Password-Authentication",
                   user_metadata: {
                     stripe: JSON.stringify(final.plan),
+                    priceMetaData: JSON.stringify(props.priceMetaData),
+                    productMetaData: JSON.stringify(props.productMetaData),
                   },
                   app_metadata: {
                     plan: "full",
@@ -134,7 +132,7 @@ const CheckoutForm = (props) => {
 
                 var config = {
                   method: "post",
-                  url: "https://dev-c37ss4t71trscecz.us.auth0.com/dbconnections/signup",
+                  url: `${auth0Config.domain}/dbconnections/signup`,
                   headers: {
                     "Content-Type": "application/json",
                   },
@@ -143,17 +141,20 @@ const CheckoutForm = (props) => {
 
                 axios(config)
                   .then(function (response) {
-                    console.log("furqan");
                     dispatch(
                       setMesssage({
                         message: "Registered Successfully",
                         type: "success",
                         code: 200,
-                        price: true,
+                        // price: true,
                       })
                     );
                     setIsLoading(false);
-                    console.log(JSON.stringify(response.data));
+                    if (response.code !== "invalid_signup") {
+                      setTimeout(() => {
+                        window.location.replace("/auth/sign-in");
+                      }, 5000);
+                    }
                   })
                   .catch(function (error) {
                     dispatch(
@@ -163,11 +164,10 @@ const CheckoutForm = (props) => {
                           ". Contact your administrator please.",
                         type: "error",
                         code: error.response.data.statusCode,
-                        price: true,
+                        // price: true,
                       })
                     );
                     setIsLoading(false);
-                    console.log(error.response.data.description);
                   });
               });
           }
@@ -182,39 +182,23 @@ const CheckoutForm = (props) => {
           <CircularProgress color="secondary" />
         </div>
       )}
+      <div
+        style={{
+          margin: "30px 0",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+          padding: "10px 0 5px",
+        }}
+      >
+        <CardElement
+          className="stripe-cus"
+          options={{ hidePostalCode: true }}
+        />
+      </div>
       <Box>
-        <Autocomplete
-          fullWidth
-          id="combo-box-demo"
-          options={["Monthly", "Yearly"]}
-          renderInput={(params) => (
-            <TextField {...params} label="Pro+ " variant="standard" />
-          )}
-        />
-        <TextField
-          type="text"
-          name="username"
-          label="Full Name"
-          value={props.inputValues.firstName + " " + props.inputValues.lastName}
-          //error={Boolean(touched.username && errors.username)}
-          fullWidth
-          //helperText={touched.username && errors.username}
-          //onBlur={handleBlur}
-          //onChange={handleChange}
-          sx={{ my: "15px" }}
-          variant="standard"
-        />
-        <CardElement className="stripe-cus" />
+        {props.children}
         <Box mt={12} display="flex" justifyContent="space-between">
-          <Link href="#" underline="none" className="back-btn">
-            Back
-          </Link>
-          <Button
-            variant="contained"
-            className="pay-btn"
-            onClick={handleSubmitSub}
-          >
-            Pay {props.price ?? "0.00"}
+          <Button variant="contained" onClick={handleSubmitSub} fullWidth>
+            Signup
           </Button>
         </Box>
       </Box>
@@ -222,10 +206,4 @@ const CheckoutForm = (props) => {
   );
 };
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { label: "The Shawshank Redemption", year: 1994 },
-  { label: "The Godfather", year: 1972 },
-  { label: "The Godfather: Part II", year: 1974 },
-];
 export default CheckoutForm;

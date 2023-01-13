@@ -44,7 +44,7 @@ const Paper = styled(MuiPaper)(spacing);
 function Alerts() {
   const alertList = useSelector((state) => state.alertsList);
   const dispatch = useDispatch();
-  const { user } = useAuth();
+  const { user ,getUserInfo } = useAuth();
   const userId = "6372c6c0a8b2c2ec60b2da52";
   const previousAlertList = useSelector((state) => state.previousAlertsList);
   let date = new Date();
@@ -119,7 +119,7 @@ function Alerts() {
     time_Received: o.time_Received ? moment(o.time_Received).format('lll') :'',
     time_Executed: o.time_Executed ? moment(o.time_Executed).format('lll') :'',
     alert_Name: o.alert_Name,
-    ticker_image_url: '/static/img/avatars/user.png',
+    ticker_image_url: o.ticker_Url,//'/static/img/avatars/user.png',
   }));
   const fields = [
     {
@@ -244,84 +244,86 @@ function Alerts() {
 
   useEffect(() => {
     const initialize = async () => {
-      try {
-        const isAuthenticated = await user;
-        let date = new Date();
-        const last30Days = moment(date)
-          .subtract(30, "days")
-          .format("YYYY-MM-DD");
-        const todayDate = moment().format("YYYY-MM-DD");
-
-        if (isAuthenticated) {
-          dispatch(fetchSettings({ User_Id: user.id }));
-          dispatch(
-            fetchAlerts({
-              startDate: last30Days,
-              endDate: todayDate,
-              userId: userId,
-            })
-          );
-
-          dispatch(
-            fetchAlerts({
-              userId: userId,
-              startDate: currentMonthFirstDay,
-              endDate: currentMonthLastDay,
-              status: "Processed",
-              count: true,
-            })
-          );
-          dispatch(
-            previousFetchAlerts({
-              userId: userId,
-              startDate: previousMonthFirstDay,
-              endDate: previousMonthLastDay,
-              status: "Processed",
-              count: true,
-            })
-          );
-
-          dispatch(
-            fetchAlerts({
-              userId: userId,
-              startDate: currentMonthFirstDay,
-              endDate: currentMonthLastDay,
-              status: "Unprocessed",
-              count: true,
-            })
-          );
-          dispatch(
-            previousFetchAlerts({
-              userId: userId,
-              startDate: previousMonthFirstDay,
-              endDate: previousMonthLastDay,
-              status: "Unprocessed",
-              count: true,
-            })
-          );
-
-          dispatch(
-            fetchAlerts({
-              userId: userId,
-              startDate: currentMonthFirstDay,
-              endDate: currentMonthLastDay,
-              status: "Expired",
-              count: true,
-            })
-          );
-          dispatch(
-            previousFetchAlerts({
-              userId: userId,
-              startDate: previousMonthFirstDay,
-              endDate: previousMonthLastDay,
-              status: "Expired",
-              count: true,
-            })
-          );
-        }
-      } catch (err) {
-        console.error(err);
-      }
+    
+        await getUserInfo().then((res) => { 
+          const userId = res.sub.split('|')[1];
+          let date = new Date();
+          const last30Days = moment(date)
+            .subtract(30, "days")
+            .format("YYYY-MM-DD");
+          const todayDate = moment().format("YYYY-MM-DD");
+  
+            dispatch(fetchSettings({ User_Id: user.id }));
+            dispatch(
+              fetchAlerts({
+                startDate: last30Days,
+                endDate: todayDate,
+                userId: userId,
+              })
+            );
+  
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Processed",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Processed",
+                count: true,
+              })
+            );
+  
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Unprocessed",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Unprocessed",
+                count: true,
+              })
+            );
+  
+            dispatch(
+              fetchAlerts({
+                userId: userId,
+                startDate: currentMonthFirstDay,
+                endDate: currentMonthLastDay,
+                status: "Expired",
+                count: true,
+              })
+            );
+            dispatch(
+              previousFetchAlerts({
+                userId: userId,
+                startDate: previousMonthFirstDay,
+                endDate: previousMonthLastDay,
+                status: "Expired",
+                count: true,
+              })
+            );
+          
+        }).catch(err => { 
+          console.log(err);
+        })
+        
+      
     };
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps

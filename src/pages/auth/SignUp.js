@@ -29,10 +29,10 @@ const Div = styled.div`
   justify-content: center;
   align-items: center;
   padding: ${(props) => props.theme.spacing(5, 0)};
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  // position: absolute;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
   a {
     color: #1b202a;
   }
@@ -84,6 +84,7 @@ function SignUp() {
         >
           Please complete to create your account.
         </Typography>
+
         <Wrapper>
           <Helmet title="Sign Up" />
           <Stepper />

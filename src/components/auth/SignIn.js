@@ -55,7 +55,7 @@ const Div = styled.div`
 
 function SignIn() {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signIn, signOut, getUserInfo, getApiToken, getUserMeta } = useAuth();
 
   return (
     <Formik
@@ -74,8 +74,22 @@ function SignIn() {
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           await signIn(values.email, values.password);
-
-          navigate("/dashboard");
+          await getApiToken()
+            .then(async (token) => {
+              await getUserInfo().then(async (_user) => {
+                const userId1 = _user.sub;
+                await getUserMeta(token, userId1).then((response) => {
+                  if (JSON.parse(response.user_metadata.stripe)) {
+                    navigate("/dashboard");
+                  } else {
+                    signOut(true);
+                  }
+                });
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         } catch (error) {
           const message = error.message || "Something went wrong";
 
@@ -108,10 +122,10 @@ function SignIn() {
             type="text"
             name="email"
             label="Username"
-            //value={values.email}
+            value={values.email}
             error={Boolean(touched.email && errors.email)}
             fullWidth
-            //helperText={touched.email && errors.email}
+            helperText={touched.email && errors.email}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
@@ -121,10 +135,10 @@ function SignIn() {
             type="password"
             name="password"
             label="Password"
-            //value={values.password}
+            value={values.password}
             error={Boolean(touched.password && errors.password)}
             fullWidth
-            //helperText={touched.password && errors.password}
+            helperText={touched.password && errors.password}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
