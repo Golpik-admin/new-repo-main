@@ -10,7 +10,6 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
   CircularProgress,
   TextField as MuiTextField,
   Typography,
