@@ -4,8 +4,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SignUpComponent from "../../components/auth/SignUp";
 
-import CustomizedSteppers from "../../pages/auth/stepperCustomized";
-
 const steps = ["Personal Details", "Payment Method"];
 
 export default function HorizontalLinearStepper() {

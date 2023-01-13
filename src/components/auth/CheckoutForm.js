@@ -1,11 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  TextField,
-  Autocomplete,
-  Box as MuiBox,
-  Link,
-} from "@mui/material";
+import { Button, CircularProgress, Box as MuiBox } from "@mui/material";
 import styled from "@emotion/styled";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
@@ -240,10 +233,4 @@ const CheckoutForm = (props) => {
   );
 };
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { label: "The Shawshank Redemption", year: 1994 },
-  { label: "The Godfather", year: 1972 },
-  { label: "The Godfather: Part II", year: 1974 },
-];
 export default CheckoutForm;

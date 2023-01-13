@@ -16,8 +16,6 @@ import {
 import { spacing } from "@mui/system";
 
 import useAuth from "../../hooks/useAuth";
-import { useSelector } from "react-redux";
-import axios from "axios";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -57,57 +55,15 @@ const Div = styled.div`
 
 function SignIn() {
   const navigate = useNavigate();
-  const { signIn, isAuthenticated, user, signOut, getUserInfo } = useAuth();
-
-  const getApiToken = () => {
-    return new Promise(function (resolve, reject) {
-      var data = {
-        client_id: "tZ9FEWfQim4Y1fcg4OarjXQ4zxHFnedY",
-        client_secret:
-          "qesvpepCk5FJSRiqe66CAMb_x3Bp2IQnAKAaUyX4dUVqGEdnfZ-3S_C5Sf-vUziD",
-        audience: "https://dev-c37ss4t71trscecz.us.auth0.com/api/v2/",
-        grant_type: "client_credentials",
-      };
-
-      var config = {
-        method: "post",
-        url: "https://dev-c37ss4t71trscecz.us.auth0.com/oauth/token",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-
-      axios
-        .post(config?.url, config?.data, config?.headers)
-        .then(function (response) {
-          resolve(response?.data?.access_token);
-        })
-        .catch(function (error) {
-          reject(error);
-        });
-    });
-  };
-  const getUserMeta = (token, userId) => {
-    return new Promise(function (resolve, reject) {
-      var config = {
-        method: "get",
-        url: `https://dev-c37ss4t71trscecz.us.auth0.com/api/v2/users/${userId}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      axios(config)
-        .then(function (response) {
-          resolve(response.data);
-        })
-        .catch(function (error) {
-          reject(error);
-        });
-    });
-  };
+  const {
+    signIn,
+    isAuthenticated,
+    user,
+    signOut,
+    getUserInfo,
+    getApiToken,
+    getUserMeta,
+  } = useAuth();
 
   return (
     <Formik
