@@ -87,7 +87,7 @@ function SignIn() {
               await getUserInfo().then(async (_user) => {
                 const userId1 = _user.sub;
                 await getUserMeta(token, userId1).then((response) => {
-                  if (!JSON.parse(response.user_metadata.stripe)) {
+                  if (JSON.parse(response.user_metadata.stripe)) {
                     navigate("/dashboard");
                   } else {
                     signOut(true);
