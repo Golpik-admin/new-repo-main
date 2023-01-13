@@ -318,17 +318,22 @@ function SignUp(props) {
                           productMetaData={productMetaData}
                         >
                           <CardContent>
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="div"
-                            >
-                              {messages?.product?.name} |
-                              {messages?.recurringInterval === "month"
-                                ? " Monthly"
-                                : " Annually"}{" "}
-                              | {messages?.price}
-                            </Typography>
+                            {messages?.product && (
+                              <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="div"
+                              >
+                                {messages?.product?.name} |
+                                {messages?.recurringInterval === "month"
+                                  ? " Monthly"
+                                  : ""}{" "}
+                                {messages?.recurringInterval === "year"
+                                  ? " Yearly"
+                                  : ""}{" "}
+                                | {messages?.price}
+                              </Typography>
+                            )}
                           </CardContent>
                         </CheckoutForm>
                       </Elements>
