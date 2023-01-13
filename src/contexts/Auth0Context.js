@@ -2,6 +2,7 @@ import { createContext, useEffect, useReducer, useState } from "react";
 import { Auth0Client } from "@auth0/auth0-spa-js";
 
 import { auth0Config } from "../config";
+import axios from "axios";
 
 const INITIALIZE = "INITIALIZE";
 const SIGN_IN = "SIGN_IN";
@@ -13,16 +14,18 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  token: null,
 };
 
 const reducer = (state, action) => {
   if (action.type === INITIALIZE) {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, token } = action.payload;
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
       user,
+      token,
     };
   }
   if (action.type === SIGN_IN) {
@@ -61,17 +64,24 @@ function AuthProvider({ children }) {
 
         if (isAuthenticated) {
           const user = await auth0Client.getUser();
-
+          const getTokenSilently = await auth0Client.getTokenSilently({
+            detailedResponse: true,
+          });
+          localStorage.setItem("access_token", getTokenSilently.access_token);
           setLoading(false);
           dispatch({
             type: INITIALIZE,
-            payload: { isAuthenticated, user: user || null },
+            payload: {
+              isAuthenticated,
+              user: user || null,
+              token: getTokenSilently.id_token || null,
+            },
           });
         } else {
           setLoading(false);
           dispatch({
             type: INITIALIZE,
-            payload: { isAuthenticated, user: null },
+            payload: { isAuthenticated, user: null, token: null },
           });
         }
       } catch (err) {
@@ -79,7 +89,7 @@ function AuthProvider({ children }) {
         console.error(err);
         dispatch({
           type: INITIALIZE,
-          payload: { isAuthenticated: false, user: null },
+          payload: { isAuthenticated: false, user: null, token: null },
         });
       }
     };
@@ -93,13 +103,95 @@ function AuthProvider({ children }) {
 
     if (isAuthenticated) {
       const user = await auth0Client?.getUser();
-      dispatch({ type: SIGN_IN, payload: { user: user || null } });
+      dispatch({
+        type: SIGN_IN,
+        payload: { user: user || null },
+      });
     }
   };
 
-  const signOut = () => {
-    auth0Client?.logout();
-    dispatch({ type: SIGN_OUT });
+  const getApiToken = () => {
+    return new Promise(function (resolve, reject) {
+      var data = {
+        client_id: "tZ9FEWfQim4Y1fcg4OarjXQ4zxHFnedY",
+        client_secret: auth0Config.clientSecret,
+        audience: `${auth0Config.domain}/api/v2/`,
+        grant_type: auth0Config.grantType,
+      };
+
+      var config = {
+        method: "post",
+        url: `${auth0Config.domain}/oauth/token`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios
+        .post(config?.url, config?.data, config?.headers)
+        .then(function (response) {
+          resolve(response?.data?.access_token);
+        })
+        .catch(function (error) {
+          reject(error);
+        });
+    });
+  };
+  const getUserMeta = (token, userId) => {
+    return new Promise(function (resolve, reject) {
+      var config = {
+        method: "get",
+        url: `${auth0Config.domain}/api/v2/users/${userId}`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      axios(config)
+        .then(function (response) {
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          reject(error);
+        });
+    });
+  };
+
+  const getUserInfo = async () => {
+    const getTokenSilently = localStorage.getItem("access_token");
+    return new Promise(async function (resolve, reject) {
+      var qs = require("qs");
+      var data = qs.stringify({});
+      var config = {
+        method: "get",
+        url: `${auth0Config.domain}/userinfo`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getTokenSilently}`,
+        },
+        data: data,
+      };
+
+      axios(config)
+        .then(function (response) {
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          reject(error);
+        });
+    });
+  };
+
+  const signOut = (localOnly = false) => {
+    auth0Client?.logout({
+      localOnly: localOnly,
+    });
+    dispatch({
+      type: SIGN_OUT,
+      payload: { isAuthenticated: false, user: null, token: null },
+    });
   };
 
   const resetPassword = (email) => {};
@@ -115,12 +207,16 @@ function AuthProvider({ children }) {
           avatar: state?.user?.picture,
           email: state?.user?.email,
           displayName: state?.user?.nickname,
+          token: state?.token,
           role: "user",
         },
         signIn,
         signOut,
         resetPassword,
         setLoading,
+        getUserInfo,
+        getApiToken,
+        getUserMeta,
         loading,
       }}
     >

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 //import { Link } from "react-router-dom";
 import { Link } from "@mui/material";
@@ -46,7 +46,7 @@ const Div = styled.div`
     border: 1px solid #1b202a;
     border-radius: 4px;
     font-size: 18px;
-    height: 48px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,7 +55,7 @@ const Div = styled.div`
 
 function SignIn() {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signIn, signOut, getUserInfo, getApiToken, getUserMeta } = useAuth();
 
   return (
     <Formik
@@ -74,8 +74,22 @@ function SignIn() {
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           await signIn(values.email, values.password);
-
-          navigate("/dashboard");
+          await getApiToken()
+            .then(async (token) => {
+              await getUserInfo().then(async (_user) => {
+                const userId1 = _user.sub;
+                await getUserMeta(token, userId1).then((response) => {
+                  if (JSON.parse(response.user_metadata.stripe)) {
+                    navigate("/dashboard");
+                  } else {
+                    signOut(true);
+                  }
+                });
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         } catch (error) {
           const message = error.message || "Something went wrong";
 
@@ -108,10 +122,10 @@ function SignIn() {
             type="text"
             name="email"
             label="Username"
-            //value={values.email}
+            value={values.email}
             error={Boolean(touched.email && errors.email)}
             fullWidth
-            //helperText={touched.email && errors.email}
+            helperText={touched.email && errors.email}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
@@ -121,10 +135,10 @@ function SignIn() {
             type="password"
             name="password"
             label="Password"
-            //value={values.password}
+            value={values.password}
             error={Boolean(touched.password && errors.password)}
             fullWidth
-            //helperText={touched.password && errors.password}
+            helperText={touched.password && errors.password}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
@@ -140,12 +154,7 @@ function SignIn() {
             </Link>
           </Div>
           <Div className="btn-wrap">
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={isSubmitting}
-              size="large"
-            >
+            <Button type="submit" variant="contained" disabled={isSubmitting}>
               Login
             </Button>
             <Link href="/auth/sign-up" underline="none" className="signup-btn">

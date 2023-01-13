@@ -1,23 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SignUpComponent from "../../components/auth/SignUp";
-
-import CustomizedSteppers from "../../pages/auth/stepperCustomized";
 
 const steps = ["Personal Details", "Payment Method"];
 
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -59,7 +50,7 @@ export default function HorizontalLinearStepper() {
           );
         })}
       </Stepper> */}
-      <CustomizedSteppers />
+      {/* <CustomizedSteppers /> */}
       {activeStep === steps.length ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
@@ -80,14 +71,17 @@ export default function HorizontalLinearStepper() {
           </Typography>
 
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
+            {activeStep === 1 && (
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+                fullWidth
+              >
+                Back
+              </Button>
+            )}
             <Box sx={{ flex: "1 1 auto" }} />
             {/* {isStepOptional(activeStep) && (
               <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>

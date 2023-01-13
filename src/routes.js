@@ -97,7 +97,7 @@ import ProtectedPage from "./pages/protected/ProtectedPage";
 import GuestGuard from "./components/guards/GuestGuard";
 
 // Dashboard components
-const Default = async(() => import("./pages/dashboards/Default"));
+// const Default = async(() => import("./pages/dashboards/Default"));
 
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));

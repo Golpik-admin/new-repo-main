@@ -25,16 +25,10 @@ const Box = styled.div`
     background: #000;
     transform: rotate(-90deg);
     background-color: ${(props) => props.theme.sidebar.background};
-    //position: absolute;
-    // bottom: 0;
-    // left: 0;
-    // right: 0;
-    // transform: rotate(-90deg);
     .vert-logo {
-      // position: absolute;
+      font-size:20px;
+      font-weight:900;
       display: inline-flex;
-      // bottom: -8px;
-      // left: -90px;
       color: #fff;
       margin: 5px 0 0 8px;
     }
@@ -61,7 +55,7 @@ const SidebarFooter = ({ ...rest }) => {
       <Box className="logo" sx={{ display: { xs: "none", md: "block" } }}>
             <Typography variant="body2" component="span">
               <em className="vert-logo">
-                <strong>Consilience </strong> Trading
+                <strong>Optionize </strong>
               </em>
             </Typography>
           </Box>

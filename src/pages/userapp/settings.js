@@ -25,6 +25,7 @@ import useAuth from "../../hooks/useAuth";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { auth0Config } from "../../config";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -53,7 +54,6 @@ const Paper = styled(MuiPaper)`
 function Settings() {
   const { user } = useAuth();
   const dispatch = useDispatch();
-
   var User_Id = user.id;
   useEffect(() => {
     if (User_Id) {
@@ -68,6 +68,30 @@ function Settings() {
   const navigate = useNavigate();
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
+  const updateUserHandler = async () => {
+    try {
+      await fetch(`${auth0Config.domain}/api/v2/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: "MARK",
+          email: "markgraywells@gmail.com",
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log("here", error);
+    }
+  };
   return (
     <React.Fragment>
       <Helmet title="Settings" />
@@ -183,7 +207,7 @@ function Settings() {
                           />
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={4}>
-                          Email
+                          Password
                         </Grid>
                         <Grid item xs={12} sm={6} md={8} lg={8}>
                           <TextField
@@ -204,6 +228,7 @@ function Settings() {
                             variant="contained"
                             color="primary"
                             disabled={isSubmitting}
+                            onClick={updateUserHandler}
                           >
                             Update
                           </Button>
