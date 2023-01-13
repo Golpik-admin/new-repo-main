@@ -2,6 +2,7 @@ import { createContext, useEffect, useReducer, useState } from "react";
 import { Auth0Client } from "@auth0/auth0-spa-js";
 
 import { auth0Config } from "../config";
+import axios from "axios";
 
 const INITIALIZE = "INITIALIZE";
 const SIGN_IN = "SIGN_IN";
@@ -66,7 +67,7 @@ function AuthProvider({ children }) {
           const getTokenSilently = await auth0Client.getTokenSilently({
             detailedResponse: true,
           });
-          console.log(getTokenSilently);
+          console.log(getTokenSilently.access_token);
           setLoading(false);
           dispatch({
             type: INITIALIZE,
@@ -109,6 +110,34 @@ function AuthProvider({ children }) {
     }
   };
 
+  const getUserInfo = async () => {
+    const getTokenSilently = await auth0Client.getTokenSilently({
+      detailedResponse: true,
+    });
+    return new Promise(async function (resolve, reject) {
+      console.log();
+      var qs = require("qs");
+      var data = qs.stringify({});
+      var config = {
+        method: "get",
+        url: "https://dev-c37ss4t71trscecz.us.auth0.com/userinfo",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getTokenSilently.access_token}`,
+        },
+        data: data,
+      };
+
+      axios(config)
+        .then(function (response) {
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          reject(error);
+        });
+    });
+  };
+
   const signOut = () => {
     auth0Client?.logout();
     dispatch({
@@ -137,6 +166,7 @@ function AuthProvider({ children }) {
         signOut,
         resetPassword,
         setLoading,
+        getUserInfo,
         loading,
       }}
     >
