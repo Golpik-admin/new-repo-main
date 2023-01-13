@@ -113,15 +113,14 @@ function AuthProvider({ children }) {
     return new Promise(function (resolve, reject) {
       var data = {
         client_id: "tZ9FEWfQim4Y1fcg4OarjXQ4zxHFnedY",
-        client_secret:
-          "qesvpepCk5FJSRiqe66CAMb_x3Bp2IQnAKAaUyX4dUVqGEdnfZ-3S_C5Sf-vUziD",
-        audience: "https://dev-c37ss4t71trscecz.us.auth0.com/api/v2/",
-        grant_type: "client_credentials",
+        client_secret: auth0Config.clientSecret,
+        audience: `${auth0Config.domain}/api/v2/`,
+        grant_type: auth0Config.grantType,
       };
 
       var config = {
         method: "post",
-        url: "https://dev-c37ss4t71trscecz.us.auth0.com/oauth/token",
+        url: `${auth0Config.domain}/oauth/token`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -142,7 +141,7 @@ function AuthProvider({ children }) {
     return new Promise(function (resolve, reject) {
       var config = {
         method: "get",
-        url: `https://dev-c37ss4t71trscecz.us.auth0.com/api/v2/users/${userId}`,
+        url: `${auth0Config.domain}/api/v2/users/${userId}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -168,7 +167,7 @@ function AuthProvider({ children }) {
       var data = qs.stringify({});
       var config = {
         method: "get",
-        url: "https://dev-c37ss4t71trscecz.us.auth0.com/userinfo",
+        url: `${auth0Config.domain}/userinfo`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${getTokenSilently.access_token}`,

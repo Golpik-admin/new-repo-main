@@ -55,15 +55,7 @@ const Div = styled.div`
 
 function SignIn() {
   const navigate = useNavigate();
-  const {
-    signIn,
-    isAuthenticated,
-    user,
-    signOut,
-    getUserInfo,
-    getApiToken,
-    getUserMeta,
-  } = useAuth();
+  const { signIn, signOut, getUserInfo, getApiToken, getUserMeta } = useAuth();
 
   return (
     <Formik
@@ -91,7 +83,6 @@ function SignIn() {
                     navigate("/dashboard");
                   } else {
                     signOut(true);
-                    // console.log("logout");
                   }
                 });
               });
@@ -131,10 +122,10 @@ function SignIn() {
             type="text"
             name="email"
             label="Username"
-            //value={values.email}
+            value={values.email}
             error={Boolean(touched.email && errors.email)}
             fullWidth
-            //helperText={touched.email && errors.email}
+            helperText={touched.email && errors.email}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
@@ -144,10 +135,10 @@ function SignIn() {
             type="password"
             name="password"
             label="Password"
-            //value={values.password}
+            value={values.password}
             error={Boolean(touched.password && errors.password)}
             fullWidth
-            //helperText={touched.password && errors.password}
+            helperText={touched.password && errors.password}
             onBlur={handleBlur}
             onChange={handleChange}
             my={2}
