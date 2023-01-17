@@ -54,7 +54,6 @@ const Paper = styled(MuiPaper)`
 function Settings() {
   const { user } = useAuth();
   const dispatch = useDispatch();
-  console.log(user);
   var User_Id = user.id;
   useEffect(() => {
     if (User_Id) {
@@ -70,7 +69,6 @@ function Settings() {
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
   const updateUserHandler = async () => {
-    console.log(user);
     try {
       await fetch(`${auth0Config.domain}/api/v2/users/${user.id}`, {
         method: "PATCH",

@@ -7,8 +7,13 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Alert as MuiAlert,
+  Card as MuiCard,
+  CardActionArea,
+  CardContent,
+  CardMedia,
   CircularProgress,
   TextField as MuiTextField,
+  Typography,
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
@@ -20,15 +25,31 @@ import {
 } from "../../config";
 import { useDispatch } from "react-redux";
 import { setMesssage } from "../../redux/slices/messageSlice";
+import { useSelector } from "react-redux";
 
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
 
+const Card = styled(MuiCard)`
+  margin-top: 40px;
+  .heading {
+    background: #a52c65;
+    text-align: center;
+    padding: 10px 0;
+    color: #fff;
+  }
+  .price {
+    color: #7e84a3;
+    font-size: 28px;
+  }
+`;
+
 const stripePromise = loadStripe(`${stripePublishKey}`);
 function SignUp(props) {
   const dispatch = useDispatch();
   const [price, setPrice] = useState(0);
+  const messages = useSelector((state) => state.messageState);
 
   const [priceMetaData, setPriceMetaData] = useState();
   const [productMetaData, setProductMetaData] = useState();
@@ -56,7 +77,6 @@ function SignUp(props) {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.error && data.error.code) {
               setIsLoading(true);
               dispatch(
@@ -67,7 +87,6 @@ function SignUp(props) {
                   price: false,
                 })
               );
-              console.log("fail");
               return;
             }
             if (data.recurring !== null) {
@@ -90,7 +109,6 @@ function SignUp(props) {
               })
                 .then((res) => res.json())
                 .then((product) => {
-                  console.log(product);
                   setProductMetaData({
                     created: product.created,
                     default_price: product.default_price,
@@ -123,7 +141,6 @@ function SignUp(props) {
                   price: false,
                 })
               );
-              console.log("fail");
               return;
             }
           })
@@ -136,20 +153,6 @@ function SignUp(props) {
     }
 
     verifyPriceId();
-
-    // Create setupintent as soon as the page loads
-    // fetch("${stripeapiEndpoint}/payment_intents?amount=100&currency=usd", {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization:
-    //       "Bearer sk_test_51MM69wGXz5lpWMAzFMPcUxatATx5B2Al7RUZmPUva4JgrNTBJ5xHfNHdVbstD5XnwIU0K1HyXKkznWaidpCpyoXH00TLZPXnwx",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     setClientSecret(data.client_secret);
-    //   });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -316,35 +319,37 @@ function SignUp(props) {
                     my={3}
                     variant="standard"
                   />
-                  {/* <Box justifyContent="space-between">
-                    <Link href="#" underline="none" className="back-btn">
-                      Back
-                    </Link>
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      // className="nxt-btn"
-                      disabled={isSubmitting}
-                    >
-                      Next
-                    </Button>
-                  </Box> */}
-                </>
-              )}
-              {true && (
-                <>
-                  <Elements stripe={stripePromise}>
-                    <CheckoutForm
-                      handleSubmit={handleSubmit}
-                      inputValues={values}
-                      lastSegment={lastSegment}
-                      price={price}
-                      priceMetaData={priceMetaData}
-                      productMetaData={productMetaData}
-                    />
-                  </Elements>
+
+                  <Card variant="outlined">
+                    {/* <CardActionArea> */}
+                    <Typography gutterBottom variant="h3" className="heading">
+                      {messages?.product?.name}
+                    </Typography>
+                    <CardContent>
+                      <Typography
+                        align="center"
+                        gutterBottom
+                        variant="h6"
+                        component="div"
+                      >
+                        <span className="price">{messages?.price} /</span>
+                        {messages?.recurringInterval === "month"
+                          ? " Monthly"
+                          : " Annually"}{" "}
+                      </Typography>
+                      <Elements stripe={stripePromise}>
+                        <CheckoutForm
+                          handleSubmit={handleSubmit}
+                          inputValues={values}
+                          lastSegment={lastSegment}
+                          price={price}
+                          priceMetaData={priceMetaData}
+                          productMetaData={productMetaData}
+                        ></CheckoutForm>
+                      </Elements>
+                    </CardContent>
+                    {/* </CardActionArea> */}
+                  </Card>
                 </>
               )}
             </form>

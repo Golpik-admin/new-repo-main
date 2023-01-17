@@ -69,14 +69,6 @@ const SidebarNav = ({ items }) => {
             ))}
         </Items>
       </List>
-      {/* <Box sx={{ display: { xs: "none", md: "block" } }}>
-        <Typography variant="body2" component="span">
-          <em className="vert-logo">
-            <strong>Consilience </strong> Trading
-          </em>
-        </Typography>
-        <Button></Button>
-      </Box> */}
     </ScrollbarComponent>
   );
 };

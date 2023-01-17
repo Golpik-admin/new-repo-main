@@ -19,21 +19,20 @@ const CheckoutForm = (props) => {
       //border-radius: 4px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.42);
       margin: 10px 0;
-      .CardField-child{
-        background:#000;
+      .CardField-child {
+        background: #000;
       }
       .InputContainer {
         .InputElement {
-          backgroung
           border-bottom: 1px solid #000;
         }
       }
     }
     .pay-btn {
-      width: 170px;
+      //width: 170px;
       background: #2b75fd;
-      font-size: 18px;
-      height:44px;
+      font-size: 16px;
+      height: 35px;
     }
     .back-btn {
       width: 170px;
@@ -80,7 +79,6 @@ const CheckoutForm = (props) => {
         })
       );
       setIsLoading(false);
-      console.log(result.error.message);
     } else {
       fetch(
         `${stripeapiEndpoint}/customers?email=${props.inputValues.email}&payment_method=${result.paymentMethod.id}&invoice_settings[default_payment_method]=${result.paymentMethod.id}`,
@@ -151,7 +149,6 @@ const CheckoutForm = (props) => {
                       })
                     );
                     setIsLoading(false);
-                    console.log(JSON.stringify(response.data));
                     if (response.code !== "invalid_signup") {
                       setTimeout(() => {
                         window.location.replace("/auth/sign-in");
@@ -159,7 +156,6 @@ const CheckoutForm = (props) => {
                     }
                   })
                   .catch(function (error) {
-                    console.log(error);
                     dispatch(
                       setMesssage({
                         message:
@@ -171,7 +167,6 @@ const CheckoutForm = (props) => {
                       })
                     );
                     setIsLoading(false);
-                    console.log(error.response.data.description);
                   });
               });
           }
@@ -188,7 +183,7 @@ const CheckoutForm = (props) => {
       )}
       <div
         style={{
-          margin: "30px 0",
+          margin: "20px 0",
           borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
           padding: "10px 0 5px",
         }}
@@ -199,33 +194,15 @@ const CheckoutForm = (props) => {
         />
       </div>
       <Box>
-        {/* <Autocomplete
-          fullWidth
-          id="combo-box-demo"
-          options={["Monthly", "Yearly"]}
-          renderInput={(params) => (
-            <TextField {...params} label="Pro+ " variant="standard" />
-          )}
-        />
-        <TextField
-          type="text"
-          name="username"
-          label="Full Name"
-          value={props.inputValues.firstName + " " + props.inputValues.lastName}
-          //error={Boolean(touched.username && errors.username)}
-          fullWidth
-          //helperText={touched.username && errors.username}
-          //onBlur={handleBlur}
-          //onChange={handleChange}
-          sx={{ my: "15px" }}
-          variant="standard"
-        /> */}
-        <Box mt={12} display="flex" justifyContent="space-between">
-          {/* <Link href="#" underline="none" className="back-btn">
-            Back
-          </Link> */}
-          <Button variant="contained" onClick={handleSubmitSub} fullWidth>
-            Pay {props.price ?? "0.00"}
+        {props.children}
+        <Box mt={7} display="flex" justifyContent="space-between">
+          <Button
+            variant="contained"
+            onClick={handleSubmitSub}
+            fullWidth
+            className="pay-btn"
+          >
+            Signup
           </Button>
         </Box>
       </Box>

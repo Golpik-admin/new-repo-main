@@ -44,8 +44,6 @@ export const riskManagementsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(fetchRiskManagements.fulfilled, (state, action) => {
-      // console.log("state: " + action.payload.Status);
-      // console.log("action: " + JSON.stringify(action));
       if (action.payload.Status === undefined) {
         state.loading = false;
         state.tickersRiskManagement = action.payload.Tickers;
