@@ -79,9 +79,14 @@ function SignIn() {
               fetch(
                 `${auth0Config.domain}/users/${final.client_reference_id}`,
                 {
-                  method: "GET",
+                  method: "PATCH",
                   headers: {
                     Authorization: `Bearer ${token}`,
+                  },
+                  body: {
+                    patch_users_by_id_body: {
+                      user_metadata: final,
+                    },
                   },
                 }
               )
