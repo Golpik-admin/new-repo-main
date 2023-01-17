@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 //import { Link } from "react-router-dom";
-import { Link } from "@mui/material";
+import { CircularProgress, Link } from "@mui/material";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
@@ -16,6 +16,7 @@ import {
 import { spacing } from "@mui/system";
 
 import useAuth from "../../hooks/useAuth";
+import { auth0Config, stripeapiEndpoint, stripeSecretKey } from "../../config";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -54,116 +55,178 @@ const Div = styled.div`
 `;
 
 function SignIn() {
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { signIn, signOut, getUserInfo, getApiToken, getUserMeta } = useAuth();
 
-  return (
-    <Formik
-      initialValues={{
-        email: "demo@bootlab.io",
-        password: "unsafepassword",
-        submit: false,
-      }}
-      validationSchema={Yup.object().shape({
-        email: Yup.string()
-          .email("Must be a valid email")
-          .max(255)
-          .required("Email is required"),
-        password: Yup.string().max(255).required("Password is required"),
-      })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-        try {
-          await signIn(values.email, values.password);
-          await getApiToken()
+  const queryParameters = new URLSearchParams(window.location.search);
+  const checkout_session_id = queryParameters.get("checkout_session_id");
+  useEffect(() => {
+    if (checkout_session_id) {
+      console.log(checkout_session_id);
+      fetch(`${stripeapiEndpoint}/checkout/sessions/${checkout_session_id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${stripeSecretKey}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((final) => {
+          console.log(final);
+          getApiToken()
             .then(async (token) => {
-              await getUserInfo().then(async (_user) => {
-                const userId1 = _user.sub;
-                await getUserMeta(token, userId1).then((response) => {
-                  if (JSON.parse(response.user_metadata.stripe)) {
-                    navigate("/dashboard");
-                  } else {
-                    signOut(true);
-                  }
-                });
-              });
+              console.log(token);
+              fetch(
+                `${auth0Config.domain}/users/${final.client_reference_id}`,
+                {
+                  method: "GET",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
+                .then((res) => res.json())
+                .then((userUpdate) => {});
             })
             .catch((error) => {
               console.log(error);
             });
-        } catch (error) {
-          const message = error.message || "Something went wrong";
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
-          setStatus({ success: false });
-          setErrors({ submit: message });
-          setSubmitting(false);
-        }
-      }}
-    >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        touched,
-        values,
-      }) => (
-        <form noValidate onSubmit={handleSubmit}>
-          {/* <Alert mt={3} mb={3} severity="info">
+  return (
+    <>
+      {isLoading && (
+        <div align="center">
+          <CircularProgress color="secondary" />
+        </div>
+      )}
+      {!isLoading && (
+        <Formik
+          initialValues={{
+            email: "demo@bootlab.io",
+            password: "unsafepassword",
+            submit: false,
+          }}
+          validationSchema={Yup.object().shape({
+            email: Yup.string()
+              .email("Must be a valid email")
+              .max(255)
+              .required("Email is required"),
+            password: Yup.string().max(255).required("Password is required"),
+          })}
+          onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+            try {
+              await signIn(values.email, values.password);
+              await getApiToken()
+                .then(async (token) => {
+                  await getUserInfo().then(async (_user) => {
+                    const userId1 = _user.sub;
+                    await getUserMeta(token, userId1).then((response) => {
+                      if (
+                        response.user_metadata &&
+                        response.user_metadata.stripe
+                      ) {
+                        navigate("/dashboard");
+                      } else {
+                        signOut(true);
+                        window.location.replace(
+                          `https://buy.stripe.com/test_14k1646MCaU56Aw000?prefilled_email=${_user.email}&client_reference_id=${_user.sub}`
+                        );
+                      }
+                    });
+                  });
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            } catch (error) {
+              const message = error.message || "Something went wrong";
+
+              setStatus({ success: false });
+              setErrors({ submit: message });
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values,
+          }) => (
+            <form noValidate onSubmit={handleSubmit}>
+              {/* <Alert mt={3} mb={3} severity="info">
             Use <strong>demo@golpik.com</strong> and{" "}
             <strong>safepassword</strong> to sign in
           </Alert> */}
-          {errors.submit && (
-            <Alert mt={2} mb={3} severity="warning">
-              {errors.submit}
-            </Alert>
+              {errors.submit && (
+                <Alert mt={2} mb={3} severity="warning">
+                  {errors.submit}
+                </Alert>
+              )}
+              <TextField
+                type="text"
+                name="email"
+                label="Username"
+                value={values.email}
+                error={Boolean(touched.email && errors.email)}
+                fullWidth
+                helperText={touched.email && errors.email}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                my={2}
+                variant="standard"
+              />
+              <TextField
+                type="password"
+                name="password"
+                label="Password"
+                value={values.password}
+                error={Boolean(touched.password && errors.password)}
+                fullWidth
+                helperText={touched.password && errors.password}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                my={2}
+                variant="standard"
+              />
+              <Div className="forgot-pas-wrap">
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label="Remember me"
+                />
+                <Link href="#" underline="none">
+                  Forgot Password
+                </Link>
+              </Div>
+              <Div className="btn-wrap">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isSubmitting}
+                >
+                  Login
+                </Button>
+                <Link
+                  href="/auth/sign-up"
+                  underline="none"
+                  className="signup-btn"
+                >
+                  Sign up
+                </Link>
+              </Div>
+            </form>
           )}
-          <TextField
-            type="text"
-            name="email"
-            label="Username"
-            value={values.email}
-            error={Boolean(touched.email && errors.email)}
-            fullWidth
-            helperText={touched.email && errors.email}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={2}
-            variant="standard"
-          />
-          <TextField
-            type="password"
-            name="password"
-            label="Password"
-            value={values.password}
-            error={Boolean(touched.password && errors.password)}
-            fullWidth
-            helperText={touched.password && errors.password}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={2}
-            variant="standard"
-          />
-          <Div className="forgot-pas-wrap">
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Link href="#" underline="none">
-              Forgot Password
-            </Link>
-          </Div>
-          <Div className="btn-wrap">
-            <Button type="submit" variant="contained" disabled={isSubmitting}>
-              Login
-            </Button>
-            <Link href="/auth/sign-up" underline="none" className="signup-btn">
-              Sign up
-            </Link>
-          </Div>
-        </form>
+        </Formik>
       )}
-    </Formik>
+    </>
   );
 }
 
