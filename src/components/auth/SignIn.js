@@ -91,7 +91,9 @@ function SignIn() {
                 }
               )
                 .then((res) => res.json())
-                .then((userUpdate) => {});
+                .then((userUpdate) => {
+                  navigate("/dashboard");
+                });
             })
             .catch((error) => {
               console.log(error);
