@@ -9,6 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
+import { appUrl, authTdameritrade } from "../../config";
 
 const Grid = styled(MuiGrid)`
   .empty-box {
@@ -122,6 +123,7 @@ function Integraion() {
             <Button
               className="int-button"
               variant="outlined"
+              href={`${authTdameritrade.URL}?response_type=code&redirect_uri=${appUrl}/auth?handler=Callback&client_id=${authTdameritrade.clientId}`}
               disableElevation
               fullWidth
             >
