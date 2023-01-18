@@ -65,17 +65,17 @@ function AuthProvider({ children }) {
 
         if (isAuthenticated) {
           const user = await auth0Client.getUser();
-          const getTokenSilently = await auth0Client.getTokenSilently({
-            detailedResponse: true,
-          });
-          localStorage.setItem("access_token", getTokenSilently.access_token);
+          // const getTokenSilently = await auth0Client.getTokenSilently({
+          //   detailedResponse: true,
+          // });
+          // localStorage.setItem("access_token", getTokenSilently.access_token);
           setLoading(false);
           dispatch({
             type: INITIALIZE,
             payload: {
               isAuthenticated,
               user: user || null,
-              token: getTokenSilently.id_token || null,
+              // token: getTokenSilently.id_token || null,
             },
           });
         } else {
@@ -104,9 +104,16 @@ function AuthProvider({ children }) {
 
     if (isAuthenticated) {
       const user = await auth0Client?.getUser();
+      const getTokenSilently = await auth0Client.getTokenSilently({
+        detailedResponse: true,
+      });
+      localStorage.setItem("access_token", getTokenSilently.access_token);
       dispatch({
         type: SIGN_IN,
-        payload: { user: user || null },
+        payload: {
+          user: user || null,
+          token: getTokenSilently.id_token || null,
+        },
       });
     }
   };
@@ -193,6 +200,7 @@ function AuthProvider({ children }) {
       type: SIGN_OUT,
       payload: { isAuthenticated: false, user: null, token: null },
     });
+    localStorage.removeItem("access_token");
   };
 
   const resetPassword = (email) => {};

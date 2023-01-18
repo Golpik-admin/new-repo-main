@@ -75,36 +75,36 @@ function SignIn() {
           console.log(final);
           getApiToken()
             .then(async (token) => {
-              await getUserInfo().then(async (_user) => {
-                const userId1 = _user.sub;
-                await getUserMeta(token, userId1).then((response) => {
-                  if (response.user_metadata && response.user_metadata.stripe) {
-                    navigate("/dashboard");
-                  } else {
-                    console.log(token);
-                    fetch(
-                      `${auth0Config.domain}/users/${userId1.split("|")[1]}`,
-                      {
-                        method: "PATCH",
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                        },
-                        body: {
-                          patch_users_by_id_body: {
-                            user_metadata: {
-                              stripe: final,
-                            },
-                          },
-                        },
-                      }
-                    )
-                      .then((res) => res.json())
-                      .then((userUpdate) => {
-                        navigate("/dashboard");
-                      });
-                  }
-                });
-              });
+              // await getUserInfo().then(async (_user) => {
+              //   const userId1 = _user.sub;
+              //   await getUserMeta(token, userId1).then((response) => {
+              //     if (response.user_metadata && response.user_metadata.stripe) {
+              //       navigate("/dashboard");
+              //     } else {
+              //       console.log(token);
+              //       fetch(
+              //         `${auth0Config.domain}/users/${userId1.split("|")[1]}`,
+              //         {
+              //           method: "PATCH",
+              //           headers: {
+              //             Authorization: `Bearer ${token}`,
+              //           },
+              //           body: {
+              //             patch_users_by_id_body: {
+              //               user_metadata: {
+              //                 stripe: final,
+              //               },
+              //             },
+              //           },
+              //         }
+              //       )
+              //         .then((res) => res.json())
+              //         .then((userUpdate) => {
+              //           navigate("/dashboard");
+              //         });
+              //     }
+              //   });
+              // });
             })
             .catch((error) => {
               console.log(error);
@@ -141,6 +141,7 @@ function SignIn() {
               await signIn(values.email, values.password);
               await getApiToken()
                 .then(async (token) => {
+                  console.log(token);
                   await getUserInfo().then(async (_user) => {
                     const userId1 = _user.sub;
                     await getUserMeta(token, userId1).then((response) => {
@@ -150,7 +151,7 @@ function SignIn() {
                       ) {
                         navigate("/dashboard");
                       } else {
-                        signOut(true);
+                        signOut(false);
                         window.location.replace(
                           `https://buy.stripe.com/test_14k1646MCaU56Aw000?prefilled_email=${_user.email}&client_reference_id=${userId1}`
                         );
