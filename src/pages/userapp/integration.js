@@ -126,7 +126,6 @@ function Integraion() {
               href={`${authTdameritrade.URL}?response_type=code&redirect_uri=${appUrl}/auth?handler=Callback&client_id=${authTdameritrade.clientId}`}
               disableElevation
               fullWidth
-              href="https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=https://localhost:3000/auth?handler=Callback&client_id=NSFEC5ESOEOD3TKYS399J0V7WNGAQB4A%40AMER.OAUTHAP"
             >
               Authorize access to TDAmeritrade.com
             </Button>
