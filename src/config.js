@@ -15,6 +15,10 @@ export const auth0Config = {
   grantType: process.env.REACT_APP_AUTH0_GRANT_TYPE,
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
 };
+export const authTdameritrade = {
+  URL: process.env.REACT_APP_AUTH_TDAMERITRADE,
+  clientId: process.env.REACT_APP_AUTH_TDAMERITRADE_CLIENTID,
+};
 
 export const cognitoConfig = {
   userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
@@ -22,6 +26,7 @@ export const cognitoConfig = {
 };
 
 export const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+export const appUrl = process.env.REACT_APP_URL;
 export const stripeapiEndpoint = process.env.REACT_APP_STRIPE_API_ENDPOINT;
 
 export const stripePublishKey = process.env.REACT_APP_API_STRIPE_PUBLISH_KEY;
