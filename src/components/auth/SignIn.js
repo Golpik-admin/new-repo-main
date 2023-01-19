@@ -61,6 +61,7 @@ function SignIn() {
 
   const queryParameters = new URLSearchParams(window.location.search);
   const checkout_session_id = queryParameters.get("session");
+  const subscription = queryParameters.get("subscription");
   useEffect(() => {
     if (checkout_session_id) {
       console.log(checkout_session_id);
@@ -82,22 +83,19 @@ function SignIn() {
                     navigate("/dashboard");
                   } else {
                     console.log(token);
-                    fetch(
-                      `${auth0Config.domain}/users/${userId1.split("|")[1]}`,
-                      {
-                        method: "PATCH",
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                        },
-                        body: {
-                          patch_users_by_id_body: {
-                            user_metadata: {
-                              stripe: final,
-                            },
+                    fetch(`${auth0Config.domain}/users/${userId1}`, {
+                      method: "PATCH",
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                      body: {
+                        patch_users_by_id_body: {
+                          user_metadata: {
+                            stripe: final,
                           },
                         },
-                      }
-                    )
+                      },
+                    })
                       .then((res) => res.json())
                       .then((userUpdate) => {
                         navigate("/dashboard");
@@ -151,10 +149,12 @@ function SignIn() {
                       ) {
                         navigate("/dashboard");
                       } else {
-                        signOut(false);
-                        window.location.replace(
-                          `https://buy.stripe.com/test_14k1646MCaU56Aw000?prefilled_email=${_user.email}&client_reference_id=${userId1}`
-                        );
+                        if (subscription) {
+                          signOut(false);
+                          window.location.replace(
+                            `${subscription}?prefilled_email=${_user.email}&client_reference_id=${userId1}`
+                          );
+                        }
                       }
                     });
                   });
