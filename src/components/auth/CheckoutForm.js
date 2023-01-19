@@ -19,21 +19,20 @@ const CheckoutForm = (props) => {
       //border-radius: 4px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.42);
       margin: 10px 0;
-      .CardField-child{
-        background:#000;
+      .CardField-child {
+        background: #000;
       }
       .InputContainer {
         .InputElement {
-          backgroung
           border-bottom: 1px solid #000;
         }
       }
     }
     .pay-btn {
-      width: 170px;
+      //width: 170px;
       background: #2b75fd;
-      font-size: 18px;
-      height:44px;
+      font-size: 16px;
+      height: 35px;
     }
     .back-btn {
       width: 170px;
@@ -184,7 +183,7 @@ const CheckoutForm = (props) => {
       )}
       <div
         style={{
-          margin: "30px 0",
+          margin: "20px 0",
           borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
           padding: "10px 0 5px",
         }}
@@ -196,8 +195,13 @@ const CheckoutForm = (props) => {
       </div>
       <Box>
         {props.children}
-        <Box mt={12} display="flex" justifyContent="space-between">
-          <Button variant="contained" onClick={handleSubmitSub} fullWidth>
+        <Box mt={7} display="flex" justifyContent="space-between">
+          <Button
+            variant="contained"
+            onClick={handleSubmitSub}
+            fullWidth
+            className="pay-btn"
+          >
             Signup
           </Button>
         </Box>
