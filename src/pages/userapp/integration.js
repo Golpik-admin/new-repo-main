@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import {
@@ -9,6 +9,10 @@ import {
   IconButton,
 } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
+import { appUrl, authTdameritrade } from "../../config";
+import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { postTDAmeritrade } from "../../redux/slices/integration";
 
 const Grid = styled(MuiGrid)`
   .empty-box {
@@ -48,6 +52,34 @@ const Grid = styled(MuiGrid)`
 `;
 
 function Integraion() {
+  const dispatch = useDispatch();
+  const isCodeAMTrade = useSelector((state) => state.integrations.TDAmeritrade);
+
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const code = searchParams.get("code");
+    if (code) {
+      const decode = decodeURIComponent(window.location.href);
+      // console.log(decode.split("&code=")[1]);
+      const decodeClient_id = decodeURIComponent(authTdameritrade.clientId);
+
+      const obj = {
+        Grant_type: "authorization_code",
+        Access_type: "offline",
+        Code: decode.split("&code=")[1],
+        Client_id: decodeClient_id,
+        redirect_uri: `${authTdameritrade.URL}?response_type=code&redirect_uri=${appUrl}/auth?handler=Callback&client_id=${authTdameritrade.clientId}`,
+      };
+      dispatch(postTDAmeritrade(obj));
+    }
+  }, []);
+
+  const handleNavigate = () => {
+    window.location.replace(
+      `${authTdameritrade.URL}?response_type=code&redirect_uri=${appUrl}/auth?handler=Callback&client_id=${authTdameritrade.clientId}`
+    );
+  };
+
   return (
     <React.Fragment>
       <Helmet title="Orders" />
@@ -119,14 +151,26 @@ function Integraion() {
               Sign-in to TD Ameritrade to authorize access to authorize access
               to your brokerage accounts.
             </Typography>
-            <Button
-              className="int-button"
-              variant="outlined"
-              disableElevation
-              fullWidth
-            >
-              Authorize access to TDAmeritrade.com
-            </Button>
+            {isCodeAMTrade ? (
+              <Button
+                color="success"
+                variant="outlined"
+                disableElevation
+                fullWidth
+              >
+                INTEGRATED
+              </Button>
+            ) : (
+              <Button
+                className="int-button"
+                variant="outlined"
+                disableElevation
+                fullWidth
+                onClick={handleNavigate}
+              >
+                Authorize access to TDAmeritrade.com
+              </Button>
+            )}
           </Box>
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={4}>
