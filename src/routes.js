@@ -624,6 +624,16 @@ const routes = [
       },
     ],
   },
+  {
+    path: "auth",
+    element: <FrontEndDashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <UserIntegration />,
+      },
+    ],
+  },
 ];
 
 export default routes;
