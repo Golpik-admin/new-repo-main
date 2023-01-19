@@ -17,6 +17,7 @@ import { spacing } from "@mui/system";
 
 import useAuth from "../../hooks/useAuth";
 import { auth0Config, stripeapiEndpoint, stripeSecretKey } from "../../config";
+import axios from "axios";
 
 const Alert = styled(MuiAlert)(spacing);
 
@@ -83,22 +84,30 @@ function SignIn() {
                     navigate("/dashboard");
                   } else {
                     console.log(token);
-                    fetch(`${auth0Config.domain}/users/${userId1}`, {
-                      method: "PATCH",
+                    var data = JSON.stringify({
+                      user_metadata: {
+                        stripe: final,
+                      },
+                    });
+
+                    var config = {
+                      method: "patch",
+                      url: `${auth0Config.domain}/api/v2/users/${userId1}`,
                       headers: {
                         Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
                       },
-                      body: {
-                        patch_users_by_id_body: {
-                          user_metadata: {
-                            stripe: final,
-                          },
-                        },
-                      },
-                    })
-                      .then((res) => res.json())
-                      .then((userUpdate) => {
-                        navigate("/dashboard");
+                      data: data,
+                    };
+
+                    axios(config)
+                      .then(function (response) {
+                        console.log(JSON.stringify(response.data));
+
+                        // navigate("/dashboard");
+                      })
+                      .catch(function (error) {
+                        console.log(error);
                       });
                   }
                 });
@@ -150,7 +159,7 @@ function SignIn() {
                         navigate("/dashboard");
                       } else {
                         if (subscription) {
-                          signOut(false);
+                          // signOut(false);
                           window.location.replace(
                             `${subscription}?prefilled_email=${_user.email}&client_reference_id=${userId1}`
                           );
