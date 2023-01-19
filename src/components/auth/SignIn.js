@@ -60,7 +60,7 @@ function SignIn() {
   const { signIn, signOut, getUserInfo, getApiToken, getUserMeta } = useAuth();
 
   const queryParameters = new URLSearchParams(window.location.search);
-  const checkout_session_id = queryParameters.get("checkout_session_id");
+  const checkout_session_id = queryParameters.get("session");
   useEffect(() => {
     if (checkout_session_id) {
       console.log(checkout_session_id);
