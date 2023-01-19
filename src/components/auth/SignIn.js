@@ -104,7 +104,7 @@ function SignIn() {
                       .then(function (response) {
                         console.log(JSON.stringify(response.data));
 
-                        // navigate("/dashboard");
+                        navigate("/dashboard");
                       })
                       .catch(function (error) {
                         console.log(error);
