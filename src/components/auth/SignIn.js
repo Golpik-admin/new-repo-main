@@ -104,7 +104,7 @@ function SignIn() {
                       .then(function (response) {
                         console.log(JSON.stringify(response.data));
 
-                        // navigate("/dashboard");
+                        navigate("/dashboard");
                       })
                       .catch(function (error) {
                         console.log(error);
@@ -120,6 +120,10 @@ function SignIn() {
     } else {
       setIsLoading(false);
     }
+
+    if (!subscription) {
+      setIsLoading(true);
+    }
   }, []);
 
   return (
@@ -127,6 +131,21 @@ function SignIn() {
       {isLoading && (
         <div align="center">
           <CircularProgress color="secondary" />
+          {!subscription && !checkout_session_id && (
+            <>
+              <Alert severity="error">
+                <span>No Subscription Found</span>
+              </Alert>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                href="https://optionize.webflow.io/pricing/price-plan"
+              >
+                Return to website
+              </Button>
+            </>
+          )}
         </div>
       )}
       {!isLoading && (
@@ -240,7 +259,13 @@ function SignIn() {
                   variant="contained"
                   disabled={isSubmitting}
                 >
-                  Login
+                  {isSubmitting && (
+                    <div>
+                      Please Wait{" "}
+                      <CircularProgress color="secondary" size="18px" />
+                    </div>
+                  )}
+                  {!isSubmitting && "Login"}
                 </Button>
                 <Link
                   href="/auth/sign-up"
