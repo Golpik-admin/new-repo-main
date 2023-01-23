@@ -53,6 +53,7 @@ const Paper = styled(MuiPaper)`
 
 function Settings() {
   const { user } = useAuth();
+  console.log(user);
   const dispatch = useDispatch();
   var User_Id = user.id;
   useEffect(() => {
@@ -73,12 +74,12 @@ function Settings() {
       await fetch(`${auth0Config.domain}/api/v2/users/${user.id}`, {
         method: "PATCH",
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          name: "MARK",
-          email: "markgraywells@gmail.com",
+          name: initialValues.firstName,
+          email: initialValues.email,
         }),
       })
         .then((res) => res.json())

@@ -10,7 +10,7 @@ const initialState = {
   todayPnlPrevious: 0,
   pnlPrevious: 0,
 };
-const userId = "6372c6c0a8b2c2ec60b2da52";
+// const userId = "6372c6c0a8b2c2ec60b2da52";
 export const fetchPositionsPrevious = createAsyncThunk(
   "positions/fetchPositionsPrevious",
   async (args = null) => {
@@ -20,7 +20,7 @@ export const fetchPositionsPrevious = createAsyncThunk(
       args !== null && args.endDate !== undefined ? args.endDate : null;
 
     const response = await axios
-      .get(`${apiEndpoint}ActiveTrades/${userId}/${startDate}/${endDate}`, {
+      .get(`${apiEndpoint}ActiveTrades/${args.userId}/${startDate}/${endDate}`, {
         params: {
           status: args !== null && args.status !== "all" ? args.status : null,
           count: args !== null ? args.count : null,
@@ -42,7 +42,7 @@ export const fetchPNLPrevious = createAsyncThunk(
     const firstDay = args.startDate;
     const lastDay = args.endDate;
     const response = await axios
-      .get(`${apiEndpoint}/PnL/${userId}/${firstDay}/${lastDay}`, {
+      .get(`${apiEndpoint}/PnL/${args.userId}/${firstDay}/${lastDay}`, {
         params: {
           apiCall: args.apiCall,
         },
