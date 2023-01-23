@@ -68,7 +68,7 @@ function Integraion() {
         Access_type: "offline",
         Code: decode.split("&code=")[1],
         Client_id: decodeClient_id,
-        redirect_uri: `${authTdameritrade.URL}?response_type=code&redirect_uri=${appUrl}/auth?handler=Callback&client_id=${authTdameritrade.clientId}`,
+        redirect_uri: `https://consilience.golpik.net/integration`,
       };
       dispatch(postTDAmeritrade(obj));
     }
