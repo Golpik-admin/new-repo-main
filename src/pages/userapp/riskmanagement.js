@@ -49,7 +49,8 @@ function RiskManagement() {
   const dispatch = useDispatch();
 
   const { user } = useAuth();
-  const userId = "6372c6c0a8b2c2ec60b2da52";
+  // const userId = "6372c6c0a8b2c2ec60b2da52";
+  const userId = user.id;
 
   let date = new Date();
   const currentMonthFirstDay = moment(date)
@@ -649,13 +650,13 @@ const Grid = styled(MuiGrid)`
       }
     }
   }
-  .MuiTablePagination-toolbar{
-    .MuiButtonBase-root{
-      color:#7E84A3;
+  .MuiTablePagination-toolbar {
+    .MuiButtonBase-root {
+      color: #7e84a3;
     }
-    .MuiButton-containedSizeSmall{
-      color:#fff;
-      background:#2B75FD;
+    .MuiButton-containedSizeSmall {
+      color: #fff;
+      background: #2b75fd;
     }
   }
 `;

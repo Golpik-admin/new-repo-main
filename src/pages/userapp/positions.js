@@ -37,6 +37,7 @@ import moment from "moment-timezone";
 
 import MaterialTable from "material-table";
 import { ChevronLeft, ChevronRight } from "react-feather";
+import useAuth from "../../hooks/useAuth";
 
 const Divider = styled(MuiDivider)(spacing);
 

@@ -20,12 +20,15 @@ export const fetchPositions = createAsyncThunk(
       args !== null && args.endDate !== undefined ? args.endDate : null;
 
     const response = await axios
-      .get(`${apiEndpoint}ActiveTrades/${args.userId}/${startDate}/${endDate}`, {
-        params: {
-          status: args !== null && args.status !== "all" ? args.status : null,
-          count: args !== null ? args.count : null,
-        },
-      })
+      .get(
+        `${apiEndpoint}ActiveTrades/${args.userId}/${startDate}/${endDate}`,
+        {
+          params: {
+            status: args !== null && args.status !== "all" ? args.status : null,
+            count: args !== null ? args.count : null,
+          },
+        }
+      )
       .then((response) => {
         return response.data;
       })
