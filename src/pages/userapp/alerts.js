@@ -45,7 +45,7 @@ function Alerts() {
   const alertList = useSelector((state) => state.alertsList);
   const dispatch = useDispatch();
   const { user ,getUserInfo } = useAuth();
-  const userId = "6372c6c0a8b2c2ec60b2da52";
+  const userId = user.id;
   const previousAlertList = useSelector((state) => state.previousAlertsList);
   let date = new Date();
   const currentMonthFirstDay = moment(date)
