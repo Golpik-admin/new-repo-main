@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import {
   Grid,
@@ -52,14 +52,29 @@ const Paper = styled(MuiPaper)`
 `;
 
 function Settings() {
-  const { user } = useAuth();
+  const { user, getApiToken, getUserMeta, getUserInfo } = useAuth();
+  const [stripe, setStripe] = useState(null);
   const dispatch = useDispatch();
   var User_Id = user.id;
   useEffect(() => {
     if (User_Id) {
       dispatch(fetchSettings({ User_Id }));
+      getApiToken()
+        .then(async (token) => {
+          await getUserInfo().then(async (_user) => {
+            const userId1 = _user.sub;
+            await getUserMeta(token, userId1).then((response) => {
+              if (response.user_metadata.stripe) {
+                setStripe(JSON.parse(response.user_metadata.stripe));
+              }
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }, [User_Id, dispatch]);
+  }, [User_Id]);
 
   const getSettings_val = useSelector((state) => state.fetchSettingsList);
   const updateSettings_val = useSelector(
@@ -68,17 +83,17 @@ function Settings() {
   const navigate = useNavigate();
   const LinearProgress = styled(MuiLinearProgress)(spacing);
 
-  const updateUserHandler = async () => {
+  const updateUserHandler = async (values) => {
     try {
       await fetch(`${auth0Config.domain}/api/v2/users/${user.id}`, {
-        method: "PATCH",
+        method: "patch",
         headers: {
-          Authorization: `Bearer ${user.token}`,
-          "content-type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: "MARK",
-          email: "markgraywells@gmail.com",
+        data: JSON.stringify({
+          name: values.firstName,
+          email: values.email,
         }),
       })
         .then((res) => res.json())
@@ -228,7 +243,7 @@ function Settings() {
                             variant="contained"
                             color="primary"
                             disabled={isSubmitting}
-                            onClick={updateUserHandler}
+                            onClick={() => updateUserHandler(values)}
                           >
                             Update
                           </Button>
@@ -527,6 +542,8 @@ function Settings() {
             </Grid>
           </Grid>
 
+          {!stripe && <LinearProgress />}
+
           <Grid justifyContent="space-between" container spacing={6}>
             <Grid item xs={12}>
               <Paper className="bot-paper">
@@ -535,22 +552,33 @@ function Settings() {
                     Subscripions
                   </Typography>
                 </Box>
-                <Grid justifyContent="space-between" container spacing={6}>
-                  <Grid item xs={12} sm={6} md={4} lg={2}>
-                    Plan &nbsp; &nbsp; <span className="bold">Pro+</span>
+                {!stripe && (
+                  <Grid justifyContent="space-between" container spacing={6}>
+                    <Grid item xs={12} sm={6} md={4} lg={2}>
+                      <span className="bold">No Subscripions Found</span>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={2}>
-                    Alert &nbsp; &nbsp; 10
+                )}
+                {console.log(stripe)}
+                {stripe && (
+                  <Grid justifyContent="space-between" container spacing={6}>
+                    <Grid item xs={12} sm={6} md={4} lg={2}>
+                      Plan: &nbsp; &nbsp;{" "}
+                      <span className="bold">{stripe.interval}</span>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={2}>
+                      Amount: &nbsp; &nbsp; ${stripe.amount / 100}
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={6}>
+                      Subscripion ID: &nbsp; &nbsp; {stripe.id}
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={2} textAlign="end">
+                      <Button variant="contained" color="primary">
+                        Update
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={6}>
-                    Per Account &nbsp; &nbsp; $20K Monthly
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4} lg={2} textAlign="end">
-                    <Button type="submit" variant="contained" color="primary">
-                      Update
-                    </Button>
-                  </Grid>
-                </Grid>
+                )}
               </Paper>
             </Grid>
           </Grid>

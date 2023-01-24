@@ -37,6 +37,7 @@ import moment from "moment-timezone";
 
 import MaterialTable from "material-table";
 import { ChevronLeft, ChevronRight } from "react-feather";
+import useAuth from "../../hooks/useAuth";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -91,11 +92,17 @@ const Box = styled.div`
   }
 `;
 
-const EnhancedTableToolbar = () => {
+const EnhancedTableToolbar = (props) => {
   // Here was 'let'
   const dispatch = useDispatch();
   const handleChange = (event) => {
-    dispatch(fetchPositions({ status: event.target.value, count: null }));
+    dispatch(
+      fetchPositions({
+        userId: props.userId,
+        status: event.target.value,
+        count: null,
+      })
+    );
   };
   const [value, setValue] = React.useState([null, null]);
   const today = moment().format("YYYY-MM-DD");
@@ -149,7 +156,11 @@ const EnhancedTableToolbar = () => {
                   : null;
               if (startDate !== null && endDate !== null) {
                 dispatch(
-                  fetchPositions({ startDate: startDate, endDate: endDate })
+                  fetchPositions({
+                    userId: props.userId,
+                    startDate: startDate,
+                    endDate: endDate,
+                  })
                 );
               }
               setValue(newValue);
@@ -169,6 +180,8 @@ const EnhancedTableToolbar = () => {
 };
 
 function Positions() {
+  const { user } = useAuth();
+  const userId = user.id;
   const positionsList = useSelector((state) => state.positionsList);
 
   const configuration = {
@@ -281,9 +294,10 @@ function Positions() {
     .format("YYYY-MM-DD");
 
   useEffect(() => {
-    dispatch(fetchPositions());
+    dispatch(fetchPositions({ userId: userId }));
     dispatch(
       fetchPositions({
+        userId: userId,
         startDate: currentMonthFirstDay,
         endDate: currentMonthLastDay,
         status: "open",
@@ -293,6 +307,7 @@ function Positions() {
 
     dispatch(
       fetchPositionsPrevious({
+        userId: userId,
         startDate: previousMonthFirstDay,
         endDate: previousMonthLastDay,
         status: "open",
@@ -302,6 +317,7 @@ function Positions() {
 
     dispatch(
       fetchPNL({
+        userId: userId,
         startDate: currentMonthFirstDay,
         endDate: currentMonthLastDay,
         apiCall: "totalPnl",
@@ -310,6 +326,7 @@ function Positions() {
     );
     dispatch(
       fetchPNLPrevious({
+        userId: userId,
         startDate: previousMonthFirstDay,
         endDate: previousMonthLastDay,
         apiCall: "totalPnl",
@@ -319,6 +336,7 @@ function Positions() {
 
     dispatch(
       fetchPNL({
+        userId: userId,
         startDate: today,
         endDate: today,
         apiCall: "today",
@@ -440,7 +458,7 @@ function Positions() {
               minHeight: 450,
             }}
           >
-            <EnhancedTableToolbar />
+            <EnhancedTableToolbar userId={userId} />
 
             <MaterialTable
               isLoading={positionsList.loading}
