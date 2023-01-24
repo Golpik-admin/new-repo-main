@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable prettier/prettier */
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,8 +44,8 @@ const Paper = styled(MuiPaper)(spacing);
 function Alerts() {
   const alertList = useSelector((state) => state.alertsList);
   const dispatch = useDispatch();
-  const { user ,getUserInfo } = useAuth();
-  const userId = user.id.split('|')[1];
+  const { getUserInfo } = useAuth();
+  const [userId, setUserId] = useState(null);
   const previousAlertList = useSelector((state) => state.previousAlertsList);
   let date = new Date();
   const currentMonthFirstDay = moment(date)
@@ -69,7 +69,7 @@ function Alerts() {
       )
     )
     .asHours();
-  
+
   const configuration = {
     toolbar: false,
     padding: "dense",
@@ -79,7 +79,7 @@ function Alerts() {
     paginationType: "stepped",
     actionsColumnIndex: -2,
     showTitle: false,
-  }
+  };
 
   const tableIcons = {
     // Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -116,10 +116,10 @@ function Alerts() {
     price: o.price,
     status: o.status,
     alert_Comment: o.alert_Comment,
-    time_Received: o.time_Received ? moment(o.time_Received).format('lll') :'',
-    time_Executed: o.time_Executed ? moment(o.time_Executed).format('lll') :'',
+    time_Received: o.time_Received ? moment(o.time_Received).format("lll") : "",
+    time_Executed: o.time_Executed ? moment(o.time_Executed).format("lll") : "",
     alert_Name: o.alert_Name,
-    ticker_image_url: o.ticker_Url,//'/static/img/avatars/user.png',
+    ticker_image_url: o.ticker_Url, //'/static/img/avatars/user.png',
   }));
   const fields = [
     {
@@ -127,7 +127,12 @@ function Alerts() {
       field: "ticker",
       render: (rowData) => {
         const styles = { width: 40, borderRadius: "50%" };
-        return <div className="img-wrap"><img src={rowData.ticker_image_url} style={styles} /> <span>{rowData.ticker}</span></div>;
+        return (
+          <div className="img-wrap">
+            <img src={rowData.ticker_image_url} style={styles} />{" "}
+            <span>{rowData.ticker}</span>
+          </div>
+        );
       },
       lookup: [...new Set(alertList.alerts.map((x) => x.ticker))]
         .filter(Boolean)
@@ -137,9 +142,7 @@ function Alerts() {
       title: "OPTION TYPE",
       field: "option_Type",
       render: (rowData) => rowData.option_Type,
-      lookup: [
-        ...new Set(alertList.alerts.map((x) => x.option_Type)),
-      ]
+      lookup: [...new Set(alertList.alerts.map((x) => x.option_Type))]
         .filter(Boolean)
         .reduce((a, v) => ({ ...a, [v]: v }), {}),
     },
@@ -147,9 +150,7 @@ function Alerts() {
       title: "ORDER ACTION",
       field: "order_Action",
       render: (rowData) => rowData.order_Action,
-      lookup: [
-        ...new Set(alertList.alerts.map((x) => x.order_Action)),
-      ]
+      lookup: [...new Set(alertList.alerts.map((x) => x.order_Action))]
         .filter(Boolean)
         .reduce((a, v) => ({ ...a, [v]: v }), {}),
     },
@@ -173,9 +174,7 @@ function Alerts() {
       title: "ALERT COMMENT",
       field: "alert_Comment",
       render: (rowData) => rowData.alert_Comment,
-      lookup: [
-        ...new Set(alertList.alerts.map((x) => x.alert_Comment)),
-      ]
+      lookup: [...new Set(alertList.alerts.map((x) => x.alert_Comment))]
         .filter(Boolean)
         .reduce((a, v) => ({ ...a, [v]: v }), {}),
     },
@@ -183,9 +182,7 @@ function Alerts() {
       title: "TIME RECEIVED",
       field: "time_Received",
       render: (rowData) => rowData.time_Received,
-      lookup: [
-        ...new Set(alertList.alerts.map((x) => x.time_Received)),
-      ]
+      lookup: [...new Set(alertList.alerts.map((x) => x.time_Received))]
         .filter(Boolean)
         .reduce((a, v) => ({ ...a, [v]: v }), {}),
     },
@@ -193,9 +190,7 @@ function Alerts() {
       title: "TIME EXECUTED",
       field: "time_Executed",
       render: (rowData) => rowData.time_Executed,
-      lookup: [
-        ...new Set(alertList.alerts.map((x) => x.time_Executed)),
-      ]
+      lookup: [...new Set(alertList.alerts.map((x) => x.time_Executed))]
         .filter(Boolean)
         .reduce((a, v) => ({ ...a, [v]: v }), {}),
     },
@@ -203,13 +198,11 @@ function Alerts() {
       title: "ALERT NAME",
       field: "alert_Name",
       render: (rowData) => rowData.alert_Name,
-      lookup: [
-        ...new Set(alertList.alerts.map((x) => x.alert_Name)),
-      ]
+      lookup: [...new Set(alertList.alerts.map((x) => x.alert_Name))]
         .filter(Boolean)
         .reduce((a, v) => ({ ...a, [v]: v }), {}),
     },
-  ]
+  ];
   function calculatePercentage(previous, current) {
     let prevCalProcessed = 0;
 
@@ -244,91 +237,89 @@ function Alerts() {
 
   useEffect(() => {
     const initialize = async () => {
-    
-        await getUserInfo().then((res) => { 
-          const userId = res.sub.split('|')[1];
+      await getUserInfo()
+        .then((res) => {
+          const userId = res.sub.split("|")[1];
+          setUserId(userId);
           let date = new Date();
           const last30Days = moment(date)
             .subtract(30, "days")
             .format("YYYY-MM-DD");
           const todayDate = moment().format("YYYY-MM-DD");
-  
-            dispatch(fetchSettings({ User_Id: user.id }));
-            dispatch(
-              fetchAlerts({
-                startDate: last30Days,
-                endDate: todayDate,
-                userId: userId,
-              })
-            );
-  
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Processed",
-                count: true,
-              })
-            );
-  
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Unprocessed",
-                count: true,
-              })
-            );
-  
-            dispatch(
-              fetchAlerts({
-                userId: userId,
-                startDate: currentMonthFirstDay,
-                endDate: currentMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-            dispatch(
-              previousFetchAlerts({
-                userId: userId,
-                startDate: previousMonthFirstDay,
-                endDate: previousMonthLastDay,
-                status: "Expired",
-                count: true,
-              })
-            );
-          
-        }).catch(err => { 
-          console.log(err);
+
+          dispatch(fetchSettings({ User_Id: res.sub }));
+          dispatch(
+            fetchAlerts({
+              startDate: last30Days,
+              endDate: todayDate,
+              userId: userId,
+            })
+          );
+
+          dispatch(
+            fetchAlerts({
+              userId: userId,
+              startDate: currentMonthFirstDay,
+              endDate: currentMonthLastDay,
+              status: "Processed",
+              count: true,
+            })
+          );
+          dispatch(
+            previousFetchAlerts({
+              userId: userId,
+              startDate: previousMonthFirstDay,
+              endDate: previousMonthLastDay,
+              status: "Processed",
+              count: true,
+            })
+          );
+
+          dispatch(
+            fetchAlerts({
+              userId: userId,
+              startDate: currentMonthFirstDay,
+              endDate: currentMonthLastDay,
+              status: "Unprocessed",
+              count: true,
+            })
+          );
+          dispatch(
+            previousFetchAlerts({
+              userId: userId,
+              startDate: previousMonthFirstDay,
+              endDate: previousMonthLastDay,
+              status: "Unprocessed",
+              count: true,
+            })
+          );
+
+          dispatch(
+            fetchAlerts({
+              userId: userId,
+              startDate: currentMonthFirstDay,
+              endDate: currentMonthLastDay,
+              status: "Expired",
+              count: true,
+            })
+          );
+          dispatch(
+            previousFetchAlerts({
+              userId: userId,
+              startDate: previousMonthFirstDay,
+              endDate: previousMonthLastDay,
+              status: "Expired",
+              count: true,
+            })
+          );
         })
-        
-      
+        .catch((err) => {
+          console.log(err);
+        });
     };
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   return (
     <React.Fragment>
@@ -444,7 +435,7 @@ function Alerts() {
               minHeight: 450,
             }}
           >
-            <EnhancedTableToolbar sx={{ p: 0 }} userId={ userId } />
+            <EnhancedTableToolbar sx={{ p: 0 }} userId={userId} />
             <MaterialTable
               isLoading={alertList.loading}
               icons={tableIcons}
@@ -521,13 +512,9 @@ const EnhancedTableToolbar = (props) => {
   };
   const onChangeDate = (newValue) => {
     let startDate =
-      newValue[0] !== null
-        ? moment(newValue[0].$d).format("YYYY-MM-DD")
-        : null;
+      newValue[0] !== null ? moment(newValue[0].$d).format("YYYY-MM-DD") : null;
     let endDate =
-      newValue[1] !== null
-        ? moment(newValue[1].$d).format("YYYY-MM-DD")
-        : null;
+      newValue[1] !== null ? moment(newValue[1].$d).format("YYYY-MM-DD") : null;
     if (startDate !== null && endDate !== null) {
       dispatch(
         fetchAlerts({
@@ -658,10 +645,10 @@ const Grid = styled(MuiGrid)`
       line-height: 1.2;
     }
     tbody {
-      .img-wrap{
-        display:flex;
-        align-items:center;
-        img{
+      .img-wrap {
+        display: flex;
+        align-items: center;
+        img {
           padding-right: 10px;
         }
       }
@@ -696,17 +683,16 @@ const Grid = styled(MuiGrid)`
             }
           }
         }
-        
       }
     }
   }
-  .MuiTablePagination-toolbar{
-    .MuiButtonBase-root{
-      color:#7E84A3;
+  .MuiTablePagination-toolbar {
+    .MuiButtonBase-root {
+      color: #7e84a3;
     }
-    .MuiButton-containedSizeSmall{
-      color:#fff;
-      background:#2B75FD;
+    .MuiButton-containedSizeSmall {
+      color: #fff;
+      background: #2b75fd;
     }
   }
 `;
