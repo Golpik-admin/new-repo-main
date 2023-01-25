@@ -63,20 +63,22 @@ function Integraion() {
       // console.log(decode.split("&code=")[1]);
       const decodeClient_id = decodeURIComponent(authTdameritrade.clientId);
 
-      const obj = {
-        Grant_type: "authorization_code",
-        Access_type: "offline",
-        Code: decode.split("&code=")[1],
-        Client_id: decodeClient_id,
-        redirect_uri: `https://consilience.golpik.net/integration`,
-      };
+      var obj = JSON.stringify({
+        grant_type: "authorization_code",
+        access_type: "offline",
+        code: decode.split("&code=")[1],
+        client_id: decodeClient_id,
+        redirect_uri:
+          "https://consilience.golpik.net/integration?handler=Callback",
+      });
+
       dispatch(postTDAmeritrade(obj));
     }
   }, []);
 
   const handleNavigate = () => {
     window.location.replace(
-      `${authTdameritrade.URL}?response_type=code&redirect_uri=${appUrl}/auth?handler=Callback&client_id=${authTdameritrade.clientId}`
+      `${authTdameritrade.URL}?response_type=code&redirect_uri=${appUrl}integration?handler=Callback&client_id=${authTdameritrade.clientId}`
     );
   };
 
