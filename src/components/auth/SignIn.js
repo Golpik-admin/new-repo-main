@@ -121,9 +121,9 @@ function SignIn() {
       setIsLoading(false);
     }
 
-    if (!subscription) {
-      setIsLoading(true);
-    }
+    // if (!subscription) {
+    //   setIsLoading(true);
+    // }
   }, []);
 
   return (
@@ -131,7 +131,7 @@ function SignIn() {
       {isLoading && (
         <div align="center">
           <CircularProgress color="secondary" />
-          {!subscription && !checkout_session_id && (
+          {/* {!subscription && !checkout_session_id && (
             <>
               <Alert severity="error">
                 <span>No Subscription Found</span>
@@ -145,7 +145,7 @@ function SignIn() {
                 Return to website
               </Button>
             </>
-          )}
+          )} */}
         </div>
       )}
       {!isLoading && (
@@ -168,29 +168,54 @@ function SignIn() {
               await getApiToken()
                 .then(async (token) => {
                   console.log(token);
-                  await getUserInfo().then(async (_user) => {
-                    const userId1 = _user.sub;
-                    await getUserMeta(token, userId1).then((response) => {
-                      if (
-                        response.user_metadata &&
-                        response.user_metadata.stripe
-                      ) {
-                        navigate("/dashboard");
-                      } else {
-                        if (subscription) {
-                          // signOut(false);
-                          window.location.replace(
-                            `${subscription}?prefilled_email=${_user.email}&client_reference_id=${userId1}`
-                          );
-                        }
-                      }
+                  await getUserInfo()
+                    .then(async (_user) => {
+                      const userId1 = _user.sub;
+                      await getUserMeta(token, userId1)
+                        .then((response) => {
+                          if (
+                            response.user_metadata &&
+                            response.user_metadata.stripe
+                          ) {
+                            navigate("/dashboard");
+                          } else {
+                            if (subscription) {
+                              // signOut(false);
+                              window.location.replace(
+                                `${subscription}?prefilled_email=${_user.email}&client_reference_id=${userId1}`
+                              );
+                            }
+                          }
+                        })
+                        .catch((error) => {
+                          signOut(false);
+                          const message =
+                            error.message || "Something went wrong";
+                          setStatus({ success: false });
+                          setErrors({ submit: message });
+                          setSubmitting(false);
+                          console.log(error);
+                        });
+                    })
+                    .catch((error) => {
+                      signOut(false);
+                      const message = error.message || "Something went wrong";
+                      setStatus({ success: false });
+                      setErrors({ submit: message });
+                      setSubmitting(false);
+                      console.log(error);
                     });
-                  });
                 })
                 .catch((error) => {
+                  signOut(false);
+                  const message = error.message || "Something went wrong";
+                  setStatus({ success: false });
+                  setErrors({ submit: message });
+                  setSubmitting(false);
                   console.log(error);
                 });
             } catch (error) {
+              signOut(false);
               const message = error.message || "Something went wrong";
 
               setStatus({ success: false });
@@ -218,7 +243,7 @@ function SignIn() {
                   {errors.submit}
                 </Alert>
               )}
-              <TextField
+              {/* <TextField
                 type="text"
                 name="email"
                 label="Username"
@@ -243,8 +268,8 @@ function SignIn() {
                 onChange={handleChange}
                 my={2}
                 variant="standard"
-              />
-              <Div className="forgot-pas-wrap">
+              /> */}
+              {/* <Div className="forgot-pas-wrap">
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
@@ -252,7 +277,7 @@ function SignIn() {
                 <Link href="#" underline="none">
                   Forgot Password
                 </Link>
-              </Div>
+              </Div> */}
               <Div className="btn-wrap">
                 <Button
                   type="submit"
@@ -267,13 +292,13 @@ function SignIn() {
                   )}
                   {!isSubmitting && "Login"}
                 </Button>
-                <Link
+                {/* <Link
                   href="/auth/sign-up"
                   underline="none"
                   className="signup-btn"
                 >
                   Sign up
-                </Link>
+                </Link> */}
               </Div>
             </form>
           )}
