@@ -14,7 +14,7 @@ export const postTDAmeritrade = createAsyncThunk(
     const response = await axios
       .post("https://api.tdameritrade.com/v1/oauth2/token", payload, {
         headers: {
-          // "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
       })
       .then((response) => {
