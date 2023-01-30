@@ -12,11 +12,10 @@ export const postTDAmeritrade = createAsyncThunk(
   "TDAmeritrade/postTDAmeritrade",
   async (payload) => {
     const response = await axios
-      .post("https://api.tdameritrade.com/v1/oauth2/token", {
+      .post("https://api.tdameritrade.com/v1/oauth2/token", payload, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        data: payload,
       })
       .then((response) => {
         return response;
