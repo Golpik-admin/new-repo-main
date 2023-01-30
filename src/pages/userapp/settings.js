@@ -54,6 +54,7 @@ const Paper = styled(MuiPaper)`
 function Settings() {
   const { user, getApiToken, getUserMeta, getUserInfo } = useAuth();
   const [stripe, setStripe] = useState(null);
+  const [stripeLoading, setStripeLoading] = useState(true);
   const dispatch = useDispatch();
   var User_Id = user.id;
   useEffect(() => {
@@ -64,8 +65,11 @@ function Settings() {
           await getUserInfo().then(async (_user) => {
             const userId1 = _user.sub;
             await getUserMeta(token, userId1).then((response) => {
-              if (response.user_metadata.stripe) {
+              if (response.user_metadata && response.user_metadata.stripe) {
                 setStripe(JSON.parse(response.user_metadata.stripe));
+                setStripeLoading(false);
+              } else {
+                setStripeLoading(false);
               }
             });
           });
@@ -542,7 +546,7 @@ function Settings() {
             </Grid>
           </Grid>
 
-          {!stripe && <LinearProgress />}
+          {stripeLoading && <LinearProgress />}
 
           <Grid justifyContent="space-between" container spacing={6}>
             <Grid item xs={12}>
@@ -559,7 +563,6 @@ function Settings() {
                     </Grid>
                   </Grid>
                 )}
-                {console.log(stripe)}
                 {stripe && (
                   <Grid justifyContent="space-between" container spacing={6}>
                     <Grid item xs={12} sm={6} md={4} lg={2}>
