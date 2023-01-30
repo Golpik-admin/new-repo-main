@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 //import { Link } from "react-router-dom";
-import { CircularProgress, Link } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import * as Yup from "yup";
 import { Formik } from "formik";
 
 import {
   Alert as MuiAlert,
-  Checkbox,
-  FormControlLabel,
   Button,
-  TextField as MuiTextField,
+  // TextField as MuiTextField,
 } from "@mui/material";
 import { spacing } from "@mui/system";
 
@@ -21,7 +19,7 @@ import axios from "axios";
 
 const Alert = styled(MuiAlert)(spacing);
 
-const TextField = styled(MuiTextField)(spacing);
+// const TextField = styled(MuiTextField)(spacing);
 
 const Div = styled.div`
   display: flex;
@@ -184,6 +182,11 @@ function SignIn() {
                               window.location.replace(
                                 `${subscription}?prefilled_email=${_user.email}&client_reference_id=${userId1}`
                               );
+                            } else {
+                              signOut(false);
+                              // window.location.replace(
+                              //   "https://optionize.webflow.io/pricing/price-plan"
+                              // );
                             }
                           }
                         })
