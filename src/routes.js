@@ -174,7 +174,11 @@ const routes = [
   },
   {
     path: "alerts",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -184,7 +188,11 @@ const routes = [
   },
   {
     path: "addAlerts",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -194,7 +202,11 @@ const routes = [
   },
   {
     path: "addPositions",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -204,7 +216,11 @@ const routes = [
   },
   {
     path: "getStarted",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -214,7 +230,11 @@ const routes = [
   },
   {
     path: "positions",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -224,7 +244,11 @@ const routes = [
   },
   {
     path: "settings",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -234,7 +258,11 @@ const routes = [
   },
   {
     path: "integration",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -244,7 +272,11 @@ const routes = [
   },
   {
     path: "help-center",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
@@ -254,7 +286,11 @@ const routes = [
   },
   {
     path: "risk-management",
-    element: <FrontEndDashboardLayout />,
+    element: (
+      <AuthGuard>
+        <FrontEndDashboardLayout />,
+      </AuthGuard>
+    ),
     children: [
       {
         path: "",
