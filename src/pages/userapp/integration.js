@@ -64,13 +64,13 @@ function Integraion() {
   console.log(lastTDAmeritrade);
 
   if (isCodeAMTrade) {
-    var obj = JSON.stringify({
-      // grant_type: "authorization_code",
-      // access_type: "offline",
-      // code: decode.split("&code=")[1],
-      // client_id: decodeClient_id,
-    });
-    dispatch(lastPostTDAmeritrade(obj));
+    // var obj = JSON.stringify({
+    // grant_type: "authorization_code",
+    // access_type: "offline",
+    // code: decode.split("&code=")[1],
+    // client_id: decodeClient_id,
+    // });
+    // dispatch(lastPostTDAmeritrade(obj));
   }
 
   const [searchParams] = useSearchParams();
@@ -80,17 +80,17 @@ function Integraion() {
       const decode = decodeURIComponent(code);
       // console.log(decode);
       const decodeClient_id = decodeURIComponent(authTdameritrade.clientId);
+      let data = new FormData();
+      data.append("grant_type", "authorization_code");
+      data.append("access_type", "offline");
+      data.append("code", decode);
+      data.append("client_id", decodeClient_id);
+      data.append(
+        "redirect_uri",
+        "https://consilience.golpik.net/integration?handler=Callback"
+      );
 
-      var obj = {
-        grant_type: "authorization_code",
-        access_type: "offline",
-        code: decode,
-        client_id: decodeClient_id,
-        redirect_uri:
-          "https://consilience.golpik.net/integration?handler=Callback",
-      };
-
-      dispatch(postTDAmeritrade(obj));
+      dispatch(postTDAmeritrade(data));
     }
   }, []);
 
