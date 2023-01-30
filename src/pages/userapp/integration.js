@@ -12,7 +12,10 @@ import { AddOutlined } from "@mui/icons-material";
 import { appUrl, authTdameritrade } from "../../config";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { postTDAmeritrade } from "../../redux/slices/integration";
+import {
+  lastPostTDAmeritrade,
+  postTDAmeritrade,
+} from "../../redux/slices/integration";
 
 const Grid = styled(MuiGrid)`
   .empty-box {
@@ -54,6 +57,21 @@ const Grid = styled(MuiGrid)`
 function Integraion() {
   const dispatch = useDispatch();
   const isCodeAMTrade = useSelector((state) => state.integrations.TDAmeritrade);
+  const lastTDAmeritrade = useSelector(
+    (state) => state.integrations.lastTDAmeritrade
+  );
+
+  console.log(lastTDAmeritrade);
+
+  if (isCodeAMTrade) {
+    var obj = JSON.stringify({
+      // grant_type: "authorization_code",
+      // access_type: "offline",
+      // code: decode.split("&code=")[1],
+      // client_id: decodeClient_id,
+    });
+    dispatch(lastPostTDAmeritrade(obj));
+  }
 
   const [searchParams] = useSearchParams();
   useEffect(() => {
