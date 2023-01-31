@@ -14,9 +14,9 @@ export const postTDAmeritrade = createAsyncThunk(
     var config = {
       method: "post",
       url: "https://api.tdameritrade.com/v1/oauth2/token",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+      // headers: {
+      //   "Content-Type": "application/x-www-form-urlencoded",
+      // },
       data: payload,
     };
 
