@@ -81,14 +81,14 @@ function Integraion() {
       // console.log(decode);
       const decodeClient_id = decodeURIComponent(authTdameritrade.clientId);
 
-      var obj = JSON.stringify({
+      var obj = {
         grant_type: "authorization_code",
         access_type: "offline",
         code: decode,
         client_id: decodeClient_id,
         redirect_uri:
           "https://consilience.golpik.net/integration?handler=Callback",
-      });
+      };
 
       dispatch(postTDAmeritrade(obj));
     }

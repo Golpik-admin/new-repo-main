@@ -11,22 +11,22 @@ const initialState = {
 export const postTDAmeritrade = createAsyncThunk(
   "TDAmeritrade/postTDAmeritrade",
   async (payload) => {
-    var config = {
-      method: "post",
-      url: "https://api.tdameritrade.com/v1/oauth2/token",
-      // headers: {
-      //   "Content-Type": "application/x-www-form-urlencoded",
-      // },
-      data: payload,
-    };
+    // var config = {
+    //   method: "post",
+    //   url: "https://api.tdameritrade.com/v1/oauth2/token",
+    //   // headers: {
+    //   //   "Content-Type": "application/x-www-form-urlencoded",
+    //   // },
+    //   data: payload,
+    // };
 
-    const response = axios(config)
-      // const response = await axios
-      //   .post("https://api.tdameritrade.com/v1/oauth2/token", payload, {
-      //     headers: {
-      //       "Content-Type": "application/x-www-form-urlencoded",
-      //     },
-      //   })
+    // const response = axios(config)
+    const response = await axios
+      .post("https://api.tdameritrade.com/v1/oauth2/token?" + payload, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      })
       .then((response) => {
         return response;
       })
