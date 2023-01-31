@@ -77,10 +77,9 @@ function Integraion() {
   useEffect(() => {
     const code = searchParams.get("code");
     if (code) {
-      const decode = decodeURIComponent(code);
+      const decode = decodeURIComponent(code.replace(/\+/g, " "));
       // console.log(decode);
       const decodeClient_id = decodeURIComponent(authTdameritrade.clientId);
-
       const obj = new URLSearchParams();
       obj.append("grant_type", "authorization_code");
       obj.append("access_type", "offline");
