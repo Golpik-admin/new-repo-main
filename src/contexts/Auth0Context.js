@@ -48,18 +48,43 @@ const AuthContext = createContext(null);
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
+  const parseQuerystring = () => {
+    var url = window.location.href,
+      retObject = {},
+      parameters;
 
+    if (url.indexOf("?") === -1) {
+      return null;
+    }
+
+    url = url.split("?")[1];
+
+    parameters = url.split("&");
+
+    for (var i = 0; i < parameters.length; i++) {
+      retObject[parameters[i].split("=")[0]] = parameters[i].split("=")[1];
+    }
+
+    return retObject;
+  };
   useEffect(() => {
     const initialize = async () => {
       setLoading(true);
+      const queryStrings = parseQuerystring();
+      const subscriptionUrl = queryStrings && queryStrings.subscription;
       try {
         auth0Client = new Auth0Client({
           client_id: auth0Config.clientId || "",
           domain: auth0Config.domain || "",
-          redirect_uri: window.location.origin,
+          redirect_uri:
+            window.location.origin + "?subscription=" + subscriptionUrl,
         });
-
-        await auth0Client.checkSession();
+        const code = queryStrings && queryStrings.code;
+        const state = queryStrings && queryStrings.state;
+        if (code && state) {
+          await auth0Client.handleRedirectCallback();
+        }
+        // await auth0Client.checkSession();
 
         const isAuthenticated = await auth0Client.isAuthenticated();
 
@@ -99,7 +124,7 @@ function AuthProvider({ children }) {
   }, []);
 
   const signIn = async () => {
-    await auth0Client?.loginWithPopup();
+    await auth0Client?.loginWithRedirect();
     const isAuthenticated = await auth0Client?.isAuthenticated();
 
     if (isAuthenticated) {
